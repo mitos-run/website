@@ -9,3 +9,6 @@ node_modules/
 .env.production
 # os / editor
 .DS_Store
+
+# superpowers brainstorm companion
+.superpowers/
