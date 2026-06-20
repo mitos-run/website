@@ -166,7 +166,6 @@ const fanNodes = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(46 + i 
       <section class="hero">
         <div class="container hero-grid">
           <div class="hero-copy reveal">
-            <p class="eyebrow">Millisecond microVM sandboxes for agent swarms</p>
             <h1>Agent swarms<br />in milliseconds.</h1>
             <p class="lede">
               Fork one running microVM into hundreds of <strong>isolated subagents</strong>,
@@ -176,7 +175,7 @@ const fanNodes = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(46 + i 
               <a class="btn btn-primary btn-lg" href={SIGNUP}>Start building</a>
               <a class="btn btn-ghost btn-lg" href={DOCS}>Read the docs →</a>
             </div>
-            <p class="spec mono">~27&nbsp;ms per fork&nbsp;·&nbsp;~3&nbsp;MiB per subagent&nbsp;·&nbsp;scales to N</p>
+            <p class="spec mono">~27&nbsp;ms per fork&nbsp;·&nbsp;~3&nbsp;MiB per subagent&nbsp;·&nbsp;fan out to thousands</p>
           </div>
 
           <div class="hero-code reveal">
