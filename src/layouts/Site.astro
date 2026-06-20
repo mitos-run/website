@@ -1,0 +1,233 @@
+---
+// Shared site shell: head, nav, footer, design tokens, base styles, and the
+// generic scripts (scroll-reveal, nav hairline, copy-to-clipboard). Pages drop
+// their content into the slot and add page-specific <style>. Vercel-style
+// monochrome, hosted-first. Never use em or en dashes in copy.
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+
+const GITHUB = 'https://github.com/mitos-run/mitos';
+const DOCS = '/quickstart/';
+const SIGNUP = '/quickstart/'; // TODO: hosted console signup when live
+
+const navLinks = [
+  { label: 'How it works', href: '/#how' },
+  { label: 'Benchmarks', href: '/benchmarks/' },
+  { label: 'Pricing', href: '/pricing/' },
+  { label: 'Docs', href: DOCS },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="hero-glow" aria-hidden="true"></div>
+
+    <header class="nav" id="nav">
+      <div class="container nav-inner">
+        <a class="brand" href="/"><span class="brand-mark">◆</span> mitos</a>
+        <nav class="nav-links">
+          {navLinks.map((l) => <a href={l.href}>{l.label}</a>)}
+        </nav>
+        <div class="nav-cta">
+          <a class="ghost-link" href={GITHUB} target="_blank" rel="noopener">GitHub ↗</a>
+          <a class="btn btn-primary" href={SIGNUP}>Start building</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="/"><span class="brand-mark">◆</span> mitos</a>
+          <p class="muted">Millisecond microVM sandbox forking for agent swarms.</p>
+          <p class="muted mono oss-badge">Open source · Apache 2.0 · <a href={GITHUB} target="_blank" rel="noopener">GitHub ↗</a></p>
+        </div>
+        <div class="footer-col">
+          <h5>Product</h5>
+          <a href="/#how">How it works</a>
+          <a href="/benchmarks/">Benchmarks</a>
+          <a href="/pricing/">Pricing</a>
+          <a href="/#compare">Comparison</a>
+        </div>
+        <div class="footer-col">
+          <h5>Developers</h5>
+          <a href={DOCS}>Docs</a>
+          <a href="/quickstart/">Quickstart</a>
+          <a href="/architecture/">Architecture</a>
+          <a href={GITHUB} target="_blank" rel="noopener">GitHub</a>
+        </div>
+        <div class="footer-col">
+          <h5>Company</h5>
+          <a href="/blog/">Blog</a>
+          <a href={`${GITHUB}/blob/main/SECURITY.md`} target="_blank" rel="noopener">Security</a>
+          <a href={`${GITHUB}/blob/main/LICENSE`} target="_blank" rel="noopener">License</a>
+        </div>
+      </div>
+      <div class="container footer-bottom">
+        <span class="muted mono">© 2026 mitos · Apache 2.0</span>
+      </div>
+    </footer>
+
+    <script>
+      // Scroll-reveal (reduced-motion safe).
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const reveals = document.querySelectorAll('.reveal');
+      const noIO = ('IntersectionObserver' in window) === false;
+      if (reduceMotion || noIO) {
+        reveals.forEach((el) => el.classList.add('in'));
+      } else {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) { entry.target.classList.add('in'); io.unobserve(entry.target); }
+          });
+        }, { threshold: 0.16, rootMargin: '0px 0px -8% 0px' });
+        reveals.forEach((el) => io.observe(el));
+      }
+
+      // Nav hairline on scroll.
+      const nav = document.getElementById('nav');
+      const onScroll = () => { if (nav) nav.classList.toggle('scrolled', window.scrollY > 8); };
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+
+      // Generic copy-to-clipboard for [data-copy-text] buttons.
+      document.querySelectorAll('.copy-btn[data-copy-text]').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText((btn.getAttribute('data-copy-text') || '').trim());
+            const prev = btn.textContent;
+            btn.textContent = '✓ copied';
+            btn.classList.add('copied');
+            setTimeout(() => { btn.textContent = prev; btn.classList.remove('copied'); }, 1400);
+          } catch (e) {}
+        });
+      });
+    </script>
+
+    <style is:global>
+      :root {
+        --bg: #000;
+        --surface: #0a0a0a;
+        --surface-2: #0d0d0d;
+        --border: rgba(255, 255, 255, 0.1);
+        --border-strong: rgba(255, 255, 255, 0.2);
+        --border-2: rgba(255, 255, 255, 0.16);
+        --elev: #141417;
+        --text: #fff;
+        --text-2: #e6e6e6;
+        --muted: #8a8a8a;
+        --dim: #5a5a5a;
+        --maxw: 1140px;
+        --mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+        --sans: 'Geist', system-ui, -apple-system, sans-serif;
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+      body {
+        margin: 0; background: var(--bg); color: var(--text); font-family: var(--sans);
+        -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+        line-height: 1.6; overflow-x: hidden;
+      }
+      ::selection { background: #fff; color: #000; }
+      .container { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+      .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+      .muted { color: var(--muted); }
+      em { font-style: normal; border-bottom: 1px solid var(--border-strong); }
+      a { color: inherit; text-decoration: none; }
+      :focus-visible { outline: 2px solid #fff; outline-offset: 3px; border-radius: 4px; }
+      h1, h2, .section-title { text-wrap: balance; }
+      .section-lede, p.lede { text-wrap: pretty; }
+
+      .hero-glow {
+        position: fixed; top: -320px; left: 50%; transform: translateX(-50%);
+        width: 1100px; height: 760px; z-index: 0; pointer-events: none;
+        background: radial-gradient(ellipse at center, rgba(255,255,255,.06), transparent 62%);
+      }
+      main, .nav, .footer { position: relative; z-index: 1; }
+
+      .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s cubic-bezier(.2,.6,.2,1), transform .6s cubic-bezier(.2,.6,.2,1); }
+      .reveal.in { opacity: 1; transform: none; }
+      @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+      /* buttons */
+      .btn { display: inline-flex; align-items: center; gap: 8px; font-weight: 500; font-size: 14px; border-radius: 8px; padding: 9px 17px; border: 1px solid transparent; cursor: pointer; transition: background .14s ease, border-color .14s ease, transform .14s ease, box-shadow .14s ease; white-space: nowrap; }
+      .btn-lg { padding: 12px 22px; font-size: 15px; }
+      .btn-primary { background: #fff; color: #000; border-color: #fff; font-weight: 600; }
+      .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px -8px rgba(255,255,255,.35); }
+      .btn-ghost { background: transparent; color: var(--text); border-color: var(--border-strong); }
+      .btn-ghost:hover { border-color: #fff; background: rgba(255,255,255,.05); transform: translateY(-1px); }
+      .btn:active { transform: translateY(0); }
+      .copy-btn { border: 1px solid var(--border-2); border-radius: 6px; padding: 5px 10px; font-size: 11px; color: var(--muted); background: transparent; cursor: pointer; transition: all .12s ease; white-space: nowrap; font-family: var(--mono); }
+      .copy-btn:hover { color: var(--text); border-color: #fff; }
+      .copy-btn.copied { color: #fff; border-color: #fff; }
+
+      /* nav */
+      .nav { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(12px); background: rgba(0,0,0,.55); border-bottom: 1px solid transparent; transition: border-color .2s ease; }
+      .nav.scrolled { border-bottom-color: var(--border); }
+      .nav-inner { display: flex; align-items: center; gap: 32px; height: 64px; }
+      .brand { font-weight: 600; font-size: 17px; letter-spacing: -.02em; display: inline-flex; align-items: center; gap: 8px; }
+      .brand-mark { font-size: 11px; }
+      .nav-links { display: flex; gap: 26px; margin-right: auto; }
+      .nav-links a { color: var(--muted); font-size: 14px; }
+      .nav-links a:hover { color: var(--text); }
+      .nav-cta { display: flex; align-items: center; gap: 16px; }
+      .ghost-link { color: var(--muted); font-size: 14px; }
+      .ghost-link:hover { color: var(--text); }
+
+      /* generic sections */
+      section { padding: 100px 0; }
+      .section-title { font-size: clamp(28px, 4vw, 40px); letter-spacing: -.03em; font-weight: 600; margin: 0 0 18px; }
+      .section-lede { color: var(--muted); font-size: 17px; max-width: 46em; margin: 0 0 48px; }
+
+      /* generic code block */
+      .code-block { background: var(--elev); border: 1px solid var(--border-2); border-radius: 10px; padding: 16px 18px; font-family: var(--mono); font-size: 12.5px; line-height: 1.7; color: #ededed; overflow-x: auto; margin: 0; }
+
+      /* page hero (shared by sub-pages) */
+      .page-hero { padding: 88px 0 8px; }
+      .page-hero .eyebrow { color: var(--muted); font-size: 12.5px; margin: 0 0 18px; }
+      .page-hero h1 { font-size: clamp(38px, 5vw, 60px); line-height: 1.02; letter-spacing: -.04em; font-weight: 600; margin: 0 0 20px; }
+      .page-hero .lede { font-size: 19px; color: var(--muted); max-width: 32em; margin: 0 0 28px; }
+      .page-hero .lede strong { color: var(--text); font-weight: 600; }
+      .page-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+      /* footer */
+      .footer { border-top: 1px solid var(--border); padding: 56px 0 32px; background: var(--surface); margin-top: 40px; }
+      .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 32px; }
+      .footer-brand .brand { margin-bottom: 12px; }
+      .footer-brand p { font-size: 14px; max-width: 26em; margin: 0 0 8px; }
+      .oss-badge { font-size: 12px; } .oss-badge a:hover { color: var(--text); }
+      .footer-col h5 { margin: 0 0 14px; font-size: 13px; font-weight: 500; color: var(--muted); }
+      .footer-col a { display: block; color: var(--muted); font-size: 14px; padding: 4px 0; }
+      .footer-col a:hover { color: var(--text); }
+      .footer-bottom { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 13px; }
+
+      @media (max-width: 900px) {
+        .footer-grid { grid-template-columns: 1fr 1fr; }
+        .nav-links { display: none; }
+      }
+    </style>
+  </body>
+</html>

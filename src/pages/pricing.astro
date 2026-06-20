@@ -1,0 +1,168 @@
+---
+import Site from '../layouts/Site.astro';
+
+const SIGNUP = '/quickstart/';
+const DOCS = '/quickstart/';
+const GITHUB = 'https://github.com/mitos-run/mitos';
+
+const tiers = [
+  {
+    name: 'Free',
+    tag: 'Get started',
+    price: 'Credits, no card',
+    desc: 'Enough warm compute to fork your first swarms and ship a prototype.',
+    features: ['Starter compute credits', 'No credit card', 'Warm pools, millisecond forks', 'Community support'],
+    cta: 'Start building',
+    href: SIGNUP,
+    primary: true,
+  },
+  {
+    name: 'Pro',
+    tag: 'Usage based',
+    price: 'Pay for what you fork',
+    desc: 'Per-second compute, metered by copy-on-write so a swarm stays cheap.',
+    features: ['Per-second compute, no idle charge', 'CoW metering: pay per dirtied page', 'Higher concurrency limits', 'Email support'],
+    cta: 'Start building',
+    href: SIGNUP,
+    primary: false,
+  },
+  {
+    name: 'Enterprise',
+    tag: 'Custom',
+    price: "Let's talk",
+    desc: 'For teams running swarms at scale with compliance and isolation needs.',
+    features: ['Volume pricing', 'SSO, audit logs', 'Run in your own cloud (BYOC)', 'SLA and dedicated support'],
+    cta: 'Contact us',
+    href: GITHUB,
+    primary: false,
+  },
+];
+
+const meters = [
+  { k: 'Compute', v: 'Per second of CPU and memory your sandboxes use. Scale to zero between forks, never pay for idle.' },
+  { k: 'Copy-on-write metering', v: 'A forked subagent costs only the pages it dirties (about 3 MiB), not a whole VM. The shared template is counted once, not once per fork.' },
+  { k: 'Storage', v: 'Durable workspaces are billed on the bytes you keep. Snapshots ship as deltas, so versions stay cheap.' },
+];
+
+const faqs = [
+  { q: 'How is a swarm billed?', a: 'You pay for the compute each subagent actually uses, per second. Because forks share memory copy-on-write, fanning out to many subagents adds little beyond the pages each one writes.' },
+  { q: 'Can I self-host instead?', a: 'Yes. The engine is open source under Apache 2.0 and free to run on your own Kubernetes cluster. Hosted mitos is for teams who want the fork speed without operating the cluster.' },
+  { q: 'Do I pay for idle sandboxes?', a: 'No. Warm pools are managed for you, and compute scales to zero between forks. You are billed for active work, not for waiting.' },
+  { q: 'What about data residency?', a: 'Enterprise can run mitos in their own cloud (BYOC) so agent code and data stay on their infrastructure.' },
+];
+---
+
+<Site
+  title="mitos pricing: pay for the compute your swarm uses"
+  description="Usage-based pricing for agent swarms. Per-second compute, metered by copy-on-write so fanning out to many subagents stays cheap. Hosted mitos is in early access."
+>
+  <section class="page-hero container">
+    <div class="reveal">
+      <p class="eyebrow">Pricing</p>
+      <h1>Pay for the compute your swarm uses.</h1>
+      <p class="lede">
+        Per-second pricing, metered by copy-on-write so a swarm of subagents stays
+        <strong>cheap to fan out</strong>. No idle charges.
+      </p>
+      <div class="page-actions">
+        <a class="btn btn-primary btn-lg" href={SIGNUP}>Start building</a>
+        <a class="btn btn-ghost btn-lg" href={DOCS}>Read the docs →</a>
+      </div>
+    </div>
+    <p class="early reveal mono">Hosted mitos is in early access. The plans below describe how pricing works. Final rates land at general availability.</p>
+  </section>
+
+  <section class="tiers-sec container">
+    <div class="tiers">
+      {tiers.map((t) => (
+        <article class={`tier reveal ${t.primary ? 'tier-primary' : ''}`}>
+          <div class="tier-head">
+            <h3>{t.name}</h3>
+            <span class="tier-tag mono">{t.tag}</span>
+          </div>
+          <p class="tier-price">{t.price}</p>
+          <p class="tier-desc">{t.desc}</p>
+          <ul class="tier-feats">
+            {t.features.map((f) => <li><span class="tick">✓</span>{f}</li>)}
+          </ul>
+          <a class={`btn ${t.primary ? 'btn-primary' : 'btn-ghost'} tier-cta`} href={t.href}>{t.cta}</a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="meter-sec container">
+    <h2 class="section-title reveal">How metering works</h2>
+    <p class="section-lede reveal">
+      The point of mitos is fanning one agent into many. Pricing is built so that
+      stays affordable: you pay for real work, counted honestly.
+    </p>
+    <div class="meter-grid">
+      {meters.map((m) => (
+        <div class="meter reveal">
+          <h4>{m.k}</h4>
+          <p>{m.v}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="faq-sec container">
+    <h2 class="section-title reveal">Questions</h2>
+    <div class="faqs">
+      {faqs.map((f) => (
+        <div class="faq reveal">
+          <h4>{f.q}</h4>
+          <p>{f.a}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="cta-sec">
+    <div class="container reveal" style="text-align:center">
+      <h2 class="cta-h">Fan out your first swarm.</h2>
+      <div class="page-actions" style="justify-content:center">
+        <a class="btn btn-primary btn-lg" href={SIGNUP}>Start building</a>
+        <a class="btn btn-ghost btn-lg" href={DOCS}>Read the docs →</a>
+      </div>
+    </div>
+  </section>
+</Site>
+
+<style>
+  .page-hero { padding-bottom: 16px; }
+  .early { margin: 28px 0 0; font-size: 12.5px; color: var(--dim); border-left: 2px solid var(--border-2); padding-left: 14px; max-width: 46em; }
+
+  .tiers-sec { padding-top: 56px; }
+  .tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .tier { display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: 14px; padding: 28px; background: var(--surface); transition: border-color .15s ease; }
+  .tier:hover { border-color: var(--border-strong); }
+  .tier-primary { border-color: var(--border-strong); background: var(--elev); }
+  .tier-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .tier-head h3 { margin: 0; font-size: 20px; font-weight: 600; }
+  .tier-tag { font-size: 11px; color: var(--muted); border: 1px solid var(--border-2); border-radius: 999px; padding: 3px 10px; }
+  .tier-price { font-size: 20px; font-weight: 600; letter-spacing: -.02em; margin: 0 0 10px; }
+  .tier-desc { color: var(--muted); font-size: 14px; margin: 0 0 20px; }
+  .tier-feats { list-style: none; padding: 0; margin: 0 0 24px; display: flex; flex-direction: column; gap: 10px; flex-grow: 1; }
+  .tier-feats li { display: flex; gap: 10px; font-size: 14px; color: var(--text-2); }
+  .tier-feats .tick { color: #fff; }
+  .tier-cta { justify-content: center; }
+
+  .meter-sec, .faq-sec { padding-top: 0; }
+  .meter-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .meter { padding: 24px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
+  .meter h4 { margin: 0 0 10px; font-size: 16px; font-weight: 600; }
+  .meter p { margin: 0; color: var(--muted); font-size: 14px; }
+
+  .faqs { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 40px; }
+  .faq h4 { margin: 0 0 8px; font-size: 16px; font-weight: 600; }
+  .faq p { margin: 0; color: var(--muted); font-size: 14px; }
+
+  .cta-sec { text-align: center; border-top: 1px solid var(--border); }
+  .cta-h { font-size: clamp(28px, 4.5vw, 44px); letter-spacing: -.03em; font-weight: 600; margin: 0 0 26px; }
+
+  @media (max-width: 900px) {
+    .tiers, .meter-grid, .faqs { grid-template-columns: 1fr; }
+  }
+</style>
