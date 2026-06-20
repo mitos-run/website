@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="100 154.508 330.902 214.59" fill="none" role="img" aria-label="mitos">
+  <title>mitos</title>
+  <clipPath id="leftDisc"><circle cx="200" cy="261.803" r="100"/></clipPath>
+  <circle cx="200" cy="261.803" r="100" fill="#0a0a0a"/>
+  <circle cx="323.607" cy="261.803" r="100" stroke="#0a0a0a" stroke-width="14.59"/>
+  <g clip-path="url(#leftDisc)"><circle cx="323.607" cy="261.803" r="100" stroke="#ffffff" stroke-width="14.59"/></g>
+</svg>

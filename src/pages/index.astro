@@ -5,9 +5,14 @@
 // Aggressive reduction; restrained motion. See
 // docs/superpowers/specs/2026-06-20-landing-world-class-pass-design.md
 // Numbers are real (engine bench/); no fabricated logos or star counts.
+import Mark from '../components/Mark.astro';
+
 const GITHUB = 'https://github.com/mitos-run/mitos';
 const DOCS = '/quickstart/';
 const SIGNUP = '/quickstart/'; // TODO: hosted console signup when live
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL('/og.png', Astro.site).href;
 
 const navLinks = [
   { label: 'How it works', href: '#how' },
@@ -106,14 +111,32 @@ const fanNodes = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(46 + i 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <title>mitos: Spin up agent swarms in milliseconds</title>
+    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="icon" href="/favicon-16.png" type="image/png" sizes="16x16" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#000000" />
+    <title>mitos: Agent swarms in milliseconds</title>
     <meta
       name="description"
       content="Fork one running microVM into hundreds of isolated subagents, each its own computer, in milliseconds. Fully managed Firecracker microVM sandboxes for agent swarms."
     />
-    <meta property="og:title" content="mitos: Spin up agent swarms in milliseconds" />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="mitos" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content="mitos: Agent swarms in milliseconds" />
     <meta property="og:description" content="Fork one running microVM into hundreds of isolated subagents, each its own computer, in milliseconds. Fully managed." />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="mitos logo with the tagline: agent swarms in milliseconds" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="mitos: Agent swarms in milliseconds" />
+    <meta name="twitter:description" content="Fork one running microVM into hundreds of isolated subagents, each its own computer, in milliseconds. Fully managed." />
+    <meta name="twitter:image" content={ogImage} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -127,7 +150,7 @@ const fanNodes = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(46 + i 
     <!-- NAV -->
     <header class="nav" id="nav">
       <div class="container nav-inner">
-        <a class="brand" href="/"><span class="brand-mark">◆</span> mitos</a>
+        <a class="brand" href="/"><Mark class="brand-mark" /> mitos</a>
         <nav class="nav-links">
           {navLinks.map((l) => <a href={l.href}>{l.label}</a>)}
         </nav>
@@ -144,7 +167,7 @@ const fanNodes = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(46 + i 
         <div class="container hero-grid">
           <div class="hero-copy reveal">
             <p class="eyebrow">Millisecond microVM sandboxes for agent swarms</p>
-            <h1>Spin up agent swarms<br />in milliseconds.</h1>
+            <h1>Agent swarms<br />in milliseconds.</h1>
             <p class="lede">
               Fork one running microVM into hundreds of <strong>isolated subagents</strong>,
               each its own computer. Fully managed.
@@ -303,7 +326,7 @@ const fanNodes = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(46 + i 
     <footer class="footer">
       <div class="container footer-grid">
         <div class="footer-brand">
-          <a class="brand" href="/"><span class="brand-mark">◆</span> mitos</a>
+          <a class="brand" href="/"><Mark class="brand-mark" /> mitos</a>
           <p class="muted">Millisecond microVM sandbox forking for agent swarms.</p>
           <p class="muted mono oss-badge">Open source · Apache 2.0 · <a href={GITHUB} target="_blank" rel="noopener">GitHub ↗</a></p>
         </div>
@@ -459,7 +482,7 @@ const fanNodes = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(46 + i 
       .nav.scrolled { border-bottom-color: var(--border); }
       .nav-inner { display: flex; align-items: center; gap: 32px; height: 64px; }
       .brand { font-weight: 600; font-size: 17px; letter-spacing: -.02em; display: inline-flex; align-items: center; gap: 8px; }
-      .brand-mark { font-size: 11px; }
+      .brand-mark { height: 18px; width: auto; }
       .nav-links { display: flex; gap: 26px; margin-right: auto; }
       .nav-links a { color: var(--muted); font-size: 14px; }
       .nav-links a:hover { color: var(--text); }

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="65.451 61.803 400 400" width="400" height="400" role="img" aria-label="mitos">
+  <title>mitos</title>
+  <desc>Two overlapping circles: a filled disc dividing into an open ring. Geometry derived from the golden ratio.</desc>
+  <style>
+    .disc { fill: #0a0a0a; }
+    .ring { stroke: #0a0a0a; }
+    .cut  { stroke: #ffffff; }
+    @media (prefers-color-scheme: dark) {
+      .disc { fill: #ffffff; }
+      .ring { stroke: #ffffff; }
+      .cut  { stroke: #0a0a0a; }
+    }
+  </style>
+  <clipPath id="leftDisc"><circle cx="200" cy="261.803" r="100"/></clipPath>
+  <circle class="disc" cx="200" cy="261.803" r="100"/>
+  <circle class="ring" cx="323.607" cy="261.803" r="100" fill="none" stroke-width="14.59"/>
+  <g clip-path="url(#leftDisc)">
+    <circle class="cut" cx="323.607" cy="261.803" r="100" fill="none" stroke-width="14.59"/>
+  </g>
+</svg>

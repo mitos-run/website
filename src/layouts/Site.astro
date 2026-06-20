@@ -3,11 +3,16 @@
 // generic scripts (scroll-reveal, nav hairline, copy-to-clipboard). Pages drop
 // their content into the slot and add page-specific <style>. Vercel-style
 // monochrome, hosted-first. Never use em or en dashes in copy.
+import Mark from '../components/Mark.astro';
+
 interface Props {
   title: string;
   description: string;
 }
 const { title, description } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL('/og.png', Astro.site).href;
 
 const GITHUB = 'https://github.com/mitos-run/mitos';
 const DOCS = '/quickstart/';
@@ -26,11 +31,29 @@ const navLinks = [
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="icon" href="/favicon-16.png" type="image/png" sizes="16x16" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#000000" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="mitos" />
+    <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="mitos logo with the tagline: agent swarms in milliseconds" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -43,7 +66,7 @@ const navLinks = [
 
     <header class="nav" id="nav">
       <div class="container nav-inner">
-        <a class="brand" href="/"><span class="brand-mark">◆</span> mitos</a>
+        <a class="brand" href="/"><Mark class="brand-mark" /> mitos</a>
         <nav class="nav-links">
           {navLinks.map((l) => <a href={l.href}>{l.label}</a>)}
         </nav>
@@ -61,7 +84,7 @@ const navLinks = [
     <footer class="footer">
       <div class="container footer-grid">
         <div class="footer-brand">
-          <a class="brand" href="/"><span class="brand-mark">◆</span> mitos</a>
+          <a class="brand" href="/"><Mark class="brand-mark" /> mitos</a>
           <p class="muted">Millisecond microVM sandbox forking for agent swarms.</p>
           <p class="muted mono oss-badge">Open source · Apache 2.0 · <a href={GITHUB} target="_blank" rel="noopener">GitHub ↗</a></p>
         </div>
@@ -189,7 +212,7 @@ const navLinks = [
       .nav.scrolled { border-bottom-color: var(--border); }
       .nav-inner { display: flex; align-items: center; gap: 32px; height: 64px; }
       .brand { font-weight: 600; font-size: 17px; letter-spacing: -.02em; display: inline-flex; align-items: center; gap: 8px; }
-      .brand-mark { font-size: 11px; }
+      .brand-mark { height: 18px; width: auto; }
       .nav-links { display: flex; gap: 26px; margin-right: auto; }
       .nav-links a { color: var(--muted); font-size: 14px; }
       .nav-links a:hover { color: var(--text); }
