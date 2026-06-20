@@ -1,0 +1,7 @@
+# Cloudflare Pages / Netlify rewrite rules.
+# Serve the Go vanity import meta (public/mitos/index.html) with HTTP 200 for
+# /mitos and every subpath, so `go get mitos.run/mitos/...` resolves at any
+# import depth. Status 200 makes these rewrites, not redirects (go-get needs
+# the meta in the final 200 response).
+/mitos        /mitos/index.html   200
+/mitos/*      /mitos/index.html   200

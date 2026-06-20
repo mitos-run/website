@@ -1,0 +1,32 @@
+<!doctype html>
+<!--
+  Go vanity import metadata for the module "mitos.run/mitos".
+
+  When `go get mitos.run/mitos/...` runs, the Go toolchain fetches
+  https://mitos.run/mitos?go-get=1 and reads the go-import meta below to learn
+  where the source actually lives. This decouples the import path from the
+  GitHub org: the org can change and imports never break.
+
+  CONFIRM at org-migration time: the repository URL below must point at the
+  real, current home of the code. Update it together with astro.config.mjs and
+  the README if the org name differs from "mitos-run".
+
+  IMPORTANT: the host must serve this same response (HTTP 200, not a redirect)
+  for /mitos AND every /mitos/* subpath, because Go may request the full import
+  path. See public/_redirects (Cloudflare Pages / Netlify) and vercel.json.
+-->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="go-import" content="mitos.run/mitos git https://github.com/mitos-run/mitos" />
+    <meta
+      name="go-source"
+      content="mitos.run/mitos https://github.com/mitos-run/mitos https://github.com/mitos-run/mitos/tree/main{/dir} https://github.com/mitos-run/mitos/blob/main{/dir}/{file}#L{line}"
+    />
+    <meta http-equiv="refresh" content="0; url=https://pkg.go.dev/mitos.run/mitos" />
+  </head>
+  <body>
+    Redirecting to
+    <a href="https://pkg.go.dev/mitos.run/mitos">pkg.go.dev/mitos.run/mitos</a>.
+  </body>
+</html>
