@@ -1,5 +1,5 @@
 ---
-// mitos landing — world-class pass. Hosted-first, Vercel-style (monochrome,
+// mitos landing, world-class pass. Hosted-first, Vercel-style (monochrome,
 // Geist). One job: make agent swarms / live microVM forking click instantly.
 // Code-forward swarm hero + a signature scroll-triggered fork fan-out.
 // Aggressive reduction; restrained motion. See
@@ -16,7 +16,7 @@ const navLinks = [
   { label: 'Docs', href: DOCS },
 ];
 
-// Hero surfaces — install + copy-to-paste example per language. The fork(8)
+// Hero surfaces: install + copy-to-paste example per language. The fork(8)
 // line is the aha. Snippets are runnable against the real API.
 const surfaces = [
   {
@@ -27,7 +27,7 @@ const surfaces = [
 
 sb = AgentRun().sandbox("python", ready=True)
 
-# fork into a swarm — each subagent its own microVM
+# fork into a swarm. each subagent gets its own microVM
 swarm = sb.fork(8)
 for agent in swarm:
     agent.exec("python subagent.py")`,
@@ -41,7 +41,7 @@ for agent in swarm:
 const run = new AgentRun();
 const sb = await run.sandbox("python", { ready: true });
 
-// fork into a swarm — each subagent its own microVM
+// fork into a swarm. each subagent gets its own microVM
 const swarm = await sb.fork(8);
 await Promise.all(swarm.map((a) => a.exec("node subagent.js")));`,
   },
@@ -57,16 +57,16 @@ mitos sandbox ls`,
 
 const hostedItems = [
   { h: 'No nodes to manage', p: 'Skip the KVM hardware, the snapshot plumbing, and the on-call. Call the API and get a forkable computer.' },
-  { h: 'Warm pools, maintained', p: 'Pre-snapshotted pools stay warm so every fork lands in milliseconds — we run the autoscaler that keeps them ready.' },
+  { h: 'Warm pools, maintained', p: 'Pre-snapshotted pools stay warm so every fork lands in milliseconds. We run the autoscaler that keeps them ready.' },
   { h: 'Scale a swarm on demand', p: 'Fan out to thousands of subagents and back to zero. CoW-aware metering bills the honest physical footprint.' },
-  { h: 'Production-parity engine', p: 'The hosted service runs the same open-source engine and the same API — no surprises between dev and prod.' },
+  { h: 'Production-parity engine', p: 'The hosted service runs the same open-source engine and the same API, so there are no surprises between dev and prod.' },
 ];
 
 const steps = [
   {
     n: '01',
     title: 'Claim a warm sandbox',
-    body: 'Ask for an image, get a running isolated computer in milliseconds — from a pre-warmed pool, no cold start.',
+    body: 'Ask for an image, get a running isolated computer in milliseconds, straight from a pre-warmed pool with no cold start.',
     code: `sb = AgentRun().sandbox("python", ready=True)`,
   },
   {
@@ -78,20 +78,24 @@ const steps = [
   {
     n: '03',
     title: 'Keep the winner',
-    body: 'Commit the workspace from the subagent that succeeded — durable, versioned, forkable state.',
+    body: 'Commit the workspace from the subagent that succeeded. Durable, versioned, forkable state.',
     code: `winner.workspace.commit()`,
   },
 ];
 
+// Capability matrix. Cells: s = 'y' (yes) | 'n' (no) | 'p' (partial), t = short note.
+// Honest and capability-based (not a latency head-to-head). Only mitos is 'y' on
+// BOTH live fork and open source, which is the whole point.
+const compCols = ['mitos', 'E2B', 'Modal', 'Daytona', 'Morph'];
 const compRows = [
-  { feat: 'Fork running state into a swarm', mitos: 'Core primitive', e2b: 'Snapshot / resume', modal: 'Memory snapshots', daytona: 'No', morph: 'Yes (proprietary)' },
-  { feat: 'Warm millisecond claims', mitos: 'Design center', e2b: 'Warm pools', modal: 'Warm pools', daytona: 'Workspaces', morph: 'Yes' },
-  { feat: 'Durable forkable workspaces', mitos: 'Workspace CRD', e2b: 'No', modal: 'Volumes', daytona: 'Workspaces', morph: 'Yes (proprietary)' },
-  { feat: 'Hardware isolation per subagent', mitos: 'KVM microVM', e2b: 'microVM', modal: 'gVisor', daytona: 'Container / VM', morph: 'microVM' },
-  { feat: 'Open source', mitos: 'Apache 2.0', e2b: 'Partial', modal: 'No', daytona: 'Partial', morph: 'No' },
+  { feat: 'Live fork of a running VM', cells: [{ s: 'y' }, { s: 'n' }, { s: 'n' }, { s: 'n' }, { s: 'y' }] },
+  { feat: 'microVM isolation per subagent', cells: [{ s: 'y', t: 'KVM' }, { s: 'y' }, { s: 'n', t: 'gVisor' }, { s: 'n', t: 'container' }, { s: 'y' }] },
+  { feat: 'Warm pool, no cold start', cells: [{ s: 'y' }, { s: 'y' }, { s: 'y' }, { s: 'y' }, { s: 'y' }] },
+  { feat: 'Durable, forkable workspaces', cells: [{ s: 'y' }, { s: 'n' }, { s: 'p', t: 'volumes' }, { s: 'p', t: 'snapshots' }, { s: 'y' }] },
+  { feat: 'Open source', cells: [{ s: 'y', t: 'Apache 2.0' }, { s: 'p' }, { s: 'n' }, { s: 'p' }, { s: 'n' }] },
 ];
 
-// Cinematic fork-fan centerpiece — child Y positions in the SVG viewBox (1000x380).
+// Cinematic fork-fan centerpiece: child Y positions in the SVG viewBox (1000x380).
 // One parent at (185,190) draws bezier branches out to eight subagent nodes.
 const fanNodes = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(46 + i * (288 / 7)) }));
 
@@ -103,13 +107,13 @@ const fanNodes = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(46 + i 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <title>mitos — Spin up agent swarms in milliseconds</title>
+    <title>mitos: Spin up agent swarms in milliseconds</title>
     <meta
       name="description"
-      content="Fork one running microVM into hundreds of isolated subagents — each its own computer, in milliseconds. Fully managed Firecracker microVM sandboxes for agent swarms."
+      content="Fork one running microVM into hundreds of isolated subagents, each its own computer, in milliseconds. Fully managed Firecracker microVM sandboxes for agent swarms."
     />
-    <meta property="og:title" content="mitos — Spin up agent swarms in milliseconds" />
-    <meta property="og:description" content="Fork one running microVM into hundreds of isolated subagents — each its own computer, in milliseconds. Fully managed." />
+    <meta property="og:title" content="mitos: Spin up agent swarms in milliseconds" />
+    <meta property="og:description" content="Fork one running microVM into hundreds of isolated subagents, each its own computer, in milliseconds. Fully managed." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -142,7 +146,7 @@ const fanNodes = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(46 + i 
             <p class="eyebrow">Millisecond microVM sandboxes for agent swarms</p>
             <h1>Spin up agent swarms<br />in milliseconds.</h1>
             <p class="lede">
-              Fork one running microVM into hundreds of <strong>isolated subagents</strong> —
+              Fork one running microVM into hundreds of <strong>isolated subagents</strong>,
               each its own computer. Fully managed.
             </p>
             <div class="hero-actions">
@@ -178,7 +182,7 @@ const fanNodes = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(46 + i 
         <div class="container swarm-inner reveal">
           <h2 class="swarm-h">One agent. <span class="swarm-h-dim">A swarm of subagents.</span></h2>
           <p class="swarm-lede">
-            Copy-on-write fork of a <em>running</em> microVM — memory, processes, and all.
+            Copy-on-write fork of a <em>running</em> microVM: memory, processes, and all.
             Fan one agent into many subagents, each costing only the pages it dirties.
             Keep the winner, drop the rest.
           </p>
@@ -261,17 +265,21 @@ const fanNodes = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(46 + i 
         <div class="table-wrap reveal">
           <table class="comp-table">
             <thead>
-              <tr><th>Capability</th><th class="own">mitos</th><th>E2B</th><th>Modal</th><th>Daytona</th><th>Morph</th></tr>
+              <tr>
+                <th>Capability</th>
+                {compCols.map((c, i) => <th class={i === 0 ? 'own' : ''}>{c}</th>)}
+              </tr>
             </thead>
             <tbody>
               {compRows.map((r) => (
                 <tr>
                   <td class="feat">{r.feat}</td>
-                  <td class="own mono">{r.mitos}</td>
-                  <td class="mono">{r.e2b}</td>
-                  <td class="mono">{r.modal}</td>
-                  <td class="mono">{r.daytona}</td>
-                  <td class="mono">{r.morph}</td>
+                  {r.cells.map((cell, i) => (
+                    <td class={i === 0 ? 'own' : ''}>
+                      <span class={`mk mk-${cell.s}`}>{cell.s === 'y' ? '✓' : cell.s === 'n' ? '✗' : '◐'}</span>
+                      {cell.t && <span class="ct">{cell.t}</span>}
+                    </td>
+                  ))}
                 </tr>
               ))}
             </tbody>
@@ -395,6 +403,8 @@ const fanNodes = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(46 + i 
         --surface-2: #0d0d0d;
         --border: rgba(255, 255, 255, 0.1);
         --border-strong: rgba(255, 255, 255, 0.2);
+        --border-2: rgba(255, 255, 255, 0.16);
+        --elev: #141417;
         --text: #fff;
         --text-2: #e6e6e6;
         --muted: #8a8a8a;
@@ -458,7 +468,7 @@ const fanNodes = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(46 + i 
       .ghost-link:hover { color: var(--text); }
 
       /* hero */
-      .hero { padding: 92px 0 72px; }
+      .hero { padding: 96px 0 88px; }
       .hero-grid { display: grid; grid-template-columns: 1fr 1.06fr; gap: 48px; align-items: center; }
       .eyebrow { color: var(--muted); font-size: 12.5px; margin: 0 0 18px; }
       h1 { font-size: clamp(40px, 5.6vw, 66px); line-height: 1.0; letter-spacing: -.04em; font-weight: 600; margin: 0 0 22px; }
@@ -469,19 +479,19 @@ const fanNodes = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(46 + i 
       .spec { font-size: 12.5px; color: var(--dim); margin: 0; letter-spacing: -.01em; }
 
       /* hero code */
-      .install { display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 1px solid var(--border); border-radius: 9px; padding: 10px 12px 10px 14px; margin-bottom: 12px; background: var(--surface); }
-      .install-cmd { font-size: 13px; color: var(--text-2); overflow-x: auto; white-space: nowrap; }
+      .install { display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 1px solid var(--border-2); border-radius: 9px; padding: 10px 12px 10px 14px; margin-bottom: 12px; background: var(--elev); }
+      .install-cmd { font-size: 13px; color: #f2f2f2; overflow-x: auto; white-space: nowrap; }
       .install-cmd::before { content: '$ '; color: var(--dim); }
       .copy-btn { border: 1px solid var(--border); border-radius: 6px; padding: 5px 10px; font-size: 11px; color: var(--muted); background: transparent; cursor: pointer; transition: all .12s ease; white-space: nowrap; }
       .copy-btn:hover { color: var(--text); border-color: var(--border-strong); }
       .copy-btn.copied { color: #fff; border-color: #fff; }
-      .card { background: var(--surface); border: 1px solid var(--border); border-radius: 11px; overflow: hidden; box-shadow: 0 30px 80px -32px rgba(0,0,0,.9); }
-      .card-tabs { display: flex; align-items: center; border-bottom: 1px solid var(--border); background: var(--surface-2); }
-      .tab { font-size: 12px; color: var(--muted); padding: 11px 16px; border: none; border-bottom: 1px solid transparent; background: transparent; cursor: pointer; transition: color .12s ease; }
+      .card { background: var(--elev); border: 1px solid var(--border-2); border-radius: 11px; overflow: hidden; box-shadow: 0 30px 80px -32px rgba(0,0,0,.9); }
+      .card-tabs { display: flex; align-items: center; border-bottom: 1px solid var(--border-2); background: #1c1c20; }
+      .tab { font-size: 12px; color: #9a9a9a; padding: 11px 16px; border: none; border-bottom: 1px solid transparent; background: transparent; cursor: pointer; transition: color .12s ease; }
       .tab:hover { color: var(--text-2); }
       .tab.on { color: var(--text); border-bottom-color: #fff; }
       .card-copy { margin-left: auto; margin-right: 8px; }
-      .code-panel { display: none; margin: 0; padding: 18px 20px; font-family: var(--mono); font-size: 12.5px; line-height: 1.85; color: var(--text-2); overflow-x: auto; }
+      .code-panel { display: none; margin: 0; padding: 18px 20px; min-height: 200px; font-family: var(--mono); font-size: 12.5px; line-height: 1.85; color: #ededed; overflow-x: auto; }
       .code-panel.on { display: block; }
       .surf-note { text-align: center; color: var(--dim); font-size: 12px; margin: 14px 0 0; }
       .surf-note span { color: var(--muted); }
@@ -489,13 +499,13 @@ const fanNodes = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(46 + i 
       .k { color: #fff; font-weight: 600; } .s { color: #9a9a9a; } .f { color: #fff; } .n { color: #9a9a9a; } .c { color: var(--dim); font-style: italic; }
 
       /* sections */
-      section { padding: 72px 0; }
-      .section-title { font-size: clamp(28px, 4vw, 40px); letter-spacing: -.03em; font-weight: 600; margin: 0 0 16px; }
-      .section-lede { color: var(--muted); font-size: 17px; max-width: 46em; margin: 0 0 36px; }
+      section { padding: 100px 0; }
+      .section-title { font-size: clamp(28px, 4vw, 40px); letter-spacing: -.03em; font-weight: 600; margin: 0 0 18px; }
+      .section-lede { color: var(--muted); font-size: 17px; max-width: 46em; margin: 0 0 48px; }
       .section-lede .muted { display: block; font-size: 13px; margin-top: 8px; color: var(--dim); }
 
-      /* swarm — cinematic centerpiece */
-      .swarm { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 80px 0 72px; }
+      /* swarm: cinematic centerpiece */
+      .swarm { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 100px 0 92px; }
       .swarm-inner { text-align: center; max-width: 720px; margin: 0 auto; }
       .swarm-h { font-size: clamp(30px,4.4vw,46px); letter-spacing: -.03em; margin: 0 0 16px; line-height: 1.05; font-weight: 600; text-wrap: balance; }
       .swarm-h-dim { color: var(--muted); }
@@ -561,9 +571,13 @@ const fanNodes = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(46 + i 
       .comp-table tbody tr { transition: background .12s ease; }
       .comp-table tbody tr:hover td { background: rgba(255,255,255,.025); }
       .comp-table .feat { font-weight: 500; }
-      .comp-table td.mono { font-size: 13px; color: var(--muted); }
-      .comp-table .own { background: rgba(255,255,255,.05); color: var(--text) !important; font-weight: 500; border-left: 1px solid var(--border-strong); border-right: 1px solid var(--border-strong); }
-      .comp-table thead th.own { color: var(--text); }
+      .comp-table .mk { font-size: 15px; }
+      .mk-y { color: #fff; } .mk-n { color: var(--dim); } .mk-p { color: var(--muted); }
+      .comp-table .ct { color: var(--muted); font-size: 12px; margin-left: 8px; font-family: var(--mono); }
+      .comp-table .own { background: rgba(255,255,255,.05); color: var(--text); font-weight: 500; border-left: 1px solid var(--border-strong); border-right: 1px solid var(--border-strong); }
+      .comp-table .own .mk-y { color: #fff; }
+      .comp-table thead th.own { color: var(--text); text-align: center; }
+      .comp-table thead th:not(:first-child), .comp-table td:not(.feat) { text-align: center; }
 
       /* final cta */
       .final-cta { text-align: center; border-top: 1px solid var(--border); }
