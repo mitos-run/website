@@ -508,7 +508,7 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
       .btn-primary:hover { background: #1f1f1d; transform: translateY(-1px); box-shadow: 0 10px 24px -12px rgba(10,10,10,.5); }
       .btn-ghost { background: transparent; color: var(--ink); border-color: var(--border-strong); }
       .btn-ghost:hover { border-color: var(--ink); background: rgba(10,10,10,.03); transform: translateY(-1px); }
-      .btn:active { transform: translateY(0); }
+      .btn:active { transform: translateY(0) scale(.985); }
 
       /* nav */
       .nav { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(12px); background: rgba(251,251,249,.72); border-bottom: 1px solid transparent; transition: border-color .2s ease; }
@@ -609,19 +609,20 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
       .hosted { background: var(--surface); border-bottom: 1px solid var(--border); }
       .hosted-inner { text-align: center; }
       .hosted-inner .section-lede { margin-left: auto; margin-right: auto; }
-      .hosted-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin: 0 0 36px; text-align: left; }
-      .hosted-item { padding: 22px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); transition: border-color .15s ease, box-shadow .15s ease; }
+      .hosted-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; margin: 8px 0 42px; text-align: left; border-top: 1px solid var(--border); }
+      .hosted-item { padding: 26px 24px 6px; border-left: 1px solid var(--border); }
+      .hosted-item:first-child { border-left: none; padding-left: 0; }
       .hosted-item h4 { margin: 0 0 8px; font-size: 15px; font-weight: 600; color: var(--ink); }
       .hosted-item p { margin: 0; color: var(--muted); font-size: 14px; }
 
-      /* how */
-      .steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
-      .step { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; transition: border-color .15s ease, box-shadow .15s ease; }
-      .step:hover, .hosted-item:hover { border-color: var(--border-strong); box-shadow: 0 10px 30px -18px rgba(10,10,10,.18); }
-      .step-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
-      .step-n { color: var(--accent-ink); font-size: 13px; }
-      .step h3 { margin: 0; font-size: 17px; font-weight: 600; color: var(--ink); }
-      .step p { color: var(--muted); font-size: 14px; margin: 0 0 16px; }
+      /* how — rule-divided gallery, not boxes */
+      .steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 0 44px; }
+      .step { padding: 26px 0 0; border-top: 1px solid var(--border-2); transition: border-color .2s ease; }
+      .step:hover { border-top-color: var(--ink); }
+      .step-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 12px; }
+      .step-n { color: var(--accent-ink); font-size: 13px; font-weight: 600; }
+      .step h3 { margin: 0; font-size: 18px; font-weight: 600; color: var(--ink); letter-spacing: -.01em; }
+      .step p { color: var(--muted); font-size: 14.5px; margin: 0 0 18px; }
       .code-block { background: var(--code-bg); border: 1px solid rgba(255,255,255,.06); border-radius: 8px; padding: 14px; font-size: 12px; line-height: 1.6; color: var(--code-ink); overflow-x: auto; margin: 0; white-space: pre-wrap; }
 
       /* comparison */
@@ -659,7 +660,11 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
       /* responsive */
       @media (max-width: 900px) {
         .hero-grid { grid-template-columns: 1fr; }
-        .hosted-grid, .steps { grid-template-columns: 1fr; }
+        .hosted-grid, .steps { grid-template-columns: 1fr; gap: 0; }
+        /* stacked: dividers become top rules, not left borders */
+        .hosted-item { border-left: none; border-top: 1px solid var(--border); padding: 22px 0 6px; }
+        .hosted-item:first-child { border-top: none; }
+        .step { margin-top: 4px; }
         .footer-grid { grid-template-columns: 1fr 1fr; }
         .nav-links { display: none; }
         .division-stats { gap: 28px; }
