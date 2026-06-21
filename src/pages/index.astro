@@ -33,7 +33,7 @@ const surfaces = [
 
 sb = AgentRun().sandbox("python", ready=True)
 
-# divide a running VM into a swarm. each daughter is its own microVM
+# fork a running VM into a swarm. each fork is its own microVM
 swarm = sb.fork(8)
 for agent in swarm:
     agent.exec("python subagent.py")`,
@@ -62,29 +62,29 @@ mitos lineage vm·0.3`,
 ];
 
 const hostedItems = [
-  { h: 'No nodes to manage', p: 'Skip the KVM hardware, the snapshot plumbing, and the on-call. Call the API and get a forkable computer.' },
-  { h: 'Warm pools, maintained', p: 'Pre-snapshotted pools stay warm so every division lands in milliseconds. We run the autoscaler that keeps them ready.' },
-  { h: 'Scale a swarm on demand', p: 'Fan out to thousands of daughters and back to zero. CoW-aware metering bills the honest physical footprint.' },
-  { h: 'Production-parity engine', p: 'The hosted service runs the same open-source engine and the same API, so there are no surprises between dev and prod.' },
+  { h: 'No cluster to run', p: 'No KVM hosts to patch, no snapshot storage to babysit, no 3am page. You call the API; we keep the metal alive.' },
+  { h: 'Pools stay warm', p: 'We keep pre-forked VMs hot and the autoscaler tuned, so forks land in milliseconds whether you need one or five hundred.' },
+  { h: 'Pay for what you dirty', p: 'Fork a thousand subagents and scale back to zero. You pay for the memory they actually write, not a thousand whole VMs.' },
+  { h: 'Dev and prod match', p: 'The hosted service is the same open-source engine behind the same API. What runs on your laptop runs in production.' },
 ];
 
 const steps = [
   {
     n: '01',
-    title: 'Claim a warm sandbox',
-    body: 'Ask for an image, get a running isolated computer in milliseconds, straight from a pre-warmed pool with no cold start.',
+    title: 'Grab a warm sandbox',
+    body: 'Ask for an image and get a running, isolated computer back in milliseconds. The pool was already warm, so there is no cold start.',
     code: `sb = AgentRun().sandbox("python", ready=True)`,
   },
   {
     n: '02',
-    title: 'Divide it into a swarm',
-    body: 'Copy-on-write fork the running VM into N daughters. Each is an independent, Ready sandbox sharing the warmed genome — only the pages it dirties cost anything.',
+    title: 'Fork it',
+    body: 'Copy the running VM as many times as you want. Each fork is its own sandbox and shares the parent in memory, so eight of them cost about 3 MiB each.',
     code: `swarm = sb.fork(8)   # ~3 MiB each, not 8 whole VMs`,
   },
   {
     n: '03',
-    title: 'Keep the winner',
-    body: 'Commit the workspace from the daughter that succeeded. Durable, versioned, forkable state with a traceable lineage.',
+    title: 'Keep what worked',
+    body: 'Commit the sandbox that succeeded and throw the rest away. The result is versioned, and you can fork it again whenever you want.',
     code: `winner.workspace.commit()`,
   },
 ];
@@ -95,7 +95,7 @@ const steps = [
 const compCols = ['mitos', 'E2B', 'Modal', 'Daytona', 'Morph'];
 const compRows = [
   { feat: 'Live fork of a running VM', cells: [{ s: 'y' }, { s: 'n' }, { s: 'n' }, { s: 'n' }, { s: 'y' }] },
-  { feat: 'microVM isolation per daughter', cells: [{ s: 'y', t: 'KVM' }, { s: 'y' }, { s: 'n', t: 'gVisor' }, { s: 'n', t: 'container' }, { s: 'y' }] },
+  { feat: 'microVM isolation per subagent', cells: [{ s: 'y', t: 'KVM' }, { s: 'y' }, { s: 'n', t: 'gVisor' }, { s: 'n', t: 'container' }, { s: 'y' }] },
   { feat: 'Warm pool, no cold start', cells: [{ s: 'y' }, { s: 'y' }, { s: 'y' }, { s: 'y' }, { s: 'y' }] },
   { feat: 'Durable, forkable workspaces', cells: [{ s: 'y' }, { s: 'n' }, { s: 'p', t: 'volumes' }, { s: 'p', t: 'snapshots' }, { s: 'y' }] },
   { feat: 'Open source', cells: [{ s: 'y', t: 'Apache 2.0' }, { s: 'p' }, { s: 'n' }, { s: 'p' }, { s: 'n' }] },
@@ -122,21 +122,21 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
     <title>mitos: one agent divides into a thousand</title>
     <meta
       name="description"
-      content="Fork one running microVM into a swarm of isolated subagents — each its own computer, alive in ~27 ms. Open-source engine, fully managed. Live copy-on-write forking for agent swarms."
+      content="Fork a running microVM into hundreds of isolated subagents in about 27ms. Each one is a real microVM, not a container. Self-host the open-source engine, or let us run it."
     />
     <link rel="canonical" href={canonical} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="mitos" />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content="mitos: one agent divides into a thousand" />
-    <meta property="og:description" content="Fork one running microVM into a swarm of isolated subagents — each its own computer, alive in ~27 ms. Open source. Fully managed." />
+    <meta property="og:description" content="Fork a running microVM into hundreds of isolated subagents in about 27ms. Each one is a real microVM, not a container. Open source, or fully hosted." />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="mitos logo with the tagline: one agent divides into a thousand" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="mitos: one agent divides into a thousand" />
-    <meta name="twitter:description" content="Fork one running microVM into a swarm of isolated subagents — each its own computer, alive in ~27 ms. Open source. Fully managed." />
+    <meta name="twitter:description" content="Fork a running microVM into hundreds of isolated subagents in about 27ms. Each one is a real microVM, not a container. Open source, or fully hosted." />
     <meta name="twitter:image" content={ogImage} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -167,15 +167,15 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
           <div class="hero-copy reveal">
             <h1>One agent divides<br />into a thousand.</h1>
             <p class="lede">
-              Fork one running microVM into a swarm of <strong>isolated subagents</strong>
-              — each its own computer, alive in <span class="hl">~27&nbsp;ms</span>.
-              Open source. Fully managed.
+              Fork a running microVM into hundreds of <strong>isolated subagents</strong>
+              in about <span class="hl">27&nbsp;ms</span>. Each one is a real computer,
+              not a container. Host it yourself, or let us run it.
             </p>
             <div class="hero-actions">
               <a class="btn btn-primary btn-lg" href={SIGNUP}>Start building</a>
               <a class="btn btn-ghost btn-lg" href="/benchmarks/">See the benchmark →</a>
             </div>
-            <p class="spec mono">~27&nbsp;ms per fork&nbsp;·&nbsp;~3&nbsp;MiB per daughter (copy-on-write)&nbsp;·&nbsp;fan out to thousands</p>
+            <p class="spec mono">~27&nbsp;ms per fork&nbsp;·&nbsp;~3&nbsp;MiB per subagent (copy-on-write)&nbsp;·&nbsp;scales to thousands</p>
           </div>
 
           <div class="hero-code reveal">
@@ -202,16 +202,17 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
       <!-- THE DIVISION (signature centerpiece) -->
       <section class="division-section" id="swarm">
         <div class="container division-head reveal">
-          <h2 class="division-h">One cell. <span class="division-h-dim">A living colony of computers.</span></h2>
+          <h2 class="division-h">Most sandboxes cold-boot. <span class="division-h-dim">mitos forks a running one.</span></h2>
           <p class="division-lede">
-            Copy-on-write fork of a <em>running</em> microVM — memory, processes, and all.
-            One machine divides into many daughters, each sharing the warmed genome and
-            costing only the pages it dirties. Keep the winner, reap the rest.
+            A fork copies the <em>live</em> VM: memory, running processes, open files
+            and all. The copies share the original's pages and only pay for what they
+            change, so eight forks cost about 3&nbsp;MiB each instead of eight whole VMs.
+            Keep the one that worked, kill the rest.
           </p>
         </div>
 
         <div class="division-stage reveal" id="division">
-          <svg class="division-svg" viewBox="0 0 1000 400" preserveAspectRatio="xMidYMid meet" role="img" aria-label="One running microVM dividing into eight isolated daughter sandboxes">
+          <svg class="division-svg" viewBox="0 0 1000 400" preserveAspectRatio="xMidYMid meet" role="img" aria-label="One running microVM forking into eight isolated subagent sandboxes">
             <!-- division paths: parent → each daughter -->
             <g class="d-paths">
               {daughters.map((n) => (
@@ -236,28 +237,28 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
 
           <div class="division-meta mono">
             <button class="run-btn" id="run-fork" type="button" aria-label="Replay the fork">▷ Run <span class="run-call">sb.fork(8)</span></button>
-            <span class="dm-out">→ 8 daughters · <span class="dm-ms">~27&nbsp;ms</span> · +3&nbsp;MiB each</span>
+            <span class="dm-out">→ 8 subagents · <span class="dm-ms">~27&nbsp;ms</span> · +3&nbsp;MiB each</span>
           </div>
         </div>
 
         <div class="container division-foot reveal">
           <div class="division-stats">
-            <div><span class="sv mono">~27 ms</span><span class="sl">per division</span></div>
-            <div><span class="sv mono">~3 MiB</span><span class="sl">per daughter</span></div>
+            <div><span class="sv mono">~27 ms</span><span class="sl">per fork</span></div>
+            <div><span class="sv mono">~3 MiB</span><span class="sl">per subagent</span></div>
             <div><span class="sv mono">N-way</span><span class="sl">live fork</span></div>
           </div>
-          <p class="division-uses mono">Built for parallel attempts · RL rollouts · test-time scaling · multi-agent eval</p>
+          <p class="division-uses mono">Parallel attempts · RL rollouts · test-time scaling · multi-agent evals</p>
         </div>
       </section>
 
       <!-- WHY HOSTED -->
       <section class="hosted" id="hosted">
         <div class="container hosted-inner reveal">
-          <h2 class="section-title">Milliseconds, without operating the cluster</h2>
+          <h2 class="section-title">Milliseconds, without running the cluster yourself</h2>
           <p class="section-lede">
-            mitos hosted runs the engine for you. You get the fork speed and the isolation;
-            we keep the warm pools full, the nodes healthy, and the fleet scaling. And it’s
-            the same Apache-2.0 engine you can <a href={GITHUB} target="_blank" rel="noopener">run yourself</a> — no lock-in.
+            We run the engine so you don’t babysit a fleet of bare-metal nodes. It’s the
+            same Apache-2.0 engine you can <a href={GITHUB} target="_blank" rel="noopener">self-host</a>,
+            so if you ever want out, you just leave.
           </p>
           <div class="hosted-grid">
             {hostedItems.map((it) => (
@@ -284,11 +285,12 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
 
       <!-- COMPARISON -->
       <section class="compare container" id="compare">
-        <h2 class="section-title reveal">The one quadrant where mitos is alone</h2>
+        <h2 class="section-title reveal">Nobody else does both</h2>
         <p class="section-lede reveal">
-          Runtimes that fork a running VM are closed and hosted-only. Open runtimes don’t
-          live-fork. mitos does both — and the engine is honestly open, Apache&nbsp;2.0.
-          <span class="muted">Competitor capabilities from their public docs; not a head-to-head benchmark.</span>
+          The runtimes that can fork a running VM are closed and hosted-only. The open
+          ones can’t live-fork. mitos does both, and “open” here means Apache&nbsp;2.0 with
+          the real engine on GitHub, not a teaser.
+          <span class="muted">Competitor capabilities from their public docs, not a head-to-head benchmark.</span>
         </p>
         <div class="table-wrap reveal">
           <table class="comp-table">
@@ -332,7 +334,7 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
       <div class="container footer-grid">
         <div class="footer-brand">
           <a class="brand" href="/"><Mark class="brand-mark" /> mitos</a>
-          <p class="muted">Live microVM division for agent swarms. One cell becomes a colony.</p>
+          <p class="muted">Fork running microVMs into agent swarms. Open source, or fully hosted.</p>
           <p class="muted mono oss-badge">Open source · Apache 2.0 · <a href={GITHUB} target="_blank" rel="noopener">GitHub ↗</a></p>
         </div>
         <div class="footer-col">
