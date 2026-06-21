@@ -482,7 +482,11 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
         line-height: 1.6; overflow-x: hidden;
       }
       ::selection { background: var(--accent-soft); color: var(--accent-ink); }
-      .container { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+      /* horizontal-only padding: using the `padding` shorthand here would reset
+         vertical padding to 0 on sections that are themselves `.container`
+         (.how, .compare), wiping their section padding. padding-inline keeps the
+         gutter without touching top/bottom. */
+      .container { max-width: var(--maxw); margin: 0 auto; padding-inline: 24px; }
       .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
       .muted { color: var(--muted); }
       h1, h2, .section-title, .division-h, .final-cta h2 { text-wrap: balance; }
