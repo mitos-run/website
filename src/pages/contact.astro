@@ -4,13 +4,13 @@
 import Site from '../layouts/Site.astro';
 
 const GITHUB = 'https://github.com/mitos-run/mitos';
-const TITLE = 'Contact mitos';
+const TITLE = 'Contact mitos: GitHub, issues, and security';
 const DESC =
-  'How to reach the mitos team: open a GitHub issue or discussion, report a security finding, or follow development. Open-source, Apache 2.0.';
+  'How to reach the mitos team: open a GitHub issue, report a security finding, or follow development. Open-source, Apache 2.0.';
 
 const channels = [
   { h: 'GitHub issues', p: 'Bugs, feature requests, and questions about the engine or SDKs. The fastest way to reach us.', cta: 'Open an issue', href: `${GITHUB}/issues` },
-  { h: 'GitHub discussions', p: 'Design questions, use-case help, and anything open-ended about forking agents.', cta: 'Start a discussion', href: `${GITHUB}/discussions` },
+  { h: 'Follow development', p: 'Watch the repository for releases and progress, and star it if forking agents is your kind of problem.', cta: 'View the repo', href: GITHUB },
   { h: 'Security', p: 'Report a vulnerability privately. Please do not file public issues for security findings.', cta: 'Read SECURITY.md', href: `${GITHUB}/blob/main/SECURITY.md` },
   { h: 'Early access', p: 'The managed console is not live yet. Run the open-source engine today and watch the repo for hosted availability.', cta: 'Get started', href: '/quickstart' },
 ];
@@ -22,6 +22,23 @@ const channels = [
     <h1>Get in touch.</h1>
     <p class="lede">
       mitos is built in the open. The best way to reach us is on GitHub.
+    </p>
+  </section>
+
+  <section class="container intro">
+    <p>
+      We are a small team building infrastructure for AI agent swarms, and we do most of our work
+      where the code lives. There is no support ticket maze and no sales gate to get past: if you
+      have a question about forking microVMs, an idea for the SDK, or a bug to report, open it on
+      GitHub and you will reach the people who actually wrote the engine.
+    </p>
+    <p>
+      Public issues are best for anything others might hit too, since the answer then helps the next
+      person. Keep security reports private through the process in SECURITY.md. If you are evaluating
+      mitos for a real workload, the fastest way to get unblocked is usually to run the open-source
+      engine from the <a href="/quickstart">quickstart</a> and tell us where it falls short, with a
+      concrete repro. We read everything, and we would rather fix the thing you hit than send you a
+      canned reply.
     </p>
   </section>
 
@@ -38,7 +55,11 @@ const channels = [
 
 <style>
   .page-hero { position: relative; }
-  .contact-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; padding-bottom: 96px; max-width: 60em; }
+  .intro { max-width: 52em; padding-top: 0; }
+  .intro p { color: var(--ink-2); font-size: 17px; line-height: 1.7; margin: 0 0 20px; }
+  .intro a { color: var(--cyan); border-bottom: 1px solid color-mix(in srgb, var(--cyan) 30%, transparent); }
+  .intro a:hover { border-bottom-color: var(--cyan); }
+  .contact-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; padding-top: 40px; padding-bottom: 96px; max-width: 60em; }
   .contact-card { display: flex; flex-direction: column; border: 1px solid var(--hairline); border-radius: var(--r-lg); padding: 28px; }
   .contact-card h2 { font-size: 18px; font-weight: 500; color: var(--ink); margin: 0 0 10px; letter-spacing: -.01em; }
   .contact-card p { color: var(--ink-2); font-size: 15px; line-height: 1.6; margin: 0 0 20px; }
