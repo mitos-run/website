@@ -27,9 +27,9 @@ const trust = [
 ];
 
 const faqs = [
-  { q: 'How is a swarm billed?', a: 'Per second, with vCPU and memory metered separately. Because forks share the parent’s memory copy-on-write, fanning out to many subagents mostly adds vCPU-seconds — the memory bill barely moves.' },
+  { q: 'How is a swarm billed?', a: 'Per second, with vCPU and memory metered separately. Forks share the parent’s memory copy-on-write, so fanning out mostly adds vCPU-seconds rather than re-paying for the shared base image. Compute scales with how many subagents run.' },
   { q: 'Will I get a surprise bill?', a: 'No. Hard spend caps are on by default: a runaway loop suspends the org at your limit instead of becoming a five-figure invoice. A soft cap alerts you before that.' },
-  { q: 'Why is memory so cheap for a swarm?', a: 'A fork is a live copy-on-write clone of a running microVM. The parent’s pages are shared and counted once; each fork only adds the pages it dirties (about 3 MiB on our benchmark). So 100 forks is not 100× the memory.' },
+  { q: 'Does forking actually make a swarm cheaper?', a: 'A fork is a live copy-on-write clone of a running microVM, so you skip the cold-boot tax — it resumes in ~27 ms — and don’t re-build the base image for every subagent. The parent’s pages are shared; each fork adds the pages it writes (about 3 MiB right after a fork, more as it diverges). vCPU still scales with how many subagents run, so a swarm’s bill is mostly compute-time, not duplicated memory. The estimator bills each fork its full RAM, so your real memory cost is usually lower.' },
   { q: 'Do I pay for idle sandboxes?', a: 'No. Compute is per-second while running and scales to zero between forks. You are billed for active work, not for waiting.' },
   { q: 'Can I run it myself instead?', a: 'Yes. The engine is open source under Apache 2.0 and free to run on your own Kubernetes cluster. Hosted mitos is for teams who want the fork speed without operating the cluster.' },
 ];
@@ -45,8 +45,8 @@ const faqs = [
     <div class="hero-copy reveal">
       <h1>Fork freely.<br />Pay for what changes.</h1>
       <p class="lede">
-        Pay-as-you-go, per-second, with <span class="hl">vCPU and memory metered separately</span>.
-        Forks share memory copy-on-write, so a swarm of subagents barely moves the bill.
+        Pay-as-you-go, per second, with <span class="hl">vCPU and memory metered separately</span>.
+        Forks resume from a warm parent in ~27 ms and share its memory, so you pay for work — not cold boots or idle.
       </p>
       <div class="hero-actions">
         <a class="btn btn-primary btn-lg" href={SIGNUP}>Start swarming</a>
@@ -98,9 +98,9 @@ const faqs = [
         </div>
         <div class="calc-lines">
           <div class="calc-line"><span>Compute · vCPU</span><b class="mono" id="o-vcpu">$0</b></div>
-          <div class="calc-line"><span>Memory · RAM (shared)</span><b class="mono" id="o-mem">$0</b></div>
+          <div class="calc-line"><span>Memory · RAM</span><b class="mono" id="o-mem">$0</b></div>
         </div>
-        <p class="calc-cow mono" id="o-cow">Booting cold VMs instead: <b>$0</b> just in memory.</p>
+        <p class="calc-cow mono">Estimate assumes each fork holds its full RAM. Copy-on-write sharing usually makes memory less, and forks resume in ~27 ms — no cold-boot tax.</p>
         <p class="calc-foot mono">$100 signup credit + hard spend caps. Illustrative rates, final at GA.</p>
       </div>
     </div>
@@ -254,7 +254,6 @@ const faqs = [
   // Illustrative per-second rates (mirror engine DefaultPriceList). Not published facts.
   const VCPU_S = 0.0000128; // $/vCPU-second  (~$0.046/hr)
   const MEM_S = 0.0000016;  // $/GiB-second   (~$0.0058/hr)
-  const MARGINAL_GIB = 0.003; // ~3 MiB CoW-dirtied per fork (benchmark)
 
   const PRESETS = {
     solo:  { n: 1,   vcpu: 2, ram: 4, min: 15, runs: 200 },
@@ -275,9 +274,7 @@ const faqs = [
       const n = +s.n.value, vcpu = +s.vcpu.value, ram = +s.ram.value, min = +s.min.value, runs = +s.runs.value;
       const sec = min * 60;
       const vcpuCost = n * vcpu * sec * runs * VCPU_S;
-      // CoW: parent memory counted once, each fork adds only its dirtied pages
-      const memCost = (ram + n * MARGINAL_GIB) * sec * runs * MEM_S;
-      const memWhole = n * ram * sec * runs * MEM_S; // booting N independent VMs
+      const memCost = n * ram * sec * runs * MEM_S; // conservative: each fork billed its full RAM
       const total = vcpuCost + memCost;
 
       $('v-n').textContent = n;
@@ -289,8 +286,6 @@ const faqs = [
       $('o-total').textContent = fmt(total);
       $('o-vcpu').textContent = fmt(vcpuCost);
       $('o-mem').textContent = fmt(memCost);
-      const factor = memCost > 0 ? Math.max(1, Math.round(memWhole / memCost)) : 1;
-      $('o-cow').innerHTML = 'Forked memory <b>' + fmt(memCost) + '</b> vs <b>' + fmt(memWhole) + '</b> for ' + n + ' cold VMs — <b>' + factor + '× less</b>.';
     }
     Object.values(s).forEach((el) => el.addEventListener('input', () => {
       document.querySelectorAll('.preset').forEach((p) => p.classList.remove('is-on'));
