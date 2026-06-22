@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
@@ -11,6 +12,11 @@ export default defineConfig({
   trailingSlash: 'never',
   build: { format: 'file' },
   integrations: [
+    // Starlight detects @astrojs/sitemap and uses this config. Drop the OG
+    // render target (/og-template) so it never enters the index.
+    sitemap({
+      filter: (page) => !page.includes('/og-template'),
+    }),
     starlight({
       title: 'mitos',
       tagline: 'Millisecond microVM sandbox forking for AI agents.',
@@ -24,11 +30,13 @@ export default defineConfig({
         { tag: 'link', attrs: { rel: 'icon', href: '/favicon.ico', sizes: '32x32' } },
         { tag: 'link', attrs: { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' } },
         { tag: 'link', attrs: { rel: 'manifest', href: '/site.webmanifest' } },
-        { tag: 'meta', attrs: { name: 'theme-color', content: '#000000' } },
+        { tag: 'meta', attrs: { name: 'theme-color', content: '#04050A' } },
         { tag: 'meta', attrs: { property: 'og:image', content: 'https://mitos.run/og.png' } },
+        { tag: 'meta', attrs: { property: 'og:image:secure_url', content: 'https://mitos.run/og.png' } },
+        { tag: 'meta', attrs: { property: 'og:image:type', content: 'image/png' } },
         { tag: 'meta', attrs: { property: 'og:image:width', content: '1200' } },
         { tag: 'meta', attrs: { property: 'og:image:height', content: '630' } },
-        { tag: 'meta', attrs: { property: 'og:image:alt', content: 'mitos logo with the tagline: agent swarms in milliseconds' } },
+        { tag: 'meta', attrs: { property: 'og:image:alt', content: 'mitos: fork a running microVM into an agent swarm' } },
         { tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' } },
         { tag: 'meta', attrs: { name: 'twitter:image', content: 'https://mitos.run/og.png' } },
       ],

@@ -1,0 +1,235 @@
+---
+// /compare/<slug> — honest, public-docs comparison pages (Fluorescence).
+// Data + honesty rules live in src/data/competitors.ts. These target the
+// high-intent "mitos vs X" / "X alternative" queries that decide the category
+// SERPs and feed AI answer engines. Never use em or en dashes in copy.
+import Site from '../../layouts/Site.astro';
+import { competitors, getCompetitor } from '../../data/competitors';
+
+export function getStaticPaths() {
+  return competitors.map((c) => ({ params: { slug: c.slug } }));
+}
+
+const { slug } = Astro.params;
+const c = getCompetitor(slug!)!;
+
+const SIGNUP = '/quickstart';
+const DOCS = '/quickstart';
+
+const mark = (s: string) => (s === 'y' ? '✓' : s === 'n' ? '✗' : '◐');
+
+// FAQPage (citable answers) + BreadcrumbList (Home > Alternatives > vs X).
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: c.faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'mitos', item: 'https://mitos.run' },
+      { '@type': 'ListItem', position: 2, name: 'Alternatives', item: 'https://mitos.run/alternatives' },
+      { '@type': 'ListItem', position: 3, name: `mitos vs ${c.name}`, item: `https://mitos.run/compare/${c.slug}` },
+    ],
+  },
+];
+
+const others = competitors.filter((o) => o.slug !== c.slug);
+---
+
+<Site title={c.title} description={c.description} schema={schema}>
+  <section class="page-hero container">
+    <div class="hero-aura" aria-hidden="true"></div>
+    <p class="eyebrow mono"><a href="/alternatives">Alternatives</a> / mitos vs {c.name}</p>
+    <h1>{c.h1}</h1>
+    <p class="lede">{c.lede}</p>
+    <div class="page-actions">
+      <a class="btn btn-primary btn-lg" href={SIGNUP}>Start swarming</a>
+      <a class="btn btn-ghost btn-lg" href="/benchmarks">See the benchmark</a>
+    </div>
+  </section>
+
+  <!-- VERDICT -->
+  <section class="container verdict-wrap">
+    <div class="verdict reveal">
+      <span class="verdict-tag mono">In short</span>
+      <p>{c.verdict}</p>
+    </div>
+  </section>
+
+  <!-- CAPABILITY TABLE -->
+  <section class="container cmp-section">
+    <h2 class="section-title reveal">mitos vs {c.name}, capability by capability</h2>
+    <p class="section-lede reveal">
+      Capabilities from each project's public docs as of June 2026, not a head-to-head benchmark.
+      Numbers move; the source of truth is each project's own repo and docs.
+    </p>
+    <div class="table-wrap reveal">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>Capability</th>
+            <th class="own">mitos</th>
+            <th>{c.name}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {c.rows.map((r) => (
+            <tr>
+              <td class="feat">{r.feat}</td>
+              <td class="own">
+                <span class={`mk mk-${r.mitos.s}`}>{mark(r.mitos.s)}</span>
+                {r.mitos.t && <span class="ct">{r.mitos.t}</span>}
+              </td>
+              <td>
+                <span class={`mk mk-${r.them.s}`}>{mark(r.them.s)}</span>
+                {r.them.t && <span class="ct">{r.them.t}</span>}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- DIFFERENCES -->
+  <section class="container diffs">
+    {c.sections.map((s) => (
+      <div class="diff reveal">
+        <h3>{s.h}</h3>
+        <p>{s.body}</p>
+      </div>
+    ))}
+  </section>
+
+  <!-- FAIR: when to pick them -->
+  <section class="container fair">
+    <div class="fair-inner reveal">
+      <h2 class="section-title">When {c.name} is the better pick</h2>
+      <p class="section-lede">We would rather you choose well than choose us. {c.name} is the right call when:</p>
+      <ul class="fair-list">
+        {c.pickThemWhen.map((p) => <li>{p}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="container faq">
+    <h2 class="section-title reveal">mitos vs {c.name}, in brief</h2>
+    <div class="faq-list reveal">
+      {c.faqs.map((f) => (
+        <details class="faq-item">
+          <summary>{f.q}</summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <!-- OTHER COMPARISONS -->
+  <section class="container more-compare">
+    <h2 class="section-title reveal">Other comparisons</h2>
+    <div class="more-grid reveal">
+      <a class="more-card" href="/alternatives">
+        <span class="more-name">All alternatives</span>
+        <span class="more-blurb">The full agent-sandbox landscape, side by side.</span>
+      </a>
+      {others.map((o) => (
+        <a class="more-card" href={`/compare/${o.slug}`}>
+          <span class="more-name">mitos vs {o.name}</span>
+          <span class="more-blurb">{o.blurb}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="final-cta">
+    <div class="container reveal">
+      <h2>Fork one machine into a swarm.</h2>
+      <div class="hero-actions center">
+        <a class="btn btn-primary btn-lg" href={SIGNUP}>Start swarming</a>
+        <a class="btn btn-ghost btn-lg" href={DOCS}>Read the docs</a>
+      </div>
+    </div>
+  </section>
+</Site>
+
+<style>
+  .page-hero { position: relative; }
+  .page-hero .eyebrow a { color: var(--ink-2); border-bottom: 1px solid var(--hairline-strong); }
+  .page-hero .eyebrow a:hover { color: var(--magenta); border-bottom-color: var(--magenta); }
+  .hero-aura { position: absolute; top: -40px; left: 4%; width: 640px; height: 480px; z-index: 0; pointer-events: none;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--magenta) 11%, transparent), transparent 72%);
+    opacity: .5; filter: blur(8px); }
+  .page-hero h1, .page-hero .lede, .page-hero .page-actions { position: relative; z-index: 1; }
+
+  .verdict-wrap { padding-top: 8px; }
+  .verdict { display: flex; gap: 18px; align-items: flex-start; border: 1px solid var(--hairline); border-left: 2px solid var(--magenta); border-radius: var(--r-md); background: var(--field-1); padding: 22px 24px; max-width: 60em; }
+  .verdict-tag { color: var(--magenta); font-size: 12px; padding-top: 3px; white-space: nowrap; letter-spacing: .04em; text-transform: uppercase; }
+  .verdict p { margin: 0; color: var(--ink); font-size: 16px; line-height: 1.6; }
+
+  .cmp-section { padding-top: 64px; }
+  .section-title { font-size: clamp(26px, 3.4vw, 38px); letter-spacing: var(--track-display); font-weight: 400; margin: 0 0 16px; }
+  .section-lede { color: var(--ink-2); font-size: 16px; max-width: 44em; margin: 0 0 36px; line-height: 1.55; }
+
+  /* comparison table (matches the homepage comp-table) */
+  .table-wrap { overflow-x: auto; border: 1px solid var(--hairline); border-radius: var(--r-lg); }
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 560px; }
+  .comp-table th, .comp-table td { text-align: left; padding: 16px 18px; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+  .comp-table thead th { background: var(--field-1); color: var(--ink-3); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+  .comp-table tbody tr:last-child td { border-bottom: none; }
+  .comp-table tbody tr:hover td { background: rgba(255,255,255,.02); }
+  .comp-table .feat { color: var(--ink-2); }
+  .comp-table th:first-child, .comp-table td:first-child { position: sticky; left: 0; background: var(--field); }
+  .comp-table thead th:first-child { background: var(--field-1); }
+  .comp-table .mk { font-size: 15px; display: block; line-height: 1.15; }
+  .mk-y { color: var(--magenta); } .mk-n { color: var(--ink-3); } .mk-p { color: var(--ink-2); }
+  .comp-table .ct { color: var(--ink-3); font-size: 11px; margin-top: 3px; font-family: var(--mono); display: block; line-height: 1.25; }
+  .comp-table .own { color: var(--ink); }
+  .comp-table thead th.own { color: var(--magenta); text-align: center; }
+  .comp-table thead th:not(:first-child), .comp-table td:not(.feat) { text-align: center; }
+  .comp-table .own .mk-y { color: var(--magenta); }
+
+  /* difference prose */
+  .diffs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px 48px; padding-top: 8px; }
+  .diff h3 { font-size: 19px; font-weight: 500; color: var(--ink); letter-spacing: -.01em; margin: 0 0 12px; }
+  .diff p { color: var(--ink-2); font-size: 14.5px; line-height: 1.65; margin: 0; }
+
+  /* fair section */
+  .fair-inner { border: 1px solid var(--hairline); border-radius: var(--r-lg); background: var(--field-1); padding: 40px 40px 36px; max-width: 60em; }
+  .fair-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; }
+  .fair-list li { color: var(--ink); font-size: 15.5px; line-height: 1.55; padding-left: 28px; position: relative; }
+  .fair-list li::before { content: '\2713'; position: absolute; left: 0; top: 0; color: var(--cyan); font-family: var(--mono); }
+
+  /* faq */
+  .faq-list { max-width: 760px; }
+  .faq-item summary { list-style: none; cursor: pointer; padding: 16px 0; font-size: 16px; color: var(--ink); display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--hairline); transition: color .14s var(--ease); }
+  .faq-item summary:hover { color: var(--magenta); }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::after { content: '+'; color: var(--magenta); font-family: var(--mono); font-size: 18px; }
+  .faq-item[open] summary::after { content: '\2212'; }
+  .faq-item p { margin: 16px 0 22px; color: var(--ink-2); font-size: 14.5px; line-height: 1.6; }
+
+  /* other comparisons */
+  .more-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .more-card { display: flex; flex-direction: column; gap: 6px; border: 1px solid var(--hairline); border-radius: var(--r-md); padding: 20px; transition: border-color .14s var(--ease), transform .14s var(--ease); }
+  .more-card:hover { border-color: var(--magenta); transform: translateY(-2px); }
+  .more-name { color: var(--ink); font-size: 15px; font-weight: 500; }
+  .more-blurb { color: var(--ink-2); font-size: 13px; line-height: 1.5; }
+
+  .final-cta { text-align: center; }
+  .final-cta h2 { font-size: clamp(28px, 4.5vw, 46px); letter-spacing: var(--track-display); margin: 0 0 28px; font-weight: 400; }
+
+  @media (max-width: 900px) {
+    .diffs, .more-grid { grid-template-columns: 1fr; }
+    .verdict { flex-direction: column; gap: 10px; }
+    .fair-inner { padding: 28px 24px; }
+  }
+</style>

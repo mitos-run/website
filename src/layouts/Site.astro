@@ -12,12 +12,40 @@ import '../styles/base.css';
 interface Props {
   title: string;
   description: string;
+  /** Page-specific JSON-LD nodes (FAQPage, SoftwareApplication, BreadcrumbList, ...). */
+  schema?: Record<string, unknown>[];
 }
-const { title, description } = Astro.props;
+const { title, description, schema = [] } = Astro.props;
 const stars = await getStars();
 
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL('/og.png', Astro.site).href;
+
+// Sitewide structured data: who we are + the site itself. Page-specific nodes
+// (FAQ, SoftwareApplication, breadcrumbs) are appended from the `schema` prop.
+// Helps rich results and, more importantly, AI answer engines cite us correctly.
+const orgId = 'https://mitos.run/#org';
+const baseSchema: Record<string, unknown>[] = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    '@id': orgId,
+    name: 'mitos',
+    url: 'https://mitos.run',
+    logo: 'https://mitos.run/icon-512.png',
+    description: 'Managed, forkable Firecracker microVM sandboxes for AI agent swarms. Open source under Apache 2.0.',
+    sameAs: ['https://github.com/mitos-run/mitos'],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': 'https://mitos.run/#website',
+    name: 'mitos',
+    url: 'https://mitos.run',
+    publisher: { '@id': orgId },
+  },
+];
+const allSchema = [...baseSchema, ...schema];
 
 const GITHUB = 'https://github.com/mitos-run/mitos';
 const DOCS = '/quickstart';
@@ -52,15 +80,20 @@ const navLinks = [
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:secure_url" content={ogImage} />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="mitos: one agent divides into a thousand" />
+    <meta property="og:image:alt" content="mitos: fork a running microVM into an agent swarm" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     <link rel="preload" href="/fonts/Satoshi-Variable.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/GeistMono-Variable.woff2" as="font" type="font/woff2" crossorigin />
+    {allSchema.map((node) => (
+      <script type="application/ld+json" set:html={JSON.stringify(node)} />
+    ))}
   </head>
   <body>
     <div class="field" aria-hidden="true"></div>
@@ -118,7 +151,8 @@ const navLinks = [
         </div>
         <div class="footer-col">
           <h5>Company</h5>
-          <a href="/blog">Blog</a>
+          <a href="/alternatives">Alternatives</a>
+          <a href={`${GITHUB}/releases`} target="_blank" rel="noopener">Changelog</a>
           <a href={`${GITHUB}/blob/main/SECURITY.md`} target="_blank" rel="noopener">Security</a>
           <a href={`${GITHUB}/blob/main/LICENSE`} target="_blank" rel="noopener">License</a>
         </div>

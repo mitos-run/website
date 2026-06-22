@@ -41,11 +41,24 @@ const faqs = [
   { q: 'Do I pay for idle sandboxes?', a: 'No. Compute is per-second while running and scales to zero between forks. You are billed for active work, not for waiting.' },
   { q: 'Can I run it myself instead?', a: 'Yes. The engine is open source under Apache 2.0 and free to run on your own Kubernetes cluster. Hosted mitos is for teams who want the fork speed without operating the cluster.' },
 ];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
 ---
 
 <Site
   title="mitos pricing: pay-as-you-go for agent swarms"
   description="Pay-as-you-go, per-second microVM compute with decoupled vCPU and RAM. Forks share memory copy-on-write so fanning out stays cheap. $100 signup credit, hard spend caps, no platform fee. Illustrative rates; final at GA."
+  schema={schema}
 >
   <section class="hero container">
     <div class="hero-aura" aria-hidden="true"></div>

@@ -1,0 +1,181 @@
+---
+// /alternatives — the agent-sandbox landscape hub. Targets "AI agent sandbox
+// alternatives" / "E2B alternatives" style queries and links out to each
+// /compare/<slug> page. Honest, public-docs framing; no fabricated claims.
+// Never use em or en dashes in copy.
+import Site from '../layouts/Site.astro';
+import { competitors } from '../data/competitors';
+
+const SIGNUP = '/quickstart';
+
+const TITLE = 'AI agent sandbox alternatives: mitos vs E2B, Modal, Daytona, Morph';
+const DESC =
+  'An honest map of the AI agent sandbox landscape: E2B, Modal, Daytona, Morph and mitos, compared on live forking, isolation, license, and cost. Public docs as of June 2026, not a head-to-head benchmark.';
+
+// Landscape table: one row per platform, the few axes that actually decide it.
+const landscape = [
+  { name: 'mitos', fork: 'Live VM fork', iso: 'Firecracker microVM', oss: 'Apache 2.0', note: 'Fork running memory into a swarm; ~27 ms, ~3 MiB/fork', own: true, href: '/' },
+  { name: 'E2B', fork: 'Fresh sandbox', iso: 'Firecracker microVM', oss: 'Apache 2.0', note: 'Mature, widely adopted; no live fork', href: '/compare/e2b' },
+  { name: 'Modal', fork: 'Snapshot', iso: 'gVisor', oss: 'Closed', note: 'Full Python/ML platform with native GPU', href: '/compare/modal' },
+  { name: 'Daytona', fork: 'Filesystem / snapshot', iso: 'Container (microVM opt-in)', oss: 'AGPL', note: 'Very fast create; Computer Use', href: '/compare/daytona' },
+  { name: 'Morph', fork: 'Live VM branch', iso: 'Undisclosed', oss: 'Closed', note: 'Closest twin (Infinibranch); fewer public numbers', href: '/compare/morph' },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'mitos', item: 'https://mitos.run' },
+      { '@type': 'ListItem', position: 2, name: 'Alternatives', item: 'https://mitos.run/alternatives' },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'AI agent sandbox platforms',
+    itemListElement: landscape.map((p, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: p.name,
+    })),
+  },
+];
+---
+
+<Site title={TITLE} description={DESC} schema={schema}>
+  <section class="page-hero container">
+    <div class="hero-aura" aria-hidden="true"></div>
+    <p class="eyebrow mono">Alternatives</p>
+    <h1>The AI agent sandbox landscape</h1>
+    <p class="lede">
+      Everyone in this category runs agent code in an isolated environment. The real
+      questions are narrower: can it <strong>fork a running machine</strong> into a swarm, what
+      isolates it, and can you run it yourself. Here is the honest map.
+    </p>
+    <div class="page-actions">
+      <a class="btn btn-primary btn-lg" href={SIGNUP}>Start swarming</a>
+      <a class="btn btn-ghost btn-lg" href="/benchmarks">See the benchmark</a>
+    </div>
+  </section>
+
+  <!-- LANDSCAPE TABLE -->
+  <section class="container land-section">
+    <p class="section-lede reveal">
+      Capabilities from each project's public docs as of June 2026, not a head-to-head benchmark.
+    </p>
+    <div class="table-wrap reveal">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>Platform</th>
+            <th>Fork model</th>
+            <th>Isolation</th>
+            <th>License</th>
+            <th>In a sentence</th>
+          </tr>
+        </thead>
+        <tbody>
+          {landscape.map((p) => (
+            <tr class={p.own ? 'own-row' : ''}>
+              <td class="pname"><a href={p.href}>{p.name}</a></td>
+              <td>{p.fork}</td>
+              <td>{p.iso}</td>
+              <td>{p.oss}</td>
+              <td class="note">{p.note}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- PER-COMPETITOR CARDS -->
+  <section class="container compare-cards">
+    <h2 class="section-title reveal">Compare mitos head to head</h2>
+    <div class="cards-grid reveal">
+      {competitors.map((c) => (
+        <a class="cmp-card" href={`/compare/${c.slug}`}>
+          <span class="cmp-card-h">mitos vs {c.name}</span>
+          <span class="cmp-card-b">{c.blurb}</span>
+          <span class="cmp-card-cta mono">Read the comparison &rarr;</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- HONEST NOTE -->
+  <section class="container honest">
+    <div class="honest-inner reveal">
+      <h2 class="section-title">Why we publish this</h2>
+      <p>
+        Most comparison pages exist to make the host look like the only sane choice. This one does not.
+        Several of these tools fork or branch VMs, and a few are excellent at it. We will not claim the
+        fork primitive is ours alone. What mitos bets on is the combination: the fastest, densest
+        <strong> live fork of running memory</strong>, with honest copy-on-write economics, a real
+        Apache-2.0 exit, all <strong>managed</strong> so you never run the cluster. If another tool fits
+        your constraints better, the comparisons above will tell you so.
+      </p>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="final-cta">
+    <div class="container reveal">
+      <h2>See the fork for yourself.</h2>
+      <div class="hero-actions center">
+        <a class="btn btn-primary btn-lg" href={SIGNUP}>Start swarming</a>
+        <a class="btn btn-ghost btn-lg" href="/benchmarks">Run the benchmark</a>
+      </div>
+    </div>
+  </section>
+</Site>
+
+<style>
+  .page-hero { position: relative; }
+  .hero-aura { position: absolute; top: -40px; left: 4%; width: 640px; height: 480px; z-index: 0; pointer-events: none;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--magenta) 11%, transparent), transparent 72%);
+    opacity: .5; filter: blur(8px); }
+  .page-hero h1, .page-hero .lede, .page-hero .page-actions { position: relative; z-index: 1; }
+  .page-hero .lede strong { color: var(--ink); font-weight: 500; }
+
+  .land-section { padding-top: 24px; }
+  .section-lede { color: var(--ink-2); font-size: 16px; max-width: 44em; margin: 0 0 28px; line-height: 1.55; }
+
+  .table-wrap { overflow-x: auto; border: 1px solid var(--hairline); border-radius: var(--r-lg); }
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 760px; }
+  .comp-table th, .comp-table td { text-align: left; padding: 16px 18px; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+  .comp-table thead th { background: var(--field-1); color: var(--ink-3); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+  .comp-table tbody tr:last-child td { border-bottom: none; }
+  .comp-table tbody tr:hover td { background: rgba(255,255,255,.02); }
+  .comp-table th:first-child, .comp-table td:first-child { position: sticky; left: 0; background: var(--field); }
+  .comp-table thead th:first-child { background: var(--field-1); }
+  .comp-table .pname a { color: var(--ink); font-weight: 500; }
+  .comp-table .pname a:hover { color: var(--magenta); }
+  .comp-table .note { color: var(--ink-2); }
+  .comp-table .own-row td:first-child { background: color-mix(in srgb, var(--magenta) 7%, var(--field)); }
+  .comp-table .own-row .pname a { color: var(--magenta); }
+
+  .compare-cards { padding-top: 88px; }
+  .section-title { font-size: clamp(26px, 3.4vw, 38px); letter-spacing: var(--track-display); font-weight: 400; margin: 0 0 28px; }
+  .cards-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .cmp-card { display: flex; flex-direction: column; gap: 8px; border: 1px solid var(--hairline); border-radius: var(--r-md); padding: 24px; transition: border-color .14s var(--ease), transform .14s var(--ease); }
+  .cmp-card:hover { border-color: var(--magenta); transform: translateY(-2px); }
+  .cmp-card-h { color: var(--ink); font-size: 17px; font-weight: 500; }
+  .cmp-card-b { color: var(--ink-2); font-size: 14px; line-height: 1.55; }
+  .cmp-card-cta { color: var(--magenta); font-size: 12.5px; margin-top: 4px; }
+
+  .honest { padding-top: 24px; }
+  .honest-inner { border: 1px solid var(--hairline); border-left: 2px solid var(--cyan); border-radius: var(--r-md); background: var(--field-1); padding: 36px 40px; max-width: 60em; }
+  .honest-inner .section-title { margin-bottom: 14px; }
+  .honest-inner p { color: var(--ink-2); font-size: 16px; line-height: 1.65; margin: 0; }
+  .honest-inner strong { color: var(--ink); font-weight: 500; }
+
+  .final-cta { text-align: center; }
+  .final-cta h2 { font-size: clamp(28px, 4.5vw, 46px); letter-spacing: var(--track-display); margin: 0 0 28px; font-weight: 400; }
+
+  @media (max-width: 900px) {
+    .cards-grid { grid-template-columns: 1fr; }
+    .honest-inner { padding: 28px 24px; }
+  }
+</style>

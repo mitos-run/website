@@ -17,7 +17,10 @@ const GITHUB = 'https://github.com/mitos-run/mitos';
 const DOCS = '/quickstart';
 const SIGNUP = '/quickstart'; // hosted console not live yet; OSS run-now path
 
-const TITLE = 'mitos: one agent divides into a thousand';
+// Title carries the search keywords (fork / microVM / agent swarm) using the
+// brand's own locked vocabulary; the poetic line lives in the OG card + body.
+// Colon separator, never an em/en dash (brand style rule).
+const TITLE = 'mitos: Fork a running microVM into an agent swarm';
 const DESC =
   'Fork a running microVM into hundreds of isolated subagents in about 27ms, roughly 3 MiB each. Live state, not a disk snapshot. Managed, and Apache-2.0 so you are never locked in.';
 
@@ -135,15 +138,44 @@ const faqs = [
 // the right of a 1000x400 viewBox. Fluorescence: magenta parent (the fork
 // primitive), cyan daughters (the genome), additive glow.
 const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i * (304 / 7)) }));
+
+// Structured data: the product (SoftwareApplication) + the visible FAQ, so the
+// answers can surface as rich results and be cited verbatim by AI engines.
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    '@id': 'https://mitos.run/#software',
+    name: 'mitos',
+    applicationCategory: 'DeveloperApplication',
+    operatingSystem: 'Linux',
+    description: DESC,
+    url: 'https://mitos.run',
+    softwareHelp: 'https://mitos.run/quickstart',
+    license: 'https://www.apache.org/licenses/LICENSE-2.0',
+    isAccessibleForFree: true,
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    publisher: { '@id': 'https://mitos.run/#org' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
 ---
 
-<Site title={TITLE} description={DESC}>
+<Site title={TITLE} description={DESC} schema={schema}>
   <!-- HERO -->
   <section class="hero">
     <div class="hero-aura" aria-hidden="true"></div>
     <div class="container hero-grid">
       <div class="hero-copy reveal">
-        <h1>Run agent swarms</h1>
+        <h1>Fork a microVM into an agent swarm.</h1>
         <p class="lede">Isolated, forkable computers for your agents.</p>
         <div class="hero-actions">
           <a class="btn btn-primary btn-lg" href={SIGNUP}>Start swarming</a>

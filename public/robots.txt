@@ -1,0 +1,8 @@
+# mitos.run — allow everything, point crawlers (and AI answer engines) at the sitemap.
+User-agent: *
+Allow: /
+
+# The OG render target is a noindex screenshot source, not a real page.
+Disallow: /og-template
+
+Sitemap: https://mitos.run/sitemap-index.xml

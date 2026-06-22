@@ -1,10 +1,17 @@
 ---
-// OG image render target (1200x630). Screenshot this to public/og.png, then it
-// can stay (underscore-free so it builds, but it is noindex and not linked).
+// OG image render target (1200x630). Screenshot this to public/og.png:
+//   1. npm run preview
+//   2. node scripts/cdp-shot.mjs 1200 /tmp/og-raw.png http://localhost:<port>/og-template
+//   3. sharp: extract top 1200x630 region, resize 1200x630, flatten #04050A,
+//      png({quality:90,palette:true}) -> public/og.png  (keep it <300KB)
+// Layout: nav-matching brand + keyword headline + legible stats, with the
+// signature 1->N fan (one warm microVM forking into a swarm). noindex, unlinked.
 import '../styles/tokens.css';
 import '../styles/base.css';
-import Division from '../components/Division.astro';
 import Mark from '../components/Mark.astro';
+
+// Compact 1 -> 6 fan for the right zone (mirrors the homepage Division fan).
+const fan = Array.from({ length: 6 }, (_, i) => ({ i, y: Math.round(60 + i * (440 / 5)) }));
 ---
 <html lang="en">
   <head><meta charset="utf-8" /><meta name="robots" content="noindex" /><title>og</title></head>
@@ -12,26 +19,62 @@ import Mark from '../components/Mark.astro';
     <div class="field" aria-hidden="true"></div>
     <div class="og">
       <div class="og-left">
-        <div class="og-brand mono"><Mark class="og-glyph" /> mitos</div>
-        <h1 class="og-title">One agent divides<br />into a thousand.</h1>
+        <div class="og-brand"><Mark class="og-glyph" /> mitos</div>
+        <h1 class="og-title">Fork a microVM<br />into a swarm.</h1>
         <div class="og-stats mono">
-          <span><b>~27ms</b> per fork</span>
-          <span><b>~3 MiB</b> per subagent</span>
-          <span><b>Apache 2.0</b></span>
+          <div class="og-stat"><b>~27 ms</b><span>per fork</span></div>
+          <div class="og-stat"><b>~3 MiB</b><span>per subagent</span></div>
+          <div class="og-stat last"><b>Apache 2.0</b><span>open source</span></div>
         </div>
       </div>
-      <div class="og-right"><Division size={300} trigger={false} /></div>
+      <div class="og-right">
+        <svg class="og-fan" viewBox="0 0 440 560" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+          <defs>
+            <radialGradient id="ofg" cx="50%" cy="46%" r="55%">
+              <stop offset="0%" stop-color="#ffffff" />
+              <stop offset="44%" stop-color="#bfeeff" />
+              <stop offset="100%" stop-color="#3DDCFF" stop-opacity="0" />
+            </radialGradient>
+            <radialGradient id="ofm" cx="50%" cy="50%" r="50%">
+              <stop offset="32%" stop-color="#FF45C8" stop-opacity="0" />
+              <stop offset="64%" stop-color="#FF45C8" stop-opacity=".6" />
+              <stop offset="84%" stop-color="#FF45C8" stop-opacity=".2" />
+              <stop offset="100%" stop-color="#FF45C8" stop-opacity="0" />
+            </radialGradient>
+          </defs>
+          {fan.map((n) => (
+            <path class="og-path" d={`M118 280 C 250 280 240 ${n.y} 330 ${n.y}`} />
+          ))}
+          {fan.map((n) => (
+            <g>
+              <circle cx="350" cy={n.y} r="26" fill="url(#ofm)" />
+              <circle cx="350" cy={n.y} r="12" fill="url(#ofg)" />
+            </g>
+          ))}
+          <circle cx="78" cy="280" r="56" fill="url(#ofm)" />
+          <circle cx="78" cy="280" r="30" fill="url(#ofg)" />
+        </svg>
+      </div>
     </div>
+
     <style>
-      .og { position: relative; z-index: 1; width: 1200px; height: 630px; box-sizing: border-box; display: flex; align-items: center; gap: 40px; padding: 72px 80px; }
-      .og-left { flex: 1; }
-      .og-brand { display: flex; align-items: center; gap: 13px; color: var(--magenta); font-size: 26px; letter-spacing: .02em; margin-bottom: 30px; filter: drop-shadow(0 0 9px color-mix(in srgb, var(--magenta) 50%, transparent)); }
-      .og-glyph { height: 30px; width: auto; --mark-bg: #04050A; }
+      .og { position: relative; z-index: 1; width: 1200px; height: 630px; box-sizing: border-box; display: flex; align-items: center; gap: 40px; padding: 72px 80px; overflow: hidden; }
+      .og-left { flex: 1; position: relative; z-index: 1; }
+      /* Match the nav brand: ink-white mark + Satoshi wordmark, magenta glow on
+         the mark only (see .brand / .brand-mark in Site.astro). */
+      .og-brand { display: flex; align-items: center; gap: 11px; color: var(--ink); font-family: var(--sans); font-weight: 600; font-size: 30px; letter-spacing: -.02em; margin-bottom: 30px; }
+      .og-glyph { height: 31px; width: auto; --mark-bg: #04050A; filter: drop-shadow(0 0 6px color-mix(in srgb, var(--magenta) 60%, transparent)); }
       .og-title { font-family: var(--sans); font-weight: 400; font-size: 72px; line-height: 1.0; letter-spacing: -.03em; color: var(--ink); margin: 0 0 36px; }
-      .og-stats { display: flex; gap: 30px; font-size: 17px; color: var(--ink-3); }
-      .og-stats b { color: var(--cyan); font-weight: 500; }
-      .og-stats span:last-child b { color: var(--magenta); }
-      .og-right { width: 340px; display: flex; align-items: center; justify-content: center; }
+      /* Stat numbers sized for feed-scale legibility; labels are secondary. */
+      .og-stats { display: flex; gap: 44px; }
+      .og-stat { display: flex; flex-direction: column; gap: 5px; }
+      .og-stat b { font-family: var(--mono); font-size: 34px; font-weight: 500; line-height: 1; color: var(--cyan); letter-spacing: -.02em; }
+      .og-stat span { font-size: 16px; color: var(--ink-3); }
+      .og-stat.last b { color: var(--magenta); }
+
+      .og-right { width: 420px; display: flex; align-items: center; justify-content: center; }
+      .og-fan { width: 420px; height: 540px; overflow: visible; mix-blend-mode: screen; }
+      .og-path { fill: none; stroke: color-mix(in srgb, var(--magenta) 50%, transparent); stroke-width: 1.4; filter: drop-shadow(0 0 3px color-mix(in srgb, var(--magenta) 55%, transparent)); }
     </style>
   </body>
 </html>
