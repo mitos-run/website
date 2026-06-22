@@ -499,7 +499,7 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
 
   /* USE CASES */
   .uc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 1px solid var(--hairline); margin-top: 8px; }
-  .uc-item { padding: 26px 24px 24px; border-left: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); }
+  .uc-item { padding: 26px 24px 24px; border-left: 1px solid var(--hairline); }
   .uc-item:nth-child(3n+1) { border-left: none; padding-left: 0; }
   .uc-item h4 { margin: 0 0 8px; font-size: 15px; font-weight: 500; color: var(--ink); }
   .uc-item p { margin: 0; color: var(--ink-2); font-size: 14px; line-height: 1.55; }
@@ -517,7 +517,7 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
   /* MANAGED + OSS */
   .hosted { border-top: 1px solid var(--hairline); }
   .hosted-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin: 8px 0 42px; text-align: left; border-top: 1px solid var(--hairline); }
-  .hosted-item { padding: 26px 24px 6px; border-left: 1px solid var(--hairline); }
+  .hosted-item { padding: 26px 24px 24px; border-left: 1px solid var(--hairline); }
   .hosted-item:first-child { border-left: none; padding-left: 0; }
   .hosted-item h4 { margin: 0 0 8px; font-size: 15px; font-weight: 500; color: var(--ink); }
   .hosted-item p { margin: 0; color: var(--ink-2); font-size: 14px; line-height: 1.55; }
