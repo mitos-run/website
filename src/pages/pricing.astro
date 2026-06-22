@@ -1,7 +1,7 @@
 ---
 // Pricing — Fluorescence, PAYG-only with a live cost estimator in the hero.
 // Model is the engine's real billing shape (decoupled per-second vCPU + RAM,
-// storage GiB-hour, metered egress, GPU-second; $100 signup credit; hard spend
+// storage GiB-hour, free egress, GPU-second; $100 signup credit; hard spend
 // caps). Rates are ILLUSTRATIVE placeholders per the repo's no-published-numbers
 // rule — every rate on this page is labelled "illustrative, final at GA".
 import Site from '../layouts/Site.astro';
@@ -13,17 +13,17 @@ const DOCS = '/quickstart';
 // per-hour for humans; the estimator computes per-second.
 const rates = [
   { meter: 'Compute · vCPU', rate: '$0.046', unit: '/ vCPU-hour' },
-  { meter: 'Memory · RAM', rate: '$0.0058', unit: '/ GiB-hour' },
+  { meter: 'Memory · RAM', rate: '$0.012', unit: '/ GiB-hour' },
   { meter: 'Storage', rate: '$0.073', unit: '/ GiB-month' },
-  { meter: 'Egress', rate: '$0.09', unit: '/ GiB' },
+  { meter: 'Egress', rate: 'Free', unit: 'no egress fees' },
   { meter: 'GPU', rate: '$2.16', unit: '/ GPU-hour' },
 ];
 
-// The two meters every sandbox vendor has, at published rates (Jun 2026). mitos
-// is illustrative; competitors are their listed prices. Compute only.
+// The two metered meters every sandbox vendor has, at published rates (Jun 2026).
+// mitos is illustrative; competitors are their listed prices. Compute only.
 const compare = [
   { unit: 'vCPU / hour', mitos: '$0.046', cols: ['$0.050', '$0.050', '$0.071'] },
-  { unit: 'RAM / GiB-hour', mitos: '$0.0058', cols: ['$0.016', '$0.016', '$0.024'] },
+  { unit: 'RAM / GiB-hour', mitos: '$0.012', cols: ['$0.016', '$0.016', '$0.024'] },
 ];
 const compareCols = ['E2B', 'Daytona', 'Modal'];
 
@@ -128,7 +128,7 @@ const schema = [
 
   <section class="rates-sec container">
     <h2 class="section-title reveal">One model: pay-as-you-go, per second</h2>
-    <p class="section-lede reveal">Decoupled meters, so a CPU-heavy and a RAM-heavy sandbox bill differently. You pay only while a sandbox runs.</p>
+    <p class="section-lede reveal">Decoupled meters, so a CPU-heavy and a RAM-heavy sandbox bill differently. You pay only while a sandbox runs, and data transfer out is free.</p>
     <div class="rate-table reveal">
       {rates.map((r) => (
         <div class="rate-row">
@@ -317,8 +317,8 @@ const schema = [
 
 <script>
   // Illustrative per-second rates (mirror engine DefaultPriceList). Not published facts.
-  const VCPU_S = 0.0000128; // $/vCPU-second  (~$0.046/hr)
-  const MEM_S = 0.0000016;  // $/GiB-second   (~$0.0058/hr)
+  const VCPU_S = 0.0000128;  // $/vCPU-second  (~$0.046/hr)
+  const MEM_S = 0.00000333;  // $/GiB-second   (~$0.012/hr)
 
   const PRESETS = {
     solo:  { n: 1,   vcpu: 2, ram: 4, min: 15, runs: 200 },
