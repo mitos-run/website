@@ -57,7 +57,7 @@ const schema = [
 
 <Site
   title="mitos pricing: pay-as-you-go for agent swarms"
-  description="Pay-as-you-go, per-second microVM compute with decoupled vCPU and RAM. Forks share memory copy-on-write so fanning out stays cheap. $100 signup credit, hard spend caps, no platform fee. Illustrative rates; final at GA."
+  description="Pay-as-you-go, per-second microVM compute: vCPU and RAM metered separately, forks share memory copy-on-write. $100 credit, hard spend caps, no platform fee."
   schema={schema}
 >
   <section class="hero container">
@@ -172,7 +172,7 @@ const schema = [
     <div class="trust-grid">
       {trust.map((t) => (
         <div class="trust reveal">
-          <h4>{t.k}</h4>
+          <h3>{t.k}</h3>
           <p>{t.v}</p>
         </div>
       ))}
@@ -277,7 +277,7 @@ const schema = [
   .trust-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 1px solid var(--hairline); }
   .trust { padding: 24px 22px 22px; border-left: 1px solid var(--hairline); }
   .trust:first-child { border-left: none; padding-left: 0; }
-  .trust h4 { margin: 0 0 8px; font-size: 15px; font-weight: 500; color: var(--ink); }
+  .trust h3 { margin: 0 0 8px; font-size: 15px; font-weight: 500; color: var(--ink); }
   .trust p { margin: 0; color: var(--ink-2); font-size: 13.5px; line-height: 1.55; }
 
   /* FAQ */

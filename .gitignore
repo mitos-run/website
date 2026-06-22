@@ -12,3 +12,8 @@ node_modules/
 
 # superpowers brainstorm companion
 .superpowers/
+
+# squirrelscan
+squirrel.toml
+.squirrel/
+*.squirrel.db

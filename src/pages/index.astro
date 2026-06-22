@@ -22,7 +22,7 @@ const SIGNUP = '/quickstart'; // hosted console not live yet; OSS run-now path
 // Colon separator, never an em/en dash (brand style rule).
 const TITLE = 'mitos: Fork a running microVM into an agent swarm';
 const DESC =
-  'Fork a running microVM into hundreds of isolated subagents in about 27ms, roughly 3 MiB each. Live state, not a disk snapshot. Managed, and Apache-2.0 so you are never locked in.';
+  'Fork a running microVM into hundreds of isolated subagents in ~27ms, ~3 MiB each. Live state, not a snapshot. Managed, Apache-2.0, no lock-in.';
 
 // Hero surfaces: install + copy-to-paste example per language. The fork(8) line
 // is the aha. Snippets are runnable against the real API.
@@ -186,14 +186,14 @@ const schema = [
       <div class="hero-code reveal">
         <div class="install">
           <code class="install-cmd mono" id="install-cmd">pip install mitos</code>
-          <button class="hcopy mono" data-copy="install" type="button" aria-label="Copy install command">⧉ copy</button>
+          <button class="hcopy mono" data-copy="install" type="button" aria-label="Copy install command">copy</button>
         </div>
         <div class="card">
           <div class="card-tabs" role="tablist">
             {surfaces.map((s, i) => (
               <button class={`tab mono ${i === 0 ? 'on' : ''}`} data-tab={s.id} role="tab" aria-selected={i === 0 ? 'true' : 'false'}><span class="tab-ic" set:html={langIcons[s.id]} />{s.name}</button>
             ))}
-            <button class="hcopy card-copy mono" data-copy="code" type="button" aria-label="Copy code">⧉ copy</button>
+            <button class="hcopy card-copy mono" data-copy="code" type="button" aria-label="Copy code">copy</button>
           </div>
           {surfaces.map((s, i) => (
             <pre class={`code-panel mono ${i === 0 ? 'on' : ''}`} data-panel={s.id} data-install={s.install} set:html={hl(s.code)} />
@@ -273,7 +273,7 @@ const schema = [
     <p class="section-lede reveal">One warm machine becomes a swarm, then collapses back to zero.</p>
     <div class="uc-grid">
       {useCases.map((u) => (
-        <div class="uc-item reveal"><h4>{u.h}</h4><p>{u.p}</p></div>
+        <div class="uc-item reveal"><h3>{u.h}</h3><p>{u.p}</p></div>
       ))}
     </div>
   </section>
@@ -309,7 +309,7 @@ const schema = [
       </p>
       <div class="hosted-grid">
         {hostedItems.map((it) => (
-          <div class="hosted-item"><h4>{it.h}</h4><p>{it.p}</p></div>
+          <div class="hosted-item"><h3>{it.h}</h3><p>{it.p}</p></div>
         ))}
       </div>
       <a class="btn btn-primary" href={SIGNUP}>Start swarming</a>
@@ -461,6 +461,9 @@ const schema = [
   .install { display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 1px solid var(--hairline); border-radius: var(--r-md); padding: 10px 12px 10px 14px; margin-bottom: 12px; background: var(--field-1); }
   .install-cmd { font-size: 13px; color: var(--ink); overflow-x: auto; white-space: nowrap; min-width: 0; flex: 1; }
   .install-cmd::before { content: '$ '; color: var(--magenta); }
+  /* decorative glyph kept out of the text node so the accessible name (aria-label)
+     matches the visible label "copy" (WCAG label-in-name). */
+  .hcopy::before { content: '\29C9'; margin-right: 5px; }
   .hcopy { border: 1px solid var(--hairline); border-radius: 6px; padding: 5px 10px; font-size: 11px; color: var(--ink-2); background: transparent; cursor: pointer; transition: color .12s var(--ease), border-color .12s var(--ease); white-space: nowrap; }
   .hcopy:hover { color: var(--ink); border-color: var(--hairline-strong); }
   .hcopy.copied { color: var(--green); border-color: var(--green); }
@@ -525,7 +528,7 @@ const schema = [
   .uc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 8px; }
   .uc-item { padding: 26px 24px 24px; border-left: 1px solid var(--hairline); }
   .uc-item:nth-child(3n+1) { border-left: none; padding-left: 0; }
-  .uc-item h4 { margin: 0 0 8px; font-size: 15px; font-weight: 500; color: var(--ink); }
+  .uc-item h3 { margin: 0 0 8px; font-size: 15px; font-weight: 500; color: var(--ink); }
   .uc-item p { margin: 0; color: var(--ink-2); font-size: 14px; line-height: 1.55; }
 
   /* HOW */
@@ -546,7 +549,7 @@ const schema = [
   .hosted-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin: 8px 0 42px; text-align: left; }
   .hosted-item { padding: 26px 24px 24px; border-left: 1px solid var(--hairline); }
   .hosted-item:first-child { border-left: none; padding-left: 0; }
-  .hosted-item h4 { margin: 0 0 8px; font-size: 15px; font-weight: 500; color: var(--ink); }
+  .hosted-item h3 { margin: 0 0 8px; font-size: 15px; font-weight: 500; color: var(--ink); }
   .hosted-item p { margin: 0; color: var(--ink-2); font-size: 14px; line-height: 1.55; }
 
   /* COMPARISON */

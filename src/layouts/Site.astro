@@ -18,7 +18,12 @@ interface Props {
 const { title, description, schema = [] } = Astro.props;
 const stars = await getStars();
 
-const canonical = new URL(Astro.url.pathname, Astro.site).href;
+// build.format:'file' makes Astro.url.pathname end in `.html` (e.g.
+// /pricing.html, /index.html), but the site serves clean, slash-free URLs
+// (trailingSlash:'never') and the sitemap uses them. Normalize so the
+// self-referencing canonical + og:url match the real URL, not the .html file.
+const cleanPath = Astro.url.pathname.replace(/index\.html$/, '').replace(/\.html$/, '');
+const canonical = new URL(cleanPath, Astro.site).href;
 const ogImage = new URL('/og.png', Astro.site).href;
 
 // Sitewide structured data: who we are + the site itself. Page-specific nodes
@@ -115,8 +120,8 @@ const navLinks = [
       </div>
     </header>
 
-    <!-- Mobile menu overlay -->
-    <div class="nav-menu" id="nav-menu" aria-hidden="true">
+    <!-- Mobile menu overlay (inert while closed so its links are not focusable) -->
+    <div class="nav-menu" id="nav-menu" aria-hidden="true" inert>
       <nav class="nav-menu-links" aria-label="Mobile">
         {navLinks.map((l) => <a href={l.href}>{l.label}</a>)}
       </nav>
@@ -136,21 +141,21 @@ const navLinks = [
           <p class="muted mono oss-badge">Open source · Apache 2.0</p>
         </div>
         <div class="footer-col">
-          <h5>Product</h5>
+          <p class="footer-h">Product</p>
           <a href="/#how">How it works</a>
           <a href="/benchmarks">Benchmarks</a>
           <a href="/pricing">Pricing</a>
           <a href="/#compare">Comparison</a>
         </div>
         <div class="footer-col">
-          <h5>Developers</h5>
+          <p class="footer-h">Developers</p>
           <a href={DOCS}>Docs</a>
           <a href="/quickstart">Quickstart</a>
           <a href="/architecture">Architecture</a>
           <a href={GITHUB} target="_blank" rel="noopener">GitHub</a>
         </div>
         <div class="footer-col">
-          <h5>Company</h5>
+          <p class="footer-h">Company</p>
           <a href="/alternatives">Alternatives</a>
           <a href={`${GITHUB}/releases`} target="_blank" rel="noopener">Changelog</a>
           <a href={`${GITHUB}/blob/main/SECURITY.md`} target="_blank" rel="noopener">Security</a>
@@ -194,6 +199,7 @@ const navLinks = [
           navToggle.setAttribute('aria-expanded', String(open));
           navToggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
           navMenu.setAttribute('aria-hidden', String(!open));
+          if (open) navMenu.removeAttribute('inert'); else navMenu.setAttribute('inert', '');
           document.body.classList.toggle('nav-open', open);
         };
         navToggle.addEventListener('click', () => setMenu(!navMenu.classList.contains('open')));
@@ -336,7 +342,7 @@ const navLinks = [
       .footer-brand .brand { margin-bottom: 12px; }
       .footer-brand p { font-size: 14px; max-width: 26em; margin: 0 0 8px; }
       .oss-badge { font-size: 12px; } .oss-badge a:hover { color: var(--ink); }
-      .footer-col h5 { margin: 0 0 14px; font-size: 13px; font-weight: 500; color: var(--ink-2); }
+      .footer-col .footer-h { margin: 0 0 14px; font-size: 13px; font-weight: 500; color: var(--ink-2); }
       .footer-col a { display: block; color: var(--ink-2); font-size: 14px; padding: 4px 0; }
       .footer-col a:hover { color: var(--ink); }
       .footer-bottom { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--hairline); font-size: 13px; }

@@ -62,7 +62,7 @@ export const competitors: Competitor[] = [
     blurb: 'Mature Firecracker-microVM sandbox with a big SDK ecosystem. No live fork of running memory.',
     title: 'mitos vs E2B: live-fork microVM sandboxes',
     description:
-      'mitos vs E2B for AI agent sandboxes. Both are Apache-2.0 on Firecracker microVMs. The difference: mitos forks a running VM into a swarm; E2B creates fresh sandboxes. Honest, public-docs comparison.',
+      'mitos vs E2B for AI agent sandboxes. Both are Apache-2.0 Firecracker microVMs; the difference is mitos forks a running VM into a swarm, E2B creates fresh ones.',
     h1: 'mitos vs E2B',
     lede:
       'Both run agent code in Firecracker microVMs and both are Apache-2.0, so isolation and licensing are a tie. The real split is what happens when you need many agents from one state: mitos forks a running VM in place; E2B spins up fresh sandboxes.',
@@ -108,7 +108,7 @@ export const competitors: Competitor[] = [
     blurb: 'Full Python ML platform with GPU sandboxes. gVisor isolation, snapshots not live forks, closed source.',
     title: 'mitos vs Modal: microVM fork vs gVisor sandbox',
     description:
-      'mitos vs Modal for AI agent sandboxes. mitos forks a running Firecracker microVM in ~27ms and is Apache-2.0; Modal is a closed, gVisor-based Python/GPU platform. Honest, public-docs comparison.',
+      'mitos vs Modal for AI agent sandboxes: mitos forks a running Firecracker microVM in ~27ms and is open source; Modal is a closed, gVisor-based Python/GPU platform.',
     h1: 'mitos vs Modal',
     lede:
       'Modal is a full serverless platform for Python and ML, with native GPU sandboxes. mitos is narrower and sharper: a live fork of a running Firecracker microVM, open source, managed. The isolation model and the cost of fanning out are where they diverge.',
@@ -154,7 +154,7 @@ export const competitors: Competitor[] = [
     blurb: 'Fast, open-source sandboxes with fork and snapshot endpoints. Container isolation by default, AGPL.',
     title: 'mitos vs Daytona: microVM vs container sandboxes',
     description:
-      'mitos vs Daytona for AI agent sandboxes. mitos forks a running Firecracker microVM and is Apache-2.0; Daytona is fast but container-isolated by default with filesystem fork/snapshot and an AGPL license. Honest comparison.',
+      'mitos vs Daytona for AI agent sandboxes: mitos is microVM-isolated with a live memory fork and Apache-2.0; Daytona is container-default, filesystem-fork, AGPL.',
     h1: 'mitos vs Daytona',
     lede:
       'Daytona is fast and open, with very quick sandbox creation and its own fork and snapshot endpoints. The two real differences are the isolation boundary (microVM vs container by default) and what “fork” means: a live copy of running memory, or a filesystem-and-snapshot clone.',
@@ -200,7 +200,7 @@ export const competitors: Competitor[] = [
     blurb: 'The closest twin: branches running VMs (Infinibranch). Closed source, with fewer published numbers.',
     title: 'mitos vs Morph: live VM forking compared',
     description:
-      'mitos vs Morph for branching running VMs. Both fork live VMs for parallel agents. mitos publishes ~27ms / ~3 MiB figures and is Apache-2.0; Morph (Infinibranch) is closed with fewer public numbers. Honest comparison.',
+      'mitos vs Morph for branching running VMs: both fork live VMs, but mitos publishes ~27ms / ~3 MiB figures and is open source; Morph (Infinibranch) is closed.',
     h1: 'mitos vs Morph',
     lede:
       'Morph is the closest thing to a twin: Infinibranch branches a running VM into parallel copies, which is the same idea mitos is built on. We will not pretend forking is ours alone. The differences are openness, published numbers, and the managed-plus-open-source combination.',
