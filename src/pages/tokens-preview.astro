@@ -27,7 +27,21 @@ const channels = [
       ))}
     </div>
 
-    <h2 style="margin-top:var(--space-8);">Telemetry (Geist Mono, tabular)</h2>
-    <pre class="mono" style="background:var(--field-1);border:1px solid var(--hairline);border-radius:var(--r-md);padding:var(--space-4);">  colony ready · 8 daughters · 27ms · +3.1 MiB/fork</pre>
+    <h2 style="margin-top:var(--space-8);">Terminal</h2>
+    <div class="terminal" style="max-width:520px;margin-top:var(--space-5);">
+      <div class="terminal-bar"><i></i><i></i><i></i></div>
+      <div class="terminal-body"><span class="t-dim">$</span> mitos <span class="t-fork">fork</span> --count 8
+<span class="t-ok">  ✓ colony ready</span> · 8 daughters · 27ms · +3.1 MiB/fork</div>
+    </div>
+
+    <h2 style="margin-top:var(--space-8);">Comparison</h2>
+    <table class="cmp" style="max-width:620px;">
+      <thead><tr><th>Capability</th><th class="col-mitos">mitos</th><th>Typical sandbox</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Live fork of a running VM</th><td class="col-mitos"><span class="win">Yes, ~27ms</span></td><td>Cold boot</td></tr>
+        <tr><th scope="row">Marginal cost per daughter</th><td class="col-mitos"><span class="win">~3 MiB CoW</span></td><td>Whole VM</td></tr>
+        <tr><th scope="row">Run it yourself</th><td class="col-mitos"><span class="win">Apache 2.0</span></td><td>Vendor cloud</td></tr>
+      </tbody>
+    </table>
   </section>
 </Site>
