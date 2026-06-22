@@ -158,6 +158,8 @@ const navLinks = [
         </div>
         <div class="footer-col">
           <p class="footer-h">Company</p>
+          <a href="/about">About</a>
+          <a href="/contact">Contact</a>
           <a href="/alternatives">Alternatives</a>
           <a href={`${GITHUB}/releases`} target="_blank" rel="noopener">Changelog</a>
           <a href={`${GITHUB}/blob/main/SECURITY.md`} target="_blank" rel="noopener">Security</a>
@@ -166,6 +168,7 @@ const navLinks = [
       </div>
       <div class="container footer-bottom">
         <span class="muted mono">© 2026 mitos · Apache 2.0</span>
+        <a class="muted mono footer-privacy" href="/privacy">Privacy</a>
       </div>
     </footer>
 
@@ -346,7 +349,8 @@ const navLinks = [
       .footer-col .footer-h { margin: 0 0 14px; font-size: 13px; font-weight: 500; color: var(--ink-2); }
       .footer-col a { display: block; color: var(--ink-2); font-size: 14px; padding: 4px 0; }
       .footer-col a:hover { color: var(--ink); }
-      .footer-bottom { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--hairline); font-size: 13px; }
+      .footer-bottom { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--hairline); font-size: 13px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+      .footer-privacy:hover { color: var(--ink); }
 
       @media (max-width: 900px) {
         .footer-grid { grid-template-columns: 1fr 1fr; }

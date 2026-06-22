@@ -1,0 +1,47 @@
+---
+// /contact — how to reach the mitos team. Honest channels only (OSS-first; no
+// fabricated phone/address). Lifts the E-E-A-T contact signal.
+import Site from '../layouts/Site.astro';
+
+const GITHUB = 'https://github.com/mitos-run/mitos';
+const TITLE = 'Contact mitos';
+const DESC =
+  'How to reach the mitos team: open a GitHub issue or discussion, report a security finding, or follow development. Open-source, Apache 2.0.';
+
+const channels = [
+  { h: 'GitHub issues', p: 'Bugs, feature requests, and questions about the engine or SDKs. The fastest way to reach us.', cta: 'Open an issue', href: `${GITHUB}/issues` },
+  { h: 'GitHub discussions', p: 'Design questions, use-case help, and anything open-ended about forking agents.', cta: 'Start a discussion', href: `${GITHUB}/discussions` },
+  { h: 'Security', p: 'Report a vulnerability privately. Please do not file public issues for security findings.', cta: 'Read SECURITY.md', href: `${GITHUB}/blob/main/SECURITY.md` },
+  { h: 'Early access', p: 'The managed console is not live yet. Run the open-source engine today and watch the repo for hosted availability.', cta: 'Get started', href: '/quickstart' },
+];
+---
+
+<Site title={TITLE} description={DESC}>
+  <section class="page-hero container">
+    <p class="eyebrow mono">Contact</p>
+    <h1>Get in touch.</h1>
+    <p class="lede">
+      mitos is built in the open. The best way to reach us is on GitHub.
+    </p>
+  </section>
+
+  <section class="container contact-grid">
+    {channels.map((c) => (
+      <div class="contact-card">
+        <h2>{c.h}</h2>
+        <p>{c.p}</p>
+        <a class="btn btn-ghost" href={c.href} target={c.href.startsWith('http') ? '_blank' : undefined} rel={c.href.startsWith('http') ? 'noopener' : undefined}>{c.cta}</a>
+      </div>
+    ))}
+  </section>
+</Site>
+
+<style>
+  .page-hero { position: relative; }
+  .contact-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; padding-bottom: 96px; max-width: 60em; }
+  .contact-card { display: flex; flex-direction: column; border: 1px solid var(--hairline); border-radius: var(--r-lg); padding: 28px; }
+  .contact-card h2 { font-size: 18px; font-weight: 500; color: var(--ink); margin: 0 0 10px; letter-spacing: -.01em; }
+  .contact-card p { color: var(--ink-2); font-size: 15px; line-height: 1.6; margin: 0 0 20px; }
+  .contact-card .btn { margin-top: auto; align-self: flex-start; }
+  @media (max-width: 700px) { .contact-grid { grid-template-columns: 1fr; } }
+</style>

@@ -6,7 +6,7 @@
   "description": "Open-source marketing site and docs for mitos (mitos.run). Also serves the Go vanity import meta for mitos.run/mitos.",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/postbuild-clean-urls.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },

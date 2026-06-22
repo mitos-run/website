@@ -25,14 +25,29 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Build Astro site (installs deps, runs astro build, uploads the Pages artifact)
-        uses: withastro/action@v3
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          # astro@6 requires Node >=22.12; the action defaults to Node 20.
+          # astro@6 requires Node >=22.12.
           node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        # `npm run build` = astro build + scripts/postbuild-clean-urls.mjs, which
+        # rewrites Starlight's .html links/canonicals to clean URLs. The withastro
+        # action runs `astro build` directly and would skip that step, so we build
+        # manually and upload the Pages artifact ourselves.
+        run: npm run build
         env:
           # Authenticated star fetch (lib/stars.ts) so the baked count is reliable, not rate-limited.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
 
   deploy:
     needs: build

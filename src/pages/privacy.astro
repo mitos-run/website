@@ -1,0 +1,98 @@
+---
+// /privacy — privacy policy for the mitos.run marketing + docs site. Reflects
+// what this STATIC site actually does today (no analytics, no accounts, a
+// client-side GitHub star fetch). Review with counsel before relying on it.
+// Update the data practices here if the hosted console or analytics ship.
+import Site from '../layouts/Site.astro';
+
+const GITHUB = 'https://github.com/mitos-run/mitos';
+const UPDATED = 'June 22, 2026';
+const TITLE = 'Privacy Policy';
+const DESC =
+  'How mitos.run handles data: a static marketing and docs site with no analytics, no tracking cookies, and no accounts. What little we touch, and the sub-processors involved.';
+---
+
+<Site title={TITLE} description={DESC}>
+  <section class="page-hero container">
+    <p class="eyebrow mono">Legal</p>
+    <h1>Privacy Policy</h1>
+    <p class="lede">What this site collects, which is almost nothing.</p>
+    <p class="updated mono">Last updated: {UPDATED}</p>
+  </section>
+
+  <section class="container prose">
+    <p>
+      This policy covers <strong>mitos.run</strong>, the marketing and documentation site for the
+      mitos project. It is a static website. It has no user accounts, no sign-up, no analytics or
+      advertising trackers, and it does not set tracking cookies. When a hosted product or any
+      tracking is added, this policy will be updated before that ships.
+    </p>
+
+    <h2>What we collect</h2>
+    <p>
+      <strong>Nothing through forms.</strong> There are no contact forms, sign-ups, or accounts on
+      this site today, so we do not ask for or store your name, email, or other personal details.
+    </p>
+    <p>
+      <strong>Standard server logs.</strong> The site is served by GitHub Pages, which may process
+      standard request data (such as IP address and user agent) to deliver the site and protect it
+      from abuse, under GitHub's own privacy practices.
+    </p>
+    <p>
+      <strong>GitHub star count.</strong> To show a live count of GitHub stars, your browser makes a
+      request directly to GitHub's public API. That request is handled by GitHub under its privacy
+      statement. We cache the returned number in your browser's local storage purely to avoid
+      repeat requests; it is not personal data and never leaves your device.
+    </p>
+
+    <h2>Cookies and local storage</h2>
+    <p>
+      We do not use cookies. The only browser storage we use is a single local-storage entry that
+      caches the GitHub star count, which you can clear at any time from your browser.
+    </p>
+
+    <h2>Sub-processors</h2>
+    <p>For the operation of this site we rely on:</p>
+    <ul>
+      <li><strong>GitHub, Inc.</strong> hosting (GitHub Pages) and the public GitHub API used for the star count.</li>
+    </ul>
+    <p>
+      The open-source engine you run yourself does not send data to us. If you later use a hosted
+      mitos product, its data processing will be described in that product's terms and a data
+      processing agreement, separate from this site policy.
+    </p>
+
+    <h2>Your choices</h2>
+    <p>
+      Because we do not collect personal data on this site, there is nothing for us to access,
+      export, or delete on your behalf. For questions about GitHub's processing of requests to its
+      service, see GitHub's privacy statement.
+    </p>
+
+    <h2>Changes</h2>
+    <p>
+      We will update this page if our data practices change and revise the date above. Material
+      changes will be reflected here before they take effect.
+    </p>
+
+    <h2>Contact</h2>
+    <p>
+      Questions about this policy can be raised through the channels on our
+      <a href="/contact">contact page</a> or the project
+      <a href={GITHUB} target="_blank" rel="noopener">repository</a>.
+    </p>
+  </section>
+</Site>
+
+<style>
+  .page-hero { position: relative; }
+  .updated { color: var(--ink-3); font-size: 13px; margin-top: 8px; }
+  .prose { max-width: 52em; padding-bottom: 96px; }
+  .prose p { color: var(--ink-2); font-size: 16px; line-height: 1.7; margin: 0 0 18px; }
+  .prose ul { color: var(--ink-2); font-size: 16px; line-height: 1.7; margin: 0 0 18px; padding-left: 22px; }
+  .prose li { margin: 0 0 8px; }
+  .prose strong { color: var(--ink); font-weight: 500; }
+  .prose a { color: var(--cyan); border-bottom: 1px solid color-mix(in srgb, var(--cyan) 30%, transparent); }
+  .prose a:hover { border-bottom-color: var(--cyan); }
+  .prose h2 { font-size: clamp(20px, 2.4vw, 26px); font-weight: 400; letter-spacing: var(--track-display); margin: 36px 0 12px; }
+</style>

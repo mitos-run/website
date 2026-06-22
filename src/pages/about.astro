@@ -1,0 +1,63 @@
+---
+// /about — who builds mitos and why. Honest, no fabricated team or metrics.
+// Lifts the E-E-A-T signal (a real About page). Never use em or en dashes.
+import Site from '../layouts/Site.astro';
+
+const GITHUB = 'https://github.com/mitos-run/mitos';
+const TITLE = 'About mitos: forkable microVM sandboxes for agent swarms';
+const DESC =
+  'mitos is managed, open-source infrastructure for AI agent swarms: fork a running Firecracker microVM into hundreds of isolated subagents. Why we build it.';
+---
+
+<Site title={TITLE} description={DESC}>
+  <section class="page-hero container">
+    <p class="eyebrow mono">About</p>
+    <h1>We make agents divide.</h1>
+    <p class="lede">
+      mitos is infrastructure for the moment one agent needs to become many.
+    </p>
+  </section>
+
+  <section class="container prose">
+    <p>
+      Most sandbox platforms were built to <strong>run untrusted code safely</strong>. That problem
+      is largely solved: microVMs are everywhere now. The pressure has moved to a harder one:
+      running <strong>fleets of stateful agents in parallel</strong> for best-of-N attempts, RL
+      rollouts, tree search, and large multi-agent evals.
+    </p>
+    <p>
+      mitos is built for that. Instead of cold-booting or restoring a snapshot for every new
+      environment, it <strong>forks a running Firecracker microVM</strong>: the live memory and
+      processes of a warm machine are copied-on-write into hundreds of isolated daughters, each its
+      own microVM, in about 27 ms and roughly 3 MiB apiece. One agent divides into a thousand.
+    </p>
+    <p>
+      The managed cloud is the product: we run the bare-metal fleet, keep pools warm, and hand you
+      an API. The engine underneath is <strong>open source under Apache 2.0</strong>, the same code
+      we run. That is your no-lock-in guarantee, not a side project: you can read it, run it
+      yourself, and leave whenever you want.
+    </p>
+    <h2>What we will not do</h2>
+    <p>
+      We will not pretend the fork primitive is ours alone (others branch VMs too), and we will not
+      publish numbers we cannot reproduce. Every figure on this site comes from a script in the
+      open-source repository. If a claim is not backed by code, it is not here.
+    </p>
+    <h2>Open source</h2>
+    <p>
+      The engine, SDKs, and benchmarks live on <a href={GITHUB} target="_blank" rel="noopener">GitHub</a>
+      under Apache 2.0. Issues, discussions, and pull requests are welcome. If you want to reach us,
+      see the <a href="/contact">contact page</a>.
+    </p>
+  </section>
+</Site>
+
+<style>
+  .page-hero { position: relative; }
+  .prose { max-width: 52em; padding-bottom: 96px; }
+  .prose p { color: var(--ink-2); font-size: 17px; line-height: 1.7; margin: 0 0 22px; }
+  .prose strong { color: var(--ink); font-weight: 500; }
+  .prose a { color: var(--cyan); border-bottom: 1px solid color-mix(in srgb, var(--cyan) 30%, transparent); }
+  .prose a:hover { border-bottom-color: var(--cyan); }
+  .prose h2 { font-size: clamp(22px, 2.6vw, 28px); font-weight: 400; letter-spacing: var(--track-display); margin: 40px 0 14px; }
+</style>
