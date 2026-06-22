@@ -223,6 +223,7 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
           <text x="150" y="276" class="parent-label">vm-0</text>
         </g>
       </svg>
+      <div class="division-cell-m" aria-hidden="true"><Division size={216} trigger={false} /></div>
     </div>
 
     <div class="container division-foot reveal">
@@ -460,6 +461,7 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
   .division-lede em { font-style: normal; color: var(--cyan); }
 
   .division-stage { position: relative; max-width: 900px; margin: 24px auto 0; padding: 0 24px; }
+  .division-cell-m { display: none; }
   .fan-svg { width: 100%; height: auto; display: block; overflow: visible; mix-blend-mode: screen; }
   .d-path { fill: none; stroke: color-mix(in srgb, var(--magenta) 50%, transparent); stroke-width: 1.2; filter: drop-shadow(0 0 3px color-mix(in srgb, var(--magenta) 55%, transparent)); stroke-dasharray: 1400; stroke-dashoffset: 0; }
   .division-stage.run .d-path { stroke-dashoffset: 1400; animation: dDraw .72s cubic-bezier(.4,0,.2,1) forwards; animation-delay: calc(.05s * var(--i) + .18s); }
@@ -561,7 +563,8 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
     .dh-br { display: none; } /* flow as one sentence on mobile, no orphaned word */
     .division-lede { font-size: 15px; }
     .division-stage { margin-top: 16px; }
-    .fan-daughter text, .fan-parent text { display: none; } /* labels unreadable at this scale */
+    .fan-svg { display: none; } /* wide fan is cramped on phones */
+    .division-cell-m { display: flex; justify-content: center; padding: 12px 0 4px; }
     .division-stats { gap: 18px; }
     .division-stats .sv { font-size: 20px; }
     .section-title { font-size: clamp(24px, 7vw, 32px); }
