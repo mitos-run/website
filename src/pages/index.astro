@@ -258,6 +258,14 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
         </div>
       ))}
     </div>
+    <div class="techstack reveal">
+      <span class="tech-chip mono">Firecracker microVMs</span>
+      <span class="tech-chip mono">KVM isolation</span>
+      <span class="tech-chip mono">Kubernetes CRDs</span>
+      <span class="tech-chip mono">Copy-on-write fork</span>
+      <span class="tech-chip mono">Memory snapshots</span>
+      <span class="tech-chip mono">Apache 2.0</span>
+    </div>
   </section>
 
   <!-- MANAGED + OSS -->
@@ -490,6 +498,9 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
 
   /* HOW */
   .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 56px; align-items: stretch; margin-top: 8px; }
+  .techstack { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 52px; }
+  .tech-chip { font-family: var(--mono); font-size: 12px; color: var(--ink-2); border: 1px solid var(--hairline); border-radius: 999px; padding: 6px 13px; transition: border-color .14s var(--ease), color .14s var(--ease); }
+  .tech-chip:hover { color: var(--ink); border-color: var(--hairline-strong); }
   .step { display: flex; flex-direction: column; }
   .step-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; }
   .step-n { color: var(--magenta); font-size: 13px; }
