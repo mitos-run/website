@@ -1,5 +1,6 @@
 ---
 import Site from '../layouts/Site.astro';
+import Division from '../components/Division.astro';
 const channels = [
   { name: 'magenta (signature)', v: 'var(--magenta)' },
   { name: 'cyan (steady)', v: 'var(--cyan)' },
@@ -13,6 +14,8 @@ const channels = [
     <p class="muted" style="font-size:var(--step-1);max-width:32em;">
       Light display weight, tight tracking, on the true black field.
     </p>
+
+    <div style="margin:var(--space-7) 0;"><Division size={260} /></div>
 
     <h2 style="margin-top:var(--space-8);">Signal channels</h2>
     <div style="display:flex;gap:var(--space-5);flex-wrap:wrap;margin-top:var(--space-5);">

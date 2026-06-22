@@ -1,0 +1,129 @@
+---
+// The Division — fork() rendered as mitosis, the brand's signature element.
+// Each cell = a magenta membrane (the dominant brand signal) wrapping a
+// cyan-white genome core (the shared CoW base). The cell divides: the membrane
+// pinches, a magenta spindle flares, a white-hot flash at separation, and two
+// daughters drift apart -- each a cyan core in a magenta membrane, ready to
+// divide again. SVG + CSS: crisp, cheap, reduced-motion-trivial.
+interface Props { size?: number; trigger?: boolean; }
+const { size = 240, trigger = true } = Astro.props;
+---
+<div class="division" style={`--dz:${size}px`}>
+  <svg class="division-svg" viewBox="0 0 240 150" role="img"
+       aria-label="A single cell divides into two daughter cells: the mitos live fork.">
+    <defs>
+      <radialGradient id="genome" cx="50%" cy="46%" r="55%">
+        <stop offset="0%" stop-color="#ffffff"/>
+        <stop offset="44%" stop-color="#bfeeff"/>
+        <stop offset="100%" stop-color="#3DDCFF" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="membrane" cx="50%" cy="50%" r="50%">
+        <stop offset="32%" stop-color="#FF45C8" stop-opacity="0"/>
+        <stop offset="64%" stop-color="#FF45C8" stop-opacity=".62"/>
+        <stop offset="84%" stop-color="#FF45C8" stop-opacity=".22"/>
+        <stop offset="100%" stop-color="#FF45C8" stop-opacity="0"/>
+      </radialGradient>
+      <filter id="bloom" x="-90%" y="-90%" width="280%" height="280%">
+        <feGaussianBlur stdDeviation="4.5" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+    <g class="stage">
+      <line class="spindle" x1="88" y1="75" x2="152" y2="75"/>
+
+      <g class="cell parent">
+        <circle class="mem" cx="120" cy="75" r="42" fill="url(#membrane)"/>
+        <circle class="core" cx="120" cy="75" r="24" fill="url(#genome)" filter="url(#bloom)"/>
+      </g>
+      <g class="cell d-l">
+        <circle class="mem" cx="120" cy="75" r="34" fill="url(#membrane)"/>
+        <circle class="core" cx="120" cy="75" r="19" fill="url(#genome)" filter="url(#bloom)"/>
+      </g>
+      <g class="cell d-r">
+        <circle class="mem" cx="120" cy="75" r="34" fill="url(#membrane)"/>
+        <circle class="core" cx="120" cy="75" r="19" fill="url(#genome)" filter="url(#bloom)"/>
+      </g>
+
+      <circle class="flash" cx="120" cy="75" r="9" fill="#fff"/>
+    </g>
+  </svg>
+  {trigger && <button class="division-trigger mono" type="button">Run fork(8)</button>}
+</div>
+
+<style>
+  .division { width: var(--dz); max-width: 100%; }
+  .division-svg { width: 100%; height: auto; display: block; overflow: visible; mix-blend-mode: screen; }
+  .stage { transform-origin: 120px 75px; }
+
+  .spindle { stroke: var(--magenta); stroke-width: 2.5; opacity: 0; filter: drop-shadow(0 0 5px var(--magenta)); }
+  .flash { opacity: 0; }
+  .d-l, .d-r { opacity: 0; }
+  /* Resting/end membrane breathes so magenta stays the dominant impression. */
+  .cell { transform-box: fill-box; transform-origin: center; }
+
+  /* Replay by toggling .run on the wrapper (set on load + on click). */
+  .division.run .parent  { animation: parent-divide 1200ms var(--ease) both; }
+  .division.run .spindle { animation: spindle 1200ms var(--ease) both; }
+  .division.run .flash   { animation: flash 1200ms var(--ease) both; }
+  .division.run .d-l     { animation: drift-l 1200ms var(--ease) both; }
+  .division.run .d-r     { animation: drift-r 1200ms var(--ease) both; }
+
+  @keyframes parent-divide {
+    0%,26% { opacity: 1; transform: scale(1); }
+    52%    { opacity: 1; transform: scaleX(1.22) scaleY(.86); }
+    61%    { opacity: 0; }
+    100%   { opacity: 0; }
+  }
+  @keyframes spindle {
+    0%,24% { opacity: 0; transform: scaleX(.35); }
+    48%    { opacity: 1; transform: scaleX(1); }
+    64%    { opacity: 0; }
+    100%   { opacity: 0; }
+  }
+  @keyframes flash {
+    0%,50% { opacity: 0; transform: scale(.4); }
+    59%    { opacity: 1; transform: scale(1.7); }
+    74%    { opacity: 0; transform: scale(2.4); }
+    100%   { opacity: 0; }
+  }
+  @keyframes drift-l {
+    0%,55% { opacity: 0; transform: translateX(0); }
+    64%    { opacity: 1; }
+    100%   { opacity: 1; transform: translateX(-36px); }
+  }
+  @keyframes drift-r {
+    0%,55% { opacity: 0; transform: translateX(0); }
+    64%    { opacity: 1; }
+    100%   { opacity: 1; transform: translateX(36px); }
+  }
+
+  /* Reduced motion: no animation; show the final split statically. */
+  @media (prefers-reduced-motion: reduce) {
+    .division .parent { opacity: 0; animation: none !important; }
+    .division .spindle, .division .flash { opacity: 0; animation: none !important; }
+    .division .d-l { opacity: 1; transform: translateX(-36px); animation: none !important; }
+    .division .d-r { opacity: 1; transform: translateX(36px); animation: none !important; }
+  }
+
+  .division-trigger {
+    margin-top: var(--space-4); font-size: var(--step--1); color: var(--ink-2);
+    background: transparent; border: 1px solid var(--hairline-strong);
+    border-radius: var(--r-sm); padding: 6px 12px; cursor: pointer;
+    transition: color .14s var(--ease), border-color .14s var(--ease);
+  }
+  .division-trigger:hover { color: var(--magenta); border-color: var(--magenta); }
+</style>
+
+<script>
+  // Play on load (unless reduced motion), and replay on trigger click.
+  document.querySelectorAll('.division').forEach((el) => {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const play = () => {
+      el.classList.remove('run');
+      void (el as HTMLElement).offsetWidth;
+      el.classList.add('run');
+    };
+    if (!reduce) play();
+    el.querySelector('.division-trigger')?.addEventListener('click', play);
+  });
+</script>
