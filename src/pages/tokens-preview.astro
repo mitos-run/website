@@ -1,0 +1,30 @@
+---
+import Site from '../layouts/Site.astro';
+const channels = [
+  { name: 'magenta (signature)', v: 'var(--magenta)' },
+  { name: 'cyan (steady)', v: 'var(--cyan)' },
+  { name: 'green (live)', v: 'var(--green)' },
+  { name: 'amber (warn)', v: 'var(--amber)' },
+];
+---
+<Site title="tokens — fluorescence" description="internal token preview">
+  <section class="container" style="padding:var(--space-9) 0;">
+    <h1>One agent divides into a thousand</h1>
+    <p class="muted" style="font-size:var(--step-1);max-width:32em;">
+      Light display weight, tight tracking, on the true black field.
+    </p>
+
+    <h2 style="margin-top:var(--space-8);">Signal channels</h2>
+    <div style="display:flex;gap:var(--space-5);flex-wrap:wrap;margin-top:var(--space-5);">
+      {channels.map((c) => (
+        <div style="text-align:center;">
+          <div class="glow" style={`--glow-color:${c.v};width:96px;height:96px;border-radius:50%;background:radial-gradient(circle at 50% 45%, var(--signal-core), ${c.v} 60%);`}></div>
+          <p class="mono" style="font-size:var(--step--1);margin-top:var(--space-3);">{c.name}</p>
+        </div>
+      ))}
+    </div>
+
+    <h2 style="margin-top:var(--space-8);">Telemetry (Geist Mono, tabular)</h2>
+    <pre class="mono" style="background:var(--field-1);border:1px solid var(--hairline);border-radius:var(--r-md);padding:var(--space-4);">  colony ready · 8 daughters · 27ms · +3.1 MiB/fork</pre>
+  </section>
+</Site>
