@@ -7,6 +7,9 @@ export default defineConfig({
   // The canonical product domain. This is also the Go vanity import host
   // (mitos.run/mitos); see public/mitos/index.html and the host rewrites.
   site: 'https://mitos.run',
+  // Clean URLs without a trailing slash (e.g. /pricing, not /pricing/).
+  trailingSlash: 'never',
+  build: { format: 'file' },
   integrations: [
     starlight({
       title: 'mitos',

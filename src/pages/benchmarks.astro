@@ -36,13 +36,14 @@ const caveats = [
 // Context only. Other vendors' published figures, for different operations, on
 // different hardware, with different methodology. NOT a head-to-head benchmark.
 const vendorContext = [
-  { name: 'mitos', figure: '~27 ms', op: 'warm-claim activate (measured by us, bare-metal)', own: true },
-  { name: 'Daytona', figure: 'sub-90 ms', op: 'create from snapshot' },
-  { name: 'E2B', figure: '~150 ms', op: 'sandbox create' },
-  { name: 'CodeSandbox SDK', figure: '~495 ms', op: 'memory resume' },
-  { name: 'Modal', figure: 'sub-second', op: 'sandbox create' },
-  { name: 'Fly Machines', figure: 'under 1 s', op: 'machine start' },
+  { name: 'mitos', figure: '~27 ms', op: 'warm-claim activate (ours)', ms: 27, own: true },
+  { name: 'Daytona', figure: 'sub-90 ms', op: 'create from snapshot', ms: 90 },
+  { name: 'E2B', figure: '~150 ms', op: 'sandbox create', ms: 150 },
+  { name: 'CodeSandbox', figure: '~495 ms', op: 'memory resume', ms: 495 },
+  { name: 'Modal', figure: 'sub-second', op: 'sandbox create', ms: 800 },
+  { name: 'Fly Machines', figure: 'under 1 s', op: 'machine start', ms: 1000 },
 ];
+const maxMs = 1000;
 ---
 
 <Site
@@ -128,27 +129,26 @@ const vendorContext = [
       on different hardware, measured with different methods. They are not measured by
       us. A matched-hardware comparison is <a href={HARNESS} target="_blank" rel="noopener" class="ulink">tracked here</a>.
     </p>
-    <div class="table-wrap reveal">
-      <table class="bench-table vendor-table">
-        <thead><tr><th>Runtime</th><th>Published figure</th><th>Operation</th></tr></thead>
-        <tbody>
-          {vendorContext.map((v) => (
-            <tr class={v.own ? 'own' : ''}>
-              <td class="op">{v.name}</td>
-              <td class="val mono">{v.figure}</td>
-              <td class="note">{v.op}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div class="vbars reveal">
+      {vendorContext.map((v) => (
+        <div class={`vbar ${v.own ? 'own' : ''}`}>
+          <div class="vbar-label">
+            <span class="vbar-name">{v.name}</span>
+            <span class="vbar-op">{v.op}</span>
+          </div>
+          <div class="vbar-track"><span class="vbar-fill" style={`width:${Math.max(2.5, (v.ms / maxMs) * 100)}%`}></span></div>
+          <span class="vbar-fig mono">{v.figure}</span>
+        </div>
+      ))}
     </div>
+    <p class="rate-note mono reveal">Bar length scales to each vendor’s published figure. Different operations, hardware, and methods, so read it as rough context, not a benchmark.</p>
   </section>
 
   <section class="final-cta">
     <div class="container reveal">
       <h2>Fork a microVM and time it yourself.</h2>
       <div class="hero-actions center">
-        <a class="btn btn-primary btn-lg" href="/quickstart/">Start swarming</a>
+        <a class="btn btn-primary btn-lg" href="/quickstart">Start swarming</a>
         <a class="btn btn-ghost btn-lg" href={GITHUB} target="_blank" rel="noopener">View the repo</a>
       </div>
     </div>
@@ -175,13 +175,14 @@ const vendorContext = [
   .stat-l { font-size: 14px; color: var(--ink-2); }
   .stat-s { font-size: 12px; color: var(--ink-3); }
 
-  .section-title { font-size: clamp(26px, 3.4vw, 38px); letter-spacing: var(--track-display); font-weight: 400; margin: 0 0 16px; }
-  .section-lede { color: var(--ink-2); font-size: 17px; max-width: 44em; margin: 0 0 40px; }
+  .section-title { font-size: clamp(28px, 3.6vw, 42px); letter-spacing: var(--track-display); font-weight: 400; margin: 0 0 18px; }
+  .section-lede { color: var(--ink-2); font-size: 17px; max-width: 44em; margin: 0 0 48px; }
+  .rate-note { margin: 18px 0 0; font-size: 12px; color: var(--ink-3); line-height: 1.5; max-width: 60em; }
   .section-lede .ulink { color: var(--cyan); border-bottom: 1px solid color-mix(in srgb, var(--cyan) 30%, transparent); }
   .section-lede .ulink:hover { border-bottom-color: var(--cyan); }
 
   /* RESULTS / TABLES */
-  .results-sec { padding-block: 64px 0; }
+  .results-sec { padding-block: 100px; }
   .results-head { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; margin-bottom: 28px; flex-wrap: wrap; }
   .results-head .section-title { margin: 0; }
   .ref { font-size: 12px; color: var(--ink-3); }
@@ -199,7 +200,7 @@ const vendorContext = [
   .vendor-table tr.own .val { color: var(--magenta); }
 
   /* REPRODUCE */
-  .repro-sec { padding-block: 64px 0; }
+  .repro-sec { padding-block: 100px; }
   .repro { display: grid; grid-template-columns: 1fr 1.1fr; gap: 44px; align-items: center; }
   .terminal { background: var(--field-1); border: 1px solid var(--hairline); border-radius: var(--r-lg); overflow: hidden; }
   .terminal-bar { display: flex; align-items: center; gap: 6px; padding: 10px 12px 10px 14px; border-bottom: 1px solid var(--hairline); }
@@ -210,15 +211,28 @@ const vendorContext = [
   .terminal-body { padding: 16px 18px; font-family: var(--mono); font-size: 12.5px; line-height: 1.85; color: var(--ink); overflow-x: auto; margin: 0; }
 
   /* CAVEATS */
-  .caveat-sec { padding-block: 64px 0; }
+  .caveat-sec { padding-block: 100px; }
   .caveats { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; max-width: 62em; }
   .caveats li { display: flex; gap: 12px; color: var(--ink-2); font-size: 15px; line-height: 1.55; }
   .caveats .dot { color: var(--magenta); }
 
-  .vendor-sec { padding-block: 64px 0; }
+  .vendor-sec { padding-block: 100px; }
+
+  /* VENDOR BARS (graphical context) */
+  .vbars { display: flex; flex-direction: column; gap: 14px; max-width: 760px; }
+  .vbar { display: grid; grid-template-columns: 184px 1fr 90px; gap: 18px; align-items: center; }
+  .vbar-label { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .vbar-name { font-size: 14px; color: var(--ink-2); }
+  .vbar-op { font-size: 11px; color: var(--ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .vbar-track { height: 26px; background: var(--field-1); border: 1px solid var(--hairline); border-radius: var(--r-sm); overflow: hidden; }
+  .vbar-fill { display: block; height: 100%; background: var(--hairline-strong); border-radius: var(--r-sm) 0 0 var(--r-sm); }
+  .vbar-fig { font-size: 13px; color: var(--ink-2); text-align: right; white-space: nowrap; }
+  .vbar.own .vbar-name { color: var(--ink); font-weight: 500; }
+  .vbar.own .vbar-fill { background: linear-gradient(90deg, color-mix(in srgb, var(--magenta) 65%, transparent), var(--magenta)); box-shadow: 0 0 16px color-mix(in srgb, var(--magenta) 45%, transparent); }
+  .vbar.own .vbar-fig { color: var(--magenta); }
 
   /* FINAL CTA */
-  .final-cta { text-align: center; border-top: 1px solid var(--hairline); padding-block: 88px; margin-top: 80px; }
+  .final-cta { text-align: center; padding-block: 104px; }
   .final-cta h2 { font-size: clamp(28px, 4.6vw, 46px); letter-spacing: var(--track-display); margin: 0 0 28px; font-weight: 400; }
 
   @media (max-width: 900px) {
@@ -227,11 +241,15 @@ const vendorContext = [
     .stats { gap: 32px; }
   }
   @media (max-width: 600px) {
-    section { padding-block: 56px; }
+    section { padding-block: 64px; }
     .hero { padding-block: 72px 0; }
     .hero h1 { font-size: clamp(30px, 8.4vw, 48px); line-height: 1.06; }
     .section-title { font-size: clamp(24px, 7vw, 32px); }
+    .results-sec, .repro-sec, .caveat-sec, .vendor-sec { padding-block: 64px; }
     .stats { gap: 24px 36px; margin-top: 44px; }
-    .final-cta { margin-top: 56px; }
+    .vbar { grid-template-columns: 104px 1fr 62px; gap: 10px; }
+    .vbar-name { font-size: 13px; }
+    .vbar-op { font-size: 10px; }
+    .vbar-fig { font-size: 12px; }
   }
 </style>

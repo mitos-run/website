@@ -6,8 +6,8 @@
 // rule — every rate on this page is labelled "illustrative, final at GA".
 import Site from '../layouts/Site.astro';
 
-const SIGNUP = '/quickstart/';
-const DOCS = '/quickstart/';
+const SIGNUP = '/quickstart';
+const DOCS = '/quickstart';
 
 // Illustrative rates (mirror engine DefaultPriceList; Modal-magnitude). Shown
 // per-hour for humans; the estimator computes per-second.
@@ -18,6 +18,14 @@ const rates = [
   { meter: 'Egress', rate: '$0.09', unit: '/ GiB' },
   { meter: 'GPU', rate: '$2.16', unit: '/ GPU-hour' },
 ];
+
+// The two meters every sandbox vendor has, at published rates (Jun 2026). mitos
+// is illustrative; competitors are their listed prices. Compute only.
+const compare = [
+  { unit: 'vCPU / hour', mitos: '$0.046', cols: ['$0.050', '$0.050', '$0.071'] },
+  { unit: 'RAM / GiB-hour', mitos: '$0.0058', cols: ['$0.016', '$0.016', '$0.024'] },
+];
+const compareCols = ['E2B', 'Daytona', 'Modal'];
 
 const trust = [
   { k: '$100 to start', v: 'Free signup credit, no card. Prepaid top-ups after that.' },
@@ -120,6 +128,33 @@ const faqs = [
     <p class="rate-note mono reveal">Illustrative rates, final at general availability. Quoted per hour for readability; metered per second.</p>
   </section>
 
+  <section class="compare-sec container">
+    <h2 class="section-title reveal">How it compares</h2>
+    <p class="section-lede reveal">The two meters every sandbox vendor has, at published rates. Ours are illustrative, but the shape is the point: cheap RAM, and no platform fee underneath.</p>
+    <div class="cmp-wrap reveal">
+      <table class="cmp-table">
+        <thead>
+          <tr>
+            <th>Per hour</th>
+            <th class="cmp-own-h">mitos<span>*</span></th>
+            {compareCols.map((c) => <th>{c}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {compare.map((row) => (
+            <tr>
+              <td class="cmp-meter">{row.unit}</td>
+              <td class="cmp-own mono">{row.mitos}</td>
+              {row.cols.map((v) => <td class="mono">{v}</td>)}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="cmp-extra reveal">Rates are only half of it. Competitors don’t live-fork, so 100 parallel agents run as 100 separate sandboxes, each paying for its own full copy of the base. A mitos swarm forks one warm parent and shares its memory, so fan-out can cost less than the rates alone suggest, depending on how far each fork diverges.</p>
+    <p class="rate-note mono reveal">*Illustrative. Competitor rates published Jun 2026, compute only. E2B ($150/mo) and Modal ($250/mo) also charge a platform fee; mitos has none.</p>
+  </section>
+
   <section class="trust-sec container">
     <div class="trust-grid">
       {trust.map((t) => (
@@ -195,20 +230,37 @@ const faqs = [
   .calc-cow { margin: 14px 0 0; font-size: 12px; color: var(--ink-3); }
   .calc-cow b { color: var(--cyan); }
 
-  .section-title { font-size: clamp(26px, 3.4vw, 38px); letter-spacing: var(--track-display); font-weight: 400; margin: 0 0 16px; }
-  .section-lede { color: var(--ink-2); font-size: 17px; max-width: 42em; margin: 0 0 36px; }
+  .section-title { font-size: clamp(28px, 3.6vw, 42px); letter-spacing: var(--track-display); font-weight: 400; margin: 0 0 18px; }
+  .section-lede { color: var(--ink-2); font-size: 17px; max-width: 42em; margin: 0 0 48px; }
 
   /* RATE TABLE */
-  .rates-sec { padding-block: 80px 0; }
-  .rate-table { border-top: 1px solid var(--hairline); max-width: 720px; }
-  .rate-row { display: grid; grid-template-columns: 1fr auto auto; gap: 14px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--hairline); }
+  .rates-sec { padding-block: 100px; }
+  .rate-table { border-top: 1px solid var(--hairline); max-width: 660px; }
+  .rate-row { display: grid; grid-template-columns: 1fr auto 138px; column-gap: 24px; align-items: baseline; padding: 17px 0; border-bottom: 1px solid var(--hairline); }
   .rate-meter { font-size: 15px; color: var(--ink); }
-  .rate-val { font-size: 17px; color: var(--magenta); }
-  .rate-unit { font-size: 12.5px; color: var(--ink-3); }
-  .rate-note { margin: 16px 0 0; font-size: 12px; color: var(--ink-3); }
+  .rate-val { font-size: 17px; color: var(--magenta); text-align: right; }
+  .rate-unit { font-size: 12.5px; color: var(--ink-3); text-align: left; }
+  .rate-note { margin: 18px 0 0; font-size: 12px; color: var(--ink-3); line-height: 1.5; }
+
+  /* COMPARE */
+  .compare-sec { padding-block: 100px; }
+  .cmp-wrap { max-width: 640px; overflow-x: auto; }
+  .cmp-table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 440px; }
+  .cmp-table th, .cmp-table td { text-align: right; padding: 14px 16px; border-bottom: 1px solid var(--hairline); white-space: nowrap; }
+  .cmp-table th:first-child, .cmp-table td:first-child { text-align: left; padding-left: 0; }
+  .cmp-table th:last-child, .cmp-table td:last-child { padding-right: 0; }
+  .cmp-table thead th { color: var(--ink-3); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; border-bottom-color: var(--hairline-strong); }
+  .cmp-table tbody tr:last-child td { border-bottom: none; }
+  .cmp-meter { color: var(--ink); }
+  .cmp-table td.mono { color: var(--ink-2); }
+  .cmp-table th.cmp-own-h, .cmp-table td.cmp-own { background: color-mix(in srgb, var(--magenta) 8%, transparent); }
+  .cmp-own-h { color: var(--magenta); }
+  .cmp-own-h span { color: var(--ink-3); font-size: 10px; vertical-align: super; }
+  .cmp-own { color: var(--magenta) !important; font-size: 15px; }
+  .cmp-extra { max-width: 640px; margin: 22px 0 0; color: var(--ink-2); font-size: 14.5px; line-height: 1.6; }
 
   /* TRUST */
-  .trust-sec { padding-block: 64px 0; }
+  .trust-sec { padding-block: 100px; }
   .trust-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 1px solid var(--hairline); }
   .trust { padding: 24px 22px 22px; border-left: 1px solid var(--hairline); }
   .trust:first-child { border-left: none; padding-left: 0; }
@@ -216,7 +268,7 @@ const faqs = [
   .trust p { margin: 0; color: var(--ink-2); font-size: 13.5px; line-height: 1.55; }
 
   /* FAQ */
-  .faq-sec { padding-block: 72px 0; }
+  .faq-sec { padding-block: 100px; }
   .faq-list { max-width: 760px; }
   .faq-item summary { list-style: none; cursor: pointer; padding: 16px 0; font-size: 16px; color: var(--ink); display: flex; align-items: center; justify-content: space-between; gap: 16px; transition: color .14s var(--ease); }
   .faq-item summary::-webkit-details-marker { display: none; }
@@ -226,7 +278,7 @@ const faqs = [
   .faq-item p { margin: 0 0 20px; color: var(--ink-2); font-size: 14.5px; line-height: 1.6; max-width: 60em; }
 
   /* FINAL CTA */
-  .final-cta { text-align: center; border-top: 1px solid var(--hairline); padding-block: 88px; margin-top: 80px; }
+  .final-cta { text-align: center; padding-block: 104px; }
   .final-cta h2 { font-size: clamp(30px, 5vw, 50px); letter-spacing: var(--track-display); margin: 0 0 28px; font-weight: 400; }
 
   @media (max-width: 900px) {
@@ -241,7 +293,9 @@ const faqs = [
     .hero { padding-block: 72px 8px; }
     .hero h1 { font-size: clamp(30px, 8.4vw, 46px); line-height: 1.06; }
     .section-title { font-size: clamp(24px, 7vw, 32px); }
-    .rates-sec { padding-block: 56px 0; }
+    .rates-sec, .compare-sec, .trust-sec, .faq-sec { padding-block: 64px; }
+    .cmp-table { font-size: 12.5px; min-width: 408px; }
+    .cmp-table th, .cmp-table td { padding: 12px 12px; }
     .trust-grid { grid-template-columns: 1fr; }
     .trust, .trust:nth-child(2) { border-left: none; padding-left: 0; }
     .calc-total-v { font-size: 30px; }

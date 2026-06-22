@@ -20,13 +20,13 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL('/og.png', Astro.site).href;
 
 const GITHUB = 'https://github.com/mitos-run/mitos';
-const DOCS = '/quickstart/';
-const SIGNUP = '/quickstart/'; // TODO: hosted console signup when live
+const DOCS = '/quickstart';
+const SIGNUP = '/quickstart'; // TODO: hosted console signup when live
 
 const navLinks = [
   { label: 'How it works', href: '/#how' },
-  { label: 'Benchmarks', href: '/benchmarks/' },
-  { label: 'Pricing', href: '/pricing/' },
+  { label: 'Benchmarks', href: '/benchmarks' },
+  { label: 'Pricing', href: '/pricing' },
   { label: 'Docs', href: DOCS },
 ];
 ---
@@ -105,20 +105,20 @@ const navLinks = [
         <div class="footer-col">
           <h5>Product</h5>
           <a href="/#how">How it works</a>
-          <a href="/benchmarks/">Benchmarks</a>
-          <a href="/pricing/">Pricing</a>
+          <a href="/benchmarks">Benchmarks</a>
+          <a href="/pricing">Pricing</a>
           <a href="/#compare">Comparison</a>
         </div>
         <div class="footer-col">
           <h5>Developers</h5>
           <a href={DOCS}>Docs</a>
-          <a href="/quickstart/">Quickstart</a>
-          <a href="/architecture/">Architecture</a>
+          <a href="/quickstart">Quickstart</a>
+          <a href="/architecture">Architecture</a>
           <a href={GITHUB} target="_blank" rel="noopener">GitHub</a>
         </div>
         <div class="footer-col">
           <h5>Company</h5>
-          <a href="/blog/">Blog</a>
+          <a href="/blog">Blog</a>
           <a href={`${GITHUB}/blob/main/SECURITY.md`} target="_blank" rel="noopener">Security</a>
           <a href={`${GITHUB}/blob/main/LICENSE`} target="_blank" rel="noopener">License</a>
         </div>
