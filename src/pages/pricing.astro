@@ -1,129 +1,132 @@
 ---
-// Pricing — Fluorescence. Managed is the product; usage-based, CoW-metered, with
-// hard spend caps (the anti-bill-shock guarantee). Hosted is early access, so this
-// page explains HOW pricing works rather than quoting final rates. Honest only.
+// Pricing — Fluorescence, PAYG-only with a live cost estimator in the hero.
+// Model is the engine's real billing shape (decoupled per-second vCPU + RAM,
+// storage GiB-hour, metered egress, GPU-second; $100 signup credit; hard spend
+// caps). Rates are ILLUSTRATIVE placeholders per the repo's no-published-numbers
+// rule — every rate on this page is labelled "illustrative, final at GA".
 import Site from '../layouts/Site.astro';
 
 const SIGNUP = '/quickstart/';
 const DOCS = '/quickstart/';
-const GITHUB = 'https://github.com/mitos-run/mitos';
 
-const tiers = [
-  {
-    name: 'Free',
-    tag: 'Start',
-    price: 'Credits, no card',
-    desc: 'Enough warm compute to fork your first swarms and ship a prototype.',
-    features: ['Starter compute credits', 'No credit card', 'Warm pools, millisecond forks', 'Community support'],
-    cta: 'Start swarming',
-    href: SIGNUP,
-    featured: false,
-  },
-  {
-    name: 'Pro',
-    tag: 'Usage based',
-    price: 'Pay for what you fork',
-    desc: 'Per-second compute, metered by copy-on-write so a swarm stays cheap.',
-    features: ['Per-second compute, no idle charge', 'CoW metering: pay per dirtied page', 'Hard spend caps on by default', 'Higher concurrency limits', 'Email support'],
-    cta: 'Start swarming',
-    href: SIGNUP,
-    featured: true,
-  },
-  {
-    name: 'Enterprise',
-    tag: 'Custom',
-    price: "Let's talk",
-    desc: 'For teams running swarms at scale with compliance and isolation needs.',
-    features: ['Volume pricing', 'SSO, audit logs', 'Run in your own cloud (BYOC)', 'SLA and dedicated support'],
-    cta: 'Contact us',
-    href: GITHUB,
-    featured: false,
-  },
+// Illustrative rates (mirror engine DefaultPriceList; Modal-magnitude). Shown
+// per-hour for humans; the estimator computes per-second.
+const rates = [
+  { meter: 'Compute · vCPU', rate: '$0.046', unit: '/ vCPU-hour' },
+  { meter: 'Memory · RAM', rate: '$0.0058', unit: '/ GiB-hour' },
+  { meter: 'Storage', rate: '$0.073', unit: '/ GiB-month' },
+  { meter: 'Egress', rate: '$0.09', unit: '/ GiB' },
+  { meter: 'GPU', rate: '$2.16', unit: '/ GPU-hour' },
 ];
 
-const meters = [
-  { k: 'Compute', v: 'Per second of CPU and memory your sandboxes use. Scale to zero between forks, never pay for idle.' },
-  { k: 'Copy-on-write', v: 'A forked subagent costs only the pages it dirties, about 3 MiB. The shared template is counted once, not once per fork.' },
-  { k: 'Storage', v: 'Durable workspaces are billed on the bytes you keep. Snapshots ship as deltas, so versions stay cheap.' },
+const trust = [
+  { k: '$100 to start', v: 'Free signup credit, no card. Prepaid top-ups after that.' },
+  { k: 'Hard spend caps', v: 'Set a ceiling. A runaway swarm suspends at the cap, not at a surprise invoice.' },
+  { k: 'No platform fee', v: 'No seat or subscription floor. You pay for compute, nothing else.' },
+  { k: 'No idle charge', v: 'Billing is per-second while running. Paused sandboxes cost nothing to run.' },
 ];
 
 const faqs = [
-  { q: 'How is a swarm billed?', a: 'You pay for the compute each subagent actually uses, per second. Because forks share memory copy-on-write, fanning out to many subagents adds little beyond the pages each one writes.' },
-  { q: 'Will I get a surprise bill?', a: 'No. Hard spend caps are on by default, so a runaway loop stops at your limit instead of becoming a five-figure invoice. Copy-on-write also means you pay for dirtied pages, not whole VMs.' },
-  { q: 'Do I pay for idle sandboxes?', a: 'No. Warm pools are managed for you, and compute scales to zero between forks. You are billed for active work, not for waiting.' },
+  { q: 'How is a swarm billed?', a: 'Per second, with vCPU and memory metered separately. Because forks share the parent’s memory copy-on-write, fanning out to many subagents mostly adds vCPU-seconds — the memory bill barely moves.' },
+  { q: 'Will I get a surprise bill?', a: 'No. Hard spend caps are on by default: a runaway loop suspends the org at your limit instead of becoming a five-figure invoice. A soft cap alerts you before that.' },
+  { q: 'Why is memory so cheap for a swarm?', a: 'A fork is a live copy-on-write clone of a running microVM. The parent’s pages are shared and counted once; each fork only adds the pages it dirties (about 3 MiB on our benchmark). So 100 forks is not 100× the memory.' },
+  { q: 'Do I pay for idle sandboxes?', a: 'No. Compute is per-second while running and scales to zero between forks. You are billed for active work, not for waiting.' },
   { q: 'Can I run it myself instead?', a: 'Yes. The engine is open source under Apache 2.0 and free to run on your own Kubernetes cluster. Hosted mitos is for teams who want the fork speed without operating the cluster.' },
-  { q: 'What about data residency?', a: 'Enterprise can run mitos in their own cloud (BYOC) so agent code and data stay on their infrastructure.' },
 ];
 ---
 
 <Site
-  title="mitos pricing: pay for what your swarm changes"
-  description="Usage-based pricing for agent swarms. Per-second compute, metered by copy-on-write so fanning out to many subagents stays cheap. Hard spend caps on by default. Hosted mitos is in early access."
+  title="mitos pricing: pay-as-you-go for agent swarms"
+  description="Pay-as-you-go, per-second microVM compute with decoupled vCPU and RAM. Forks share memory copy-on-write so fanning out stays cheap. $100 signup credit, hard spend caps, no platform fee. Illustrative rates; final at GA."
 >
   <section class="hero container">
     <div class="hero-aura" aria-hidden="true"></div>
-    <div class="hero-in reveal">
-      <p class="eyebrow mono">Pricing</p>
-      <h1>Fork freely. Pay for what changes.</h1>
+
+    <div class="hero-copy reveal">
+      <h1>Fork freely.<br />Pay for what changes.</h1>
       <p class="lede">
-        Per-second compute, metered by <span class="hl">copy-on-write</span> so a swarm of
-        subagents stays cheap to fan out. No idle charges, and hard spend caps on by default.
+        Pay-as-you-go, per-second, with <span class="hl">vCPU and memory metered separately</span>.
+        Forks share memory copy-on-write, so a swarm of subagents barely moves the bill.
       </p>
       <div class="hero-actions">
         <a class="btn btn-primary btn-lg" href={SIGNUP}>Start swarming</a>
         <a class="btn btn-ghost btn-lg" href={DOCS}>Read the docs</a>
       </div>
-      <p class="early mono">Hosted mitos is in early access. The plans below describe how pricing works; final rates land at general availability.</p>
+      <p class="early mono">Hosted mitos is in early access. Rates here are illustrative; final rates land at general availability.</p>
+    </div>
+
+    <!-- LIVE COST ESTIMATOR -->
+    <div class="calc reveal" id="calc">
+      <div class="calc-head">
+        <span class="calc-title">Estimate your swarm</span>
+        <span class="calc-tag mono">illustrative</span>
+      </div>
+
+      <div class="presets" role="group" aria-label="Workload presets">
+        <button class="preset" data-preset="solo">Solo agent</button>
+        <button class="preset is-on" data-preset="swarm">Eval swarm</button>
+        <button class="preset" data-preset="ci">CI fleet</button>
+      </div>
+
+      <div class="sliders">
+        <label class="slider">
+          <span class="slider-top"><span>Sandboxes</span><b id="v-n" class="mono">100</b></span>
+          <input type="range" id="s-n" min="1" max="500" step="1" value="100" />
+        </label>
+        <label class="slider">
+          <span class="slider-top"><span>vCPU each</span><b id="v-vcpu" class="mono">1</b></span>
+          <input type="range" id="s-vcpu" min="1" max="16" step="1" value="1" />
+        </label>
+        <label class="slider">
+          <span class="slider-top"><span>RAM each</span><b id="v-ram" class="mono">2 GiB</b></span>
+          <input type="range" id="s-ram" min="1" max="32" step="1" value="2" />
+        </label>
+        <label class="slider">
+          <span class="slider-top"><span>Minutes each</span><b id="v-min" class="mono">5</b></span>
+          <input type="range" id="s-min" min="1" max="120" step="1" value="5" />
+        </label>
+        <label class="slider">
+          <span class="slider-top"><span>Runs / month</span><b id="v-runs" class="mono">50</b></span>
+          <input type="range" id="s-runs" min="1" max="1000" step="1" value="50" />
+        </label>
+      </div>
+
+      <div class="calc-out">
+        <div class="calc-total">
+          <span class="calc-total-v mono" id="o-total">$0</span>
+          <span class="calc-total-l">est. / month</span>
+        </div>
+        <div class="calc-lines">
+          <div class="calc-line"><span>Compute · vCPU</span><b class="mono" id="o-vcpu">$0</b></div>
+          <div class="calc-line"><span>Memory · RAM (shared)</span><b class="mono" id="o-mem">$0</b></div>
+        </div>
+        <p class="calc-cow mono" id="o-cow">Booting cold VMs instead: <b>$0</b> just in memory.</p>
+        <p class="calc-foot mono">$100 signup credit + hard spend caps. Illustrative rates, final at GA.</p>
+      </div>
     </div>
   </section>
 
-  <section class="tiers-sec container">
-    <div class="tiers">
-      {tiers.map((t) => (
-        <article class={`tier reveal ${t.featured ? 'tier-featured' : ''}`}>
-          {t.featured && <span class="tier-badge mono">Most popular</span>}
-          <div class="tier-head">
-            <h3>{t.name}</h3>
-            <span class="tier-tag mono">{t.tag}</span>
-          </div>
-          <p class="tier-price">{t.price}</p>
-          <p class="tier-desc">{t.desc}</p>
-          <ul class="tier-feats">
-            {t.features.map((f) => <li><span class="tick">✓</span>{f}</li>)}
-          </ul>
-          <a class={`btn ${t.featured ? 'btn-primary' : 'btn-ghost'} tier-cta`} href={t.href}>{t.cta}</a>
-        </article>
+  <section class="rates-sec container">
+    <h2 class="section-title reveal">One model: pay-as-you-go, per second</h2>
+    <p class="section-lede reveal">Decoupled meters, so a CPU-heavy and a RAM-heavy sandbox bill differently. You pay only while a sandbox runs.</p>
+    <div class="rate-table reveal">
+      {rates.map((r) => (
+        <div class="rate-row">
+          <span class="rate-meter">{r.meter}</span>
+          <span class="rate-val mono">{r.rate}</span>
+          <span class="rate-unit mono">{r.unit}</span>
+        </div>
       ))}
     </div>
+    <p class="rate-note mono reveal">Illustrative rates, final at general availability. Quoted per hour for readability; metered per second.</p>
   </section>
 
-  <!-- THE MATH: make copy-on-write economics tangible -->
-  <section class="math-sec container">
-    <h2 class="section-title reveal">The math of forking 100 subagents</h2>
-    <p class="section-lede reveal">Copy-on-write means a swarm shares one warm template. You pay for what each fork dirties, not a hundred whole machines.</p>
-    <div class="math reveal">
-      <div class="math-row">
-        <div class="math-label">mitos: one template + 100 forks</div>
-        <div class="math-bar"><span class="math-fill mitos" style="width:14%"></span></div>
-        <div class="math-num mono">~1.3<span>VMs of memory</span></div>
-      </div>
-      <div class="math-row">
-        <div class="math-label">Whole VMs: 100 copies</div>
-        <div class="math-bar"><span class="math-fill plain" style="width:100%"></span></div>
-        <div class="math-num mono">100<span>VMs of memory</span></div>
-      </div>
-      <p class="math-note mono">1 warm template (counted once) + 100 forks × ~3 MiB dirtied each. Illustrative; your real cost depends on what each fork writes.</p>
-    </div>
-  </section>
-
-  <section class="meter-sec container">
-    <h2 class="section-title reveal">How metering works</h2>
-    <p class="section-lede reveal">You pay for real work, counted honestly. Three things are metered, nothing else.</p>
-    <div class="meter-grid">
-      {meters.map((m) => (
-        <div class="meter reveal">
-          <h4>{m.k}</h4>
-          <p>{m.v}</p>
+  <section class="trust-sec container">
+    <div class="trust-grid">
+      {trust.map((t) => (
+        <div class="trust reveal">
+          <h4>{t.k}</h4>
+          <p>{t.v}</p>
         </div>
       ))}
     </div>
@@ -153,85 +156,153 @@ const faqs = [
 </Site>
 
 <style>
-  /* HERO */
-  .hero { padding-block: 96px 8px; position: relative; }
-  .hero-aura { position: absolute; top: -60px; left: 4%; width: 680px; max-width: 90vw; height: 520px; z-index: 0; pointer-events: none;
+  /* HERO (2-col: copy + estimator), matched to landing placement */
+  .hero { padding-block: 184px 8px; position: relative; display: grid; grid-template-columns: 1fr minmax(0, 1.02fr); gap: 56px; align-items: start; }
+  .hero-aura { position: absolute; top: -60px; left: 2%; width: 640px; max-width: 86vw; height: 520px; z-index: 0; pointer-events: none;
     background: radial-gradient(closest-side, color-mix(in srgb, var(--magenta) 11%, transparent), transparent 72%); opacity: .5; filter: blur(8px); }
-  .hero-in { position: relative; z-index: 1; max-width: 720px; }
-  .eyebrow { color: var(--ink-3); font-size: 12.5px; letter-spacing: .04em; text-transform: uppercase; margin: 0 0 16px; }
-  .hero h1 { font-size: clamp(40px, 5.4vw, 64px); line-height: 1.02; letter-spacing: var(--track-display); font-weight: 400; margin: 0 0 20px; }
-  .lede { font-size: 19px; color: var(--ink-2); max-width: 32em; margin: 0 0 28px; line-height: 1.5; }
+  .hero-copy { position: relative; z-index: 1; }
+  .hero h1 { font-size: clamp(40px, 4.6vw, 60px); line-height: 1.0; letter-spacing: -.035em; font-weight: 400; margin: 0 0 20px; }
+  .lede { font-size: 18px; color: var(--ink-2); max-width: 26em; margin: 0 0 28px; line-height: 1.5; }
   .lede .hl { color: var(--cyan); }
   .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
   .hero-actions.center { justify-content: center; }
-  .early { margin: 28px 0 0; font-size: 12.5px; color: var(--ink-3); border-left: 2px solid color-mix(in srgb, var(--magenta) 45%, transparent); padding-left: 14px; max-width: 44em; line-height: 1.55; }
+  .early { margin: 26px 0 0; font-size: 12px; color: var(--ink-3); border-left: 2px solid color-mix(in srgb, var(--magenta) 45%, transparent); padding-left: 14px; max-width: 38em; line-height: 1.55; }
+
+  /* ESTIMATOR */
+  .calc { position: relative; z-index: 1; background: var(--field-1); border: 1px solid var(--hairline); border-radius: var(--r-lg); padding: 20px; }
+  .calc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .calc-title { font-size: 15px; color: var(--ink); font-weight: 500; }
+  .calc-tag { font-size: 10.5px; color: var(--ink-3); border: 1px solid var(--hairline-strong); border-radius: 999px; padding: 3px 9px; text-transform: uppercase; letter-spacing: .05em; }
+  .presets { display: flex; gap: 8px; margin-bottom: 18px; }
+  .preset { flex: 1; font: inherit; font-size: 12.5px; color: var(--ink-2); background: transparent; border: 1px solid var(--hairline); border-radius: 999px; padding: 7px 6px; cursor: pointer; transition: color .14s var(--ease), border-color .14s var(--ease), background .14s var(--ease); }
+  .preset:hover { color: var(--ink); border-color: var(--hairline-strong); }
+  .preset.is-on { color: var(--field); background: var(--magenta); border-color: var(--magenta); font-weight: 500; }
+
+  .sliders { display: flex; flex-direction: column; gap: 14px; }
+  .slider { display: flex; flex-direction: column; gap: 7px; }
+  .slider-top { display: flex; align-items: baseline; justify-content: space-between; font-size: 13px; color: var(--ink-2); }
+  .slider-top b { color: var(--ink); font-size: 13px; }
+  input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 4px; border-radius: 999px; background: var(--field-2); outline: none; cursor: pointer; }
+  input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--magenta); border: 2px solid var(--field); box-shadow: 0 0 10px color-mix(in srgb, var(--magenta) 55%, transparent); cursor: pointer; }
+  input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--magenta); border: 2px solid var(--field); cursor: pointer; }
+
+  .calc-out { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--hairline); }
+  .calc-total { display: flex; align-items: baseline; gap: 10px; }
+  .calc-total-v { font-size: 36px; color: var(--ink); letter-spacing: -.03em; }
+  .calc-total-l { font-size: 13px; color: var(--ink-3); }
+  .calc-lines { margin-top: 12px; display: flex; flex-direction: column; gap: 7px; }
+  .calc-line { display: flex; align-items: baseline; justify-content: space-between; font-size: 13px; color: var(--ink-2); }
+  .calc-line b { color: var(--ink); }
+  .calc-cow { margin: 14px 0 0; font-size: 12px; color: var(--ink-3); }
+  .calc-cow b { color: var(--cyan); }
+  .calc-foot { margin: 10px 0 0; font-size: 11px; color: var(--ink-3); line-height: 1.5; }
 
   .section-title { font-size: clamp(26px, 3.4vw, 38px); letter-spacing: var(--track-display); font-weight: 400; margin: 0 0 16px; }
-  .section-lede { color: var(--ink-2); font-size: 17px; max-width: 42em; margin: 0 0 40px; }
+  .section-lede { color: var(--ink-2); font-size: 17px; max-width: 42em; margin: 0 0 36px; }
 
-  /* TIERS */
-  .tiers-sec { padding-block: 48px; }
-  .tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; align-items: stretch; }
-  .tier { position: relative; display: flex; flex-direction: column; border: 1px solid var(--hairline); border-radius: var(--r-lg); padding: 28px; background: var(--field-1); transition: border-color .15s var(--ease); }
-  .tier:hover { border-color: var(--hairline-strong); }
-  .tier-featured { border-color: color-mix(in srgb, var(--magenta) 55%, transparent); background: var(--field-2); }
-  .tier-badge { position: absolute; top: -10px; left: 24px; background: var(--magenta); color: var(--field); font-size: 11px; padding: 3px 10px; border-radius: 999px; letter-spacing: .02em; }
-  .tier-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-  .tier-head h3 { margin: 0; font-size: 20px; font-weight: 500; }
-  .tier-tag { font-size: 11px; color: var(--ink-3); border: 1px solid var(--hairline-strong); border-radius: 999px; padding: 3px 10px; }
-  .tier-price { font-size: 20px; font-weight: 500; letter-spacing: -.01em; margin: 0 0 10px; color: var(--ink); }
-  .tier-desc { color: var(--ink-2); font-size: 14px; margin: 0 0 20px; line-height: 1.5; }
-  .tier-feats { list-style: none; padding: 0; margin: 0 0 24px; display: flex; flex-direction: column; gap: 10px; flex-grow: 1; }
-  .tier-feats li { display: flex; gap: 10px; font-size: 14px; color: var(--ink-2); }
-  .tier-feats .tick { color: var(--magenta); flex-shrink: 0; }
-  .tier-cta { justify-content: center; }
+  /* RATE TABLE */
+  .rates-sec { padding-block: 80px 0; }
+  .rate-table { border-top: 1px solid var(--hairline); max-width: 720px; }
+  .rate-row { display: grid; grid-template-columns: 1fr auto auto; gap: 14px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--hairline); }
+  .rate-meter { font-size: 15px; color: var(--ink); }
+  .rate-val { font-size: 17px; color: var(--magenta); }
+  .rate-unit { font-size: 12.5px; color: var(--ink-3); }
+  .rate-note { margin: 16px 0 0; font-size: 12px; color: var(--ink-3); }
 
-  /* THE MATH */
-  .math-sec { padding-block: 64px; }
-  .math { max-width: 760px; }
-  .math-row { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 22px; }
-  .math-label { font-size: 14px; color: var(--ink-2); }
-  .math-bar { height: 30px; background: var(--field-1); border: 1px solid var(--hairline); border-radius: var(--r-sm); overflow: hidden; position: relative; }
-  .math-fill { display: block; height: 100%; }
-  .math-fill.mitos { background: linear-gradient(90deg, color-mix(in srgb, var(--magenta) 70%, transparent), var(--magenta)); box-shadow: 0 0 18px color-mix(in srgb, var(--magenta) 40%, transparent); }
-  .math-fill.plain { background: var(--hairline-strong); }
-  .math-num { font-size: 22px; color: var(--ink); display: flex; align-items: baseline; gap: 8px; }
-  .math-num span { font-size: 12px; color: var(--ink-3); font-family: var(--sans); }
-  .math-note { margin: 14px 0 0; font-size: 12px; color: var(--ink-3); line-height: 1.5; }
-
-  /* METER */
-  .meter-sec { padding-block: 0 64px; }
-  .meter-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 1px solid var(--hairline); }
-  .meter { padding: 26px 24px 24px; border-left: 1px solid var(--hairline); }
-  .meter:first-child { border-left: none; padding-left: 0; }
-  .meter h4 { margin: 0 0 8px; font-size: 15px; font-weight: 500; color: var(--ink); }
-  .meter p { margin: 0; color: var(--ink-2); font-size: 14px; line-height: 1.55; }
+  /* TRUST */
+  .trust-sec { padding-block: 64px 0; }
+  .trust-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 1px solid var(--hairline); }
+  .trust { padding: 24px 22px 22px; border-left: 1px solid var(--hairline); }
+  .trust:first-child { border-left: none; padding-left: 0; }
+  .trust h4 { margin: 0 0 8px; font-size: 15px; font-weight: 500; color: var(--ink); }
+  .trust p { margin: 0; color: var(--ink-2); font-size: 13.5px; line-height: 1.55; }
 
   /* FAQ */
-  .faq-sec { padding-block: 0 72px; }
+  .faq-sec { padding-block: 72px 0; }
   .faq-list { max-width: 760px; }
   .faq-item summary { list-style: none; cursor: pointer; padding: 16px 0; font-size: 16px; color: var(--ink); display: flex; align-items: center; justify-content: space-between; gap: 16px; transition: color .14s var(--ease); }
   .faq-item summary::-webkit-details-marker { display: none; }
   .faq-item summary::after { content: '+'; color: var(--magenta); font-family: var(--mono); font-size: 18px; }
-  .faq-item[open] summary::after { content: '−'; }
+  .faq-item[open] summary::after { content: '\2212'; }
   .faq-item summary:hover { color: var(--magenta); }
   .faq-item p { margin: 0 0 20px; color: var(--ink-2); font-size: 14.5px; line-height: 1.6; max-width: 60em; }
 
   /* FINAL CTA */
-  .final-cta { text-align: center; border-top: 1px solid var(--hairline); padding-block: 88px; }
+  .final-cta { text-align: center; border-top: 1px solid var(--hairline); padding-block: 88px; margin-top: 80px; }
   .final-cta h2 { font-size: clamp(30px, 5vw, 50px); letter-spacing: var(--track-display); margin: 0 0 28px; font-weight: 400; }
 
   @media (max-width: 900px) {
-    .hero { padding-block: 88px 8px; }
-    .tiers, .meter-grid { grid-template-columns: 1fr; }
-    .meter { border-left: none; padding-left: 0; }
-    .meter-grid { border-top: none; }
+    .hero { padding-block: 104px 8px; grid-template-columns: 1fr; gap: 40px; }
+    .hero h1 { font-size: clamp(38px, 8vw, 52px); }
+    .trust-grid { grid-template-columns: 1fr 1fr; }
+    .trust { border-left: none; padding-left: 0; }
+    .trust:nth-child(2) { padding-left: 22px; border-left: 1px solid var(--hairline); }
   }
   @media (max-width: 600px) {
     section { padding-block: 56px; }
-    .hero { padding-block: 64px 8px; }
-    .hero h1 { font-size: clamp(30px, 8.4vw, 48px); }
+    .hero { padding-block: 72px 8px; }
+    .hero h1 { font-size: clamp(30px, 8.4vw, 46px); line-height: 1.06; }
     .section-title { font-size: clamp(24px, 7vw, 32px); }
-    .math-num { font-size: 19px; }
+    .rates-sec { padding-block: 56px 0; }
+    .trust-grid { grid-template-columns: 1fr; }
+    .trust, .trust:nth-child(2) { border-left: none; padding-left: 0; }
+    .calc-total-v { font-size: 30px; }
   }
 </style>
+
+<script>
+  // Illustrative per-second rates (mirror engine DefaultPriceList). Not published facts.
+  const VCPU_S = 0.0000128; // $/vCPU-second  (~$0.046/hr)
+  const MEM_S = 0.0000016;  // $/GiB-second   (~$0.0058/hr)
+  const MARGINAL_GIB = 0.003; // ~3 MiB CoW-dirtied per fork (benchmark)
+
+  const PRESETS = {
+    solo:  { n: 1,   vcpu: 2, ram: 4, min: 15, runs: 200 },
+    swarm: { n: 100, vcpu: 1, ram: 2, min: 5,  runs: 50 },
+    ci:    { n: 20,  vcpu: 4, ram: 8, min: 10, runs: 300 },
+  };
+
+  const $ = (id) => document.getElementById(id);
+  const calc = $('calc');
+  if (calc) {
+    const s = { n: $('s-n'), vcpu: $('s-vcpu'), ram: $('s-ram'), min: $('s-min'), runs: $('s-runs') };
+    const fmt = (v) => {
+      if (v >= 1000) return '$' + v.toLocaleString('en-US', { maximumFractionDigits: 0 });
+      if (v >= 10) return '$' + v.toFixed(0);
+      return '$' + v.toFixed(2);
+    };
+    function render() {
+      const n = +s.n.value, vcpu = +s.vcpu.value, ram = +s.ram.value, min = +s.min.value, runs = +s.runs.value;
+      const sec = min * 60;
+      const vcpuCost = n * vcpu * sec * runs * VCPU_S;
+      // CoW: parent memory counted once, each fork adds only its dirtied pages
+      const memCost = (ram + n * MARGINAL_GIB) * sec * runs * MEM_S;
+      const memWhole = n * ram * sec * runs * MEM_S; // booting N independent VMs
+      const total = vcpuCost + memCost;
+
+      $('v-n').textContent = n;
+      $('v-vcpu').textContent = vcpu;
+      $('v-ram').textContent = ram + ' GiB';
+      $('v-min').textContent = min;
+      $('v-runs').textContent = runs;
+
+      $('o-total').textContent = fmt(total);
+      $('o-vcpu').textContent = fmt(vcpuCost);
+      $('o-mem').textContent = fmt(memCost);
+      const factor = memCost > 0 ? Math.max(1, Math.round(memWhole / memCost)) : 1;
+      $('o-cow').innerHTML = 'Forked memory <b>' + fmt(memCost) + '</b> vs <b>' + fmt(memWhole) + '</b> for ' + n + ' cold VMs — <b>' + factor + '× less</b>.';
+    }
+    Object.values(s).forEach((el) => el.addEventListener('input', () => {
+      document.querySelectorAll('.preset').forEach((p) => p.classList.remove('is-on'));
+      render();
+    }));
+    document.querySelectorAll('.preset').forEach((btn) => btn.addEventListener('click', () => {
+      const p = PRESETS[btn.dataset.preset]; if (!p) return;
+      s.n.value = p.n; s.vcpu.value = p.vcpu; s.ram.value = p.ram; s.min.value = p.min; s.runs.value = p.runs;
+      document.querySelectorAll('.preset').forEach((b) => b.classList.remove('is-on'));
+      btn.classList.add('is-on');
+      render();
+    }));
+    render();
+  }
+</script>
