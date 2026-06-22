@@ -3,6 +3,9 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  schedule:
+    # Daily rebuild so the baked-in GitHub star count stays fresh between pushes.
+    - cron: '0 6 * * *'
   workflow_dispatch:
 
 # Allow the workflow to publish to Pages via OIDC.
@@ -24,6 +27,9 @@ jobs:
         uses: actions/checkout@v4
       - name: Build Astro site (installs deps, runs astro build, uploads the Pages artifact)
         uses: withastro/action@v3
+        env:
+          # Authenticated star fetch (lib/stars.ts) so the baked count is reliable, not rate-limited.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deploy:
     needs: build
