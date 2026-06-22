@@ -7,6 +7,10 @@
 // docs/superpowers/plans/2026-06-22-fluorescence-page-rebuild.md.
 import Site from '../layouts/Site.astro';
 import Division from '../components/Division.astro';
+import pythonIcon from '../assets/lang/python.svg?raw';
+import tsIcon from '../assets/lang/typescript.svg?raw';
+import cliIcon from '../assets/lang/cli.svg?raw';
+const langIcons: Record<string, string> = { py: pythonIcon, ts: tsIcon, cli: cliIcon };
 
 const GITHUB = 'https://github.com/mitos-run/mitos';
 const DOCS = '/quickstart/';
@@ -64,12 +68,29 @@ mitos lineage vm·0.3`,
   },
 ];
 
+// Minimal syntax highlighter for the hero snippets. Maps to our signal colors;
+// the fork primitive is highlighted in magenta (the brand signature in code).
+function hl(code: string): string {
+  const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const KW = /\b(from|import|const|await|new|for|def|return|in)\b/g;
+  return code.split('\n').map((line) => {
+    let codePart = line, comPart = '';
+    const m = line.match(/#|\/\//);
+    if (m) { const i = line.indexOf(m[0]); codePart = line.slice(0, i); comPart = line.slice(i); }
+    const h = esc(codePart)
+      .replace(/(['"])(.*?)\1/g, '<span class="c-str">$1$2$1</span>')
+      .replace(/\bfork\b/g, '<span class="c-fork">fork</span>')
+      .replace(KW, '<span class="c-kw">$1</span>');
+    return comPart ? h + '<span class="c-com">' + esc(comPart) + '</span>' : h;
+  }).join('\n');
+}
+
 const useCases = [
-  { h: 'Best-of-N attempts', p: 'Fork a warm VM, run N divergent attempts in parallel, commit the one that worked and drop the rest.' },
-  { h: 'RL rollouts and fan-out', p: 'Spin thousands of parallel environments from a single warm template each training step, then collapse them back to zero.' },
-  { h: 'Tree search and test-time compute', p: 'Branch a running agent mid-thought for MCTS or speculative exploration. Parallel beats serial, and forks are cheap.' },
-  { h: 'Multi-agent evals', p: 'Give every agent its own real computer, isolated from the others, so one crash or escape cannot touch the rest.' },
-  { h: 'Untrusted code', p: 'Run model-written code in a microVM with its own kernel. A bad command stays inside one disposable fork.' },
+  { h: 'Best-of-N attempts', p: 'Run N attempts in parallel, commit the one that worked, drop the rest.' },
+  { h: 'RL rollouts and fan-out', p: 'Thousands of parallel environments from one warm template, then back to zero.' },
+  { h: 'Tree search', p: 'Branch a running agent mid-thought for MCTS. Parallel beats serial.' },
+  { h: 'Multi-agent evals', p: 'Every agent its own computer, isolated from the rest.' },
+  { h: 'Untrusted code', p: 'Model-written code in a microVM with its own kernel.' },
 ];
 
 const steps = [
@@ -79,10 +100,10 @@ const steps = [
 ];
 
 const hostedItems = [
-  { h: 'No cluster to run', p: 'No KVM hosts to patch, no snapshot storage to babysit, no 3am page. You call the API; we keep the metal alive.' },
-  { h: 'Pools stay warm', p: 'We keep pre-forked VMs hot and the autoscaler tuned, so forks land in milliseconds whether you need one or five hundred.' },
-  { h: 'Open source is your exit', p: 'The hosted service runs the same Apache-2.0 engine you can run yourself. If you ever want out, you just leave. No rewrite, no lock-in.' },
-  { h: 'Dev and prod match', p: 'The same engine behind the same API on your laptop and in production. What you build against locally is what ships.' },
+  { h: 'No cluster to run', p: 'No KVM hosts to patch, no snapshot storage to babysit, no 3am page.' },
+  { h: 'Pools stay warm', p: 'Pre-forked VMs stay hot, so forks land in milliseconds, one or five hundred.' },
+  { h: 'Open source is your exit', p: 'Same Apache-2.0 engine you can run yourself. No rewrite, no lock-in.' },
+  { h: 'Dev and prod match', p: 'Same engine, same API, laptop to production.' },
 ];
 
 // Honest, capability-based comparison from public docs (not a head-to-head
@@ -98,12 +119,12 @@ const compRows = [
 ];
 
 const faqs = [
-  { q: 'Is the fork really unique?', a: 'No, and we will not pretend it is. A few others can branch a VM. The difference is the combination: a live copy-on-write fork of running memory at about 27ms and 3 MiB per daughter, with microVM isolation, fully managed, and Apache-2.0 so you can run it yourself. No one else holds all of those at once.' },
-  { q: 'How many forks can I run at once?', a: 'The fork primitive is built for fan-out: hundreds to thousands of daughters from one warm parent. They share the parent in memory, so the cost grows with what each one writes, not with the count.' },
-  { q: 'Can I run it myself?', a: 'Yes. The engine is Apache-2.0 on GitHub, the same code the managed service runs. Self-hosting is your insurance against lock-in, not a worse version of the product.' },
-  { q: 'How are subagents isolated?', a: 'Each fork is a Firecracker microVM with its own kernel, isolated by KVM. That is the boundary you want when an agent runs code it wrote itself or pulled from the web.' },
-  { q: 'Will I get a surprise bill?', a: 'Hard spend caps are on by default. Copy-on-write means you pay for the pages your forks actually dirty, not for whole VMs, so a runaway loop cannot quietly turn into a five-figure invoice.' },
-  { q: 'Which languages and SDKs?', a: 'Python, TypeScript, and a CLI today, plus an MCP server. The sandbox runs any Linux workload.' },
+  { q: 'Is the fork really unique?', a: 'No, and we will not pretend it is. A few others can branch a VM. No one else combines a live fork of running memory at about 27ms and 3 MiB per daughter, microVM-isolated, managed, and Apache-2.0.' },
+  { q: 'How many forks can I run at once?', a: 'Hundreds to thousands from one warm parent. They share its memory, so cost grows with what each one writes, not with the count.' },
+  { q: 'Can I run it myself?', a: 'Yes. The engine is Apache-2.0 on GitHub, the same code the managed service runs.' },
+  { q: 'How are subagents isolated?', a: 'Each fork is a Firecracker microVM with its own kernel, isolated by KVM.' },
+  { q: 'Will I get a surprise bill?', a: 'Hard spend caps are on by default, and copy-on-write means you pay for dirtied pages, not whole VMs.' },
+  { q: 'Which languages and SDKs?', a: 'Python, TypeScript, and a CLI, plus an MCP server. The sandbox runs any Linux workload.' },
 ];
 
 // The Division — one parent at (170,200) divides into eight daughters fanned on
@@ -124,7 +145,6 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
           <a class="btn btn-primary btn-lg" href={SIGNUP}>Start building</a>
           <a class="btn btn-ghost btn-lg" href="/benchmarks/">See the benchmark</a>
         </div>
-        <p class="spec mono">~27&nbsp;ms per fork&nbsp;·&nbsp;~3&nbsp;MiB per subagent (copy-on-write)&nbsp;·&nbsp;microVM isolation</p>
       </div>
 
       <div class="hero-code reveal">
@@ -135,15 +155,14 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
         <div class="card">
           <div class="card-tabs" role="tablist">
             {surfaces.map((s, i) => (
-              <button class={`tab mono ${i === 0 ? 'on' : ''}`} data-tab={s.id} role="tab" aria-selected={i === 0 ? 'true' : 'false'}>{s.name}</button>
+              <button class={`tab mono ${i === 0 ? 'on' : ''}`} data-tab={s.id} role="tab" aria-selected={i === 0 ? 'true' : 'false'}><span class="tab-ic" set:html={langIcons[s.id]} />{s.name}</button>
             ))}
             <button class="hcopy card-copy mono" data-copy="code" type="button" aria-label="Copy code">⧉ copy</button>
           </div>
           {surfaces.map((s, i) => (
-            <pre class={`code-panel mono ${i === 0 ? 'on' : ''}`} data-panel={s.id} data-install={s.install}>{s.code}</pre>
+            <pre class={`code-panel mono ${i === 0 ? 'on' : ''}`} data-panel={s.id} data-install={s.install} set:html={hl(s.code)} />
           ))}
         </div>
-        <p class="surf-note mono">Python · TypeScript · CLI · <span>+ MCP server</span></p>
       </div>
     </div>
 
@@ -163,10 +182,9 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
     <div class="container division-head reveal">
       <h2 class="division-h">Most sandboxes cold-boot or restore a snapshot.<br /><span class="division-h-hl">mitos forks the running machine.</span></h2>
       <p class="division-lede">
-        A fork copies the <em>live</em> VM: memory, running processes, open files and all.
-        Daughters share the parent's pages copy-on-write and only pay for what they change,
-        so eight forks cost about 3&nbsp;MiB each instead of eight whole VMs. The parent keeps
-        running. Keep the one that worked, kill the rest.
+        A fork copies the <em>live</em> VM, memory and all, not just the disk. Daughters share
+        the parent's pages and pay only for what they change: about 3&nbsp;MiB each, not eight
+        whole VMs.
       </p>
     </div>
 
@@ -222,7 +240,7 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
   <!-- USE CASES -->
   <section class="usecases container" id="usecases">
     <h2 class="section-title reveal">Built for the work that needs many of them</h2>
-    <p class="section-lede reveal">The category moved past "run one sandbox safely." The work that is growing wants a warm machine to explode into a swarm and collapse back down.</p>
+    <p class="section-lede reveal">One warm machine becomes a swarm, then collapses back to zero.</p>
     <div class="uc-grid">
       {useCases.map((u) => (
         <div class="uc-item reveal"><h4>{u.h}</h4><p>{u.p}</p></div>
@@ -249,9 +267,8 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
     <div class="container hosted-inner reveal">
       <h2 class="section-title">We run the cluster. You call the API.</h2>
       <p class="section-lede">
-        We keep the bare-metal fleet alive so you do not. It is the same Apache-2.0 engine
-        you can <a href={GITHUB} target="_blank" rel="noopener">run yourself</a>, which makes
-        open source your insurance, not your homework.
+        We keep the bare-metal fleet alive so you don't. Same engine you can
+        <a href={GITHUB} target="_blank" rel="noopener">run yourself</a>, so you are never locked in.
       </p>
       <div class="hosted-grid">
         {hostedItems.map((it) => (
@@ -266,8 +283,7 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
   <section class="compare container" id="compare">
     <h2 class="section-title reveal">Live fork, microVM isolation, and actually open</h2>
     <p class="section-lede reveal">
-      Some runtimes fork. Some are open. Some isolate with a real kernel. mitos is the one
-      that does all of it at once.
+      Plenty of runtimes do one of these. mitos does all of them.
       <span class="muted">Capabilities from each project's public docs, not a head-to-head benchmark.</span>
     </p>
     <div class="table-wrap reveal">
@@ -300,10 +316,8 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
     <div class="sec-inner reveal">
       <h2 class="section-title">Every fork is a real microVM, not a shared kernel</h2>
       <p class="section-lede">
-        Each subagent runs in its own Firecracker microVM with its own kernel, isolated by KVM.
-        That is the boundary you want when an agent runs code it wrote itself or pulled from the
-        web. A prompt injection that turns into a shell stays inside one disposable fork, not your
-        host and not the other agents.
+        Each subagent runs in its own Firecracker microVM with its own kernel. A prompt injection
+        that turns into a shell stays inside one disposable fork, not your host and not the other agents.
       </p>
     </div>
   </section>
@@ -313,9 +327,8 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
     <div class="econ-inner reveal">
       <h2 class="section-title">Pay for divergence, not duplication</h2>
       <p class="section-lede">
-        Fork a thousand subagents and they share the parent's memory until they write. You pay for
-        the pages they actually dirty, roughly 3&nbsp;MiB each, not a thousand whole VMs. Hard spend
-        caps are on by default, so a runaway loop cannot hand you a surprise five-figure bill.
+        Forks share the parent's memory until they write, so you pay for the pages they dirty, about
+        3&nbsp;MiB each, not whole VMs. Hard spend caps are on by default.
       </p>
       <a class="btn btn-ghost" href="/pricing/">See pricing</a>
     </div>
@@ -394,14 +407,14 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
 
 <style>
   /* HERO */
-  .hero { padding: 84px 0 0; position: relative; }
+  .hero { padding: 128px 0 32px; position: relative; }
   /* faint diegetic ambient: the specimen under illumination. Restrained (~5%). */
-  .hero-aura { position: absolute; top: -120px; left: 8%; width: 760px; height: 620px; z-index: 0; pointer-events: none;
+  .hero-aura { position: absolute; top: -80px; left: 6%; width: 800px; height: 640px; z-index: 0; pointer-events: none;
     background: radial-gradient(closest-side, color-mix(in srgb, var(--magenta) 12%, transparent), transparent 72%);
     opacity: .5; filter: blur(8px); }
-  .hero-grid { display: grid; grid-template-columns: 1fr 1.06fr; gap: 52px; align-items: center; position: relative; z-index: 1; }
-  .hero-copy h1 { font-size: clamp(40px, 5vw, 64px); line-height: 1.02; letter-spacing: var(--track-display); font-weight: 400; margin: 0 0 22px; }
-  .lede { font-size: 18.5px; color: var(--ink-2); max-width: 27em; margin: 0 0 14px; line-height: 1.5; }
+  .hero-grid { display: grid; grid-template-columns: 1fr 1.08fr; gap: 60px; align-items: center; position: relative; z-index: 1; }
+  .hero-copy h1 { font-size: clamp(46px, 6vw, 76px); line-height: 1.0; letter-spacing: -.035em; font-weight: 400; margin: 0 0 20px; }
+  .lede { font-size: 19px; color: var(--ink-2); max-width: 24em; margin: 0 0 28px; line-height: 1.5; }
   .lede strong { color: var(--ink); font-weight: 500; }
   .lede .hl { color: var(--cyan); font-weight: 500; }
   .lede-sub { font-size: 15px; color: var(--ink-2); margin: 0 0 28px; }
@@ -419,12 +432,19 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
   .hcopy.copied { color: var(--green); border-color: var(--green); }
   .card { background: var(--field-1); border: 1px solid var(--hairline); border-radius: var(--r-lg); overflow: hidden; }
   .card-tabs { display: flex; align-items: center; border-bottom: 1px solid var(--hairline); background: var(--field-2); }
-  .tab { font-size: 12px; color: var(--ink-2); padding: 11px 16px; border: none; border-bottom: 1px solid transparent; background: transparent; cursor: pointer; transition: color .12s var(--ease); }
+  .tab { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; color: var(--ink-2); padding: 13px 18px; border: none; border-bottom: 1.5px solid transparent; background: transparent; cursor: pointer; transition: color .12s var(--ease), border-color .12s var(--ease); }
   .tab:hover { color: var(--ink); }
   .tab.on { color: var(--ink); border-bottom-color: var(--magenta); }
-  .card-copy { margin-left: auto; margin-right: 8px; }
-  .code-panel { display: none; margin: 0; padding: 18px 20px; min-height: 196px; font-size: 12.5px; line-height: 1.85; color: var(--ink); overflow-x: auto; }
+  .tab-ic { display: inline-flex; }
+  .tab-ic :global(svg) { width: 15px; height: 15px; display: block; }
+  .card-copy { margin-left: auto; margin-right: 8px; align-self: center; }
+  /* fixed height so switching tabs never resizes the card */
+  .code-panel { display: none; margin: 0; padding: 18px 20px; height: 232px; box-sizing: border-box; font-size: 12.5px; line-height: 1.85; color: var(--ink); overflow: auto; }
   .code-panel.on { display: block; }
+  .code-panel :global(.c-com) { color: var(--ink-3); }
+  .code-panel :global(.c-str) { color: var(--green); }
+  .code-panel :global(.c-kw) { color: color-mix(in srgb, var(--cyan) 72%, var(--ink)); }
+  .code-panel :global(.c-fork) { color: var(--magenta); font-weight: 600; }
   .surf-note { text-align: center; color: var(--ink-3); font-size: 12px; margin: 14px 0 0; }
   .surf-note span { color: var(--ink-2); }
 
