@@ -29,7 +29,7 @@ const trust = [
 const faqs = [
   { q: 'How is a swarm billed?', a: 'Per second, with vCPU and memory metered separately. Forks share the parent’s memory copy-on-write, so fanning out mostly adds vCPU-seconds rather than re-paying for the shared base image. Compute scales with how many subagents run.' },
   { q: 'Will I get a surprise bill?', a: 'No. Hard spend caps are on by default: a runaway loop suspends the org at your limit instead of becoming a five-figure invoice. A soft cap alerts you before that.' },
-  { q: 'Does forking actually make a swarm cheaper?', a: 'A fork is a live copy-on-write clone of a running microVM, so you skip the cold-boot tax — it resumes in ~27 ms — and don’t re-build the base image for every subagent. The parent’s pages are shared; each fork adds the pages it writes (about 3 MiB right after a fork, more as it diverges). vCPU still scales with how many subagents run, so a swarm’s bill is mostly compute-time, not duplicated memory. The estimator bills each fork its full RAM, so your real memory cost is usually lower.' },
+  { q: 'Does forking actually make a swarm cheaper?', a: 'A fork is a live copy-on-write clone of a running microVM, so you skip the cold-boot tax (it resumes in ~27 ms) and don’t re-build the base image for every subagent. The parent’s pages are shared; each fork adds the pages it writes (about 3 MiB right after a fork, more as it diverges). vCPU still scales with how many subagents run, so a swarm’s bill is mostly compute-time, not duplicated memory. The estimator bills each fork its full RAM, so your real memory cost is usually lower.' },
   { q: 'Do I pay for idle sandboxes?', a: 'No. Compute is per-second while running and scales to zero between forks. You are billed for active work, not for waiting.' },
   { q: 'Can I run it myself instead?', a: 'Yes. The engine is open source under Apache 2.0 and free to run on your own Kubernetes cluster. Hosted mitos is for teams who want the fork speed without operating the cluster.' },
 ];
@@ -43,10 +43,10 @@ const faqs = [
     <div class="hero-aura" aria-hidden="true"></div>
 
     <div class="hero-copy reveal">
-      <h1>Fork freely.<br />Pay for what changes.</h1>
+      <h1>Pay by the second.<br />You set the cap.</h1>
       <p class="lede">
-        Pay-as-you-go, per second, with <span class="hl">vCPU and memory metered separately</span>.
-        Forks resume from a warm parent in ~27 ms and share its memory, so you pay for work — not cold boots or idle.
+        Pay-as-you-go, with <span class="hl">vCPU and memory metered separately</span>.
+        No idle charge, no platform fee, and a spend cap you set so a runaway swarm can never surprise you.
       </p>
       <div class="hero-actions">
         <a class="btn btn-primary btn-lg" href={SIGNUP}>Start swarming</a>
@@ -100,7 +100,7 @@ const faqs = [
           <div class="calc-line"><span>Compute · vCPU</span><b class="mono" id="o-vcpu">$0</b></div>
           <div class="calc-line"><span>Memory · RAM</span><b class="mono" id="o-mem">$0</b></div>
         </div>
-        <p class="calc-cow mono">Estimate assumes each fork holds its full RAM. Copy-on-write sharing usually makes memory less, and forks resume in ~27 ms — no cold-boot tax.</p>
+        <p class="calc-cow mono">Estimate assumes each fork holds its full RAM. Copy-on-write sharing usually makes memory less, and forks resume in ~27 ms with no cold-boot tax.</p>
         <p class="calc-foot mono">$100 signup credit + hard spend caps. Illustrative rates, final at GA.</p>
       </div>
     </div>
@@ -169,24 +169,24 @@ const faqs = [
   .early { margin: 26px 0 0; font-size: 12px; color: var(--ink-3); border-left: 2px solid color-mix(in srgb, var(--magenta) 45%, transparent); padding-left: 14px; max-width: 38em; line-height: 1.55; }
 
   /* ESTIMATOR */
-  .calc { position: relative; z-index: 1; background: var(--field-1); border: 1px solid var(--hairline); border-radius: var(--r-lg); padding: 20px; }
-  .calc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .calc { position: relative; z-index: 1; background: var(--field-1); border: 1px solid var(--hairline); border-radius: var(--r-lg); padding: 18px; }
+  .calc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
   .calc-title { font-size: 15px; color: var(--ink); font-weight: 500; }
   .calc-tag { font-size: 10.5px; color: var(--ink-3); border: 1px solid var(--hairline-strong); border-radius: 999px; padding: 3px 9px; text-transform: uppercase; letter-spacing: .05em; }
-  .presets { display: flex; gap: 8px; margin-bottom: 18px; }
+  .presets { display: flex; gap: 8px; margin-bottom: 14px; }
   .preset { flex: 1; font: inherit; font-size: 12.5px; color: var(--ink-2); background: transparent; border: 1px solid var(--hairline); border-radius: 999px; padding: 7px 6px; cursor: pointer; transition: color .14s var(--ease), border-color .14s var(--ease), background .14s var(--ease); }
   .preset:hover { color: var(--ink); border-color: var(--hairline-strong); }
   .preset.is-on { color: var(--field); background: var(--magenta); border-color: var(--magenta); font-weight: 500; }
 
-  .sliders { display: flex; flex-direction: column; gap: 14px; }
-  .slider { display: flex; flex-direction: column; gap: 7px; }
+  .sliders { display: flex; flex-direction: column; gap: 10px; }
+  .slider { display: flex; flex-direction: column; gap: 6px; }
   .slider-top { display: flex; align-items: baseline; justify-content: space-between; font-size: 13px; color: var(--ink-2); }
   .slider-top b { color: var(--ink); font-size: 13px; }
   input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 4px; border-radius: 999px; background: var(--field-2); outline: none; cursor: pointer; }
   input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--magenta); border: 2px solid var(--field); box-shadow: 0 0 10px color-mix(in srgb, var(--magenta) 55%, transparent); cursor: pointer; }
   input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--magenta); border: 2px solid var(--field); cursor: pointer; }
 
-  .calc-out { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--hairline); }
+  .calc-out { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--hairline); }
   .calc-total { display: flex; align-items: baseline; gap: 10px; }
   .calc-total-v { font-size: 36px; color: var(--ink); letter-spacing: -.03em; }
   .calc-total-l { font-size: 13px; color: var(--ink-3); }
