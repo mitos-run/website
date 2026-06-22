@@ -182,7 +182,7 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
   <!-- THE DIVISION -->
   <section class="division-section" id="swarm">
     <div class="container division-head reveal">
-      <h2 class="division-h">Most sandboxes cold-boot or restore a snapshot.<br /><span class="division-h-hl">mitos forks the running machine.</span></h2>
+      <h2 class="division-h">Most sandboxes cold-boot or restore a snapshot.<br class="dh-br" /> <span class="division-h-hl">mitos forks the running machine.</span></h2>
       <p class="division-lede">
         A fork copies the <em>live</em> VM, memory and all, not just the disk. Daughters share
         the parent's pages and pay only for what they change: about 3&nbsp;MiB each, not eight
@@ -557,7 +557,8 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
     .lede { font-size: 17px; }
     .division-section { padding-block: 60px 52px; overflow: hidden; }
     .division-head { max-width: 100%; }
-    .division-h { font-size: 21px; line-height: 1.25; overflow-wrap: break-word; text-wrap: wrap; }
+    .division-h { font-size: 21px; line-height: 1.3; overflow-wrap: break-word; text-wrap: pretty; }
+    .dh-br { display: none; } /* flow as one sentence on mobile, no orphaned word */
     .division-lede { font-size: 15px; }
     .division-stage { margin-top: 16px; }
     .fan-daughter text, .fan-parent text { display: none; } /* labels unreadable at this scale */

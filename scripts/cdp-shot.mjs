@@ -27,6 +27,9 @@ await send('Page.enable', {});
 await send('Emulation.setDeviceMetricsOverride', { width, height: 900, deviceScaleFactor: 2, mobile: width < 900 });
 await send('Page.navigate', { url });
 await new Promise((r) => setTimeout(r, 2600)); // let fonts + reveals settle
+// force any scroll-reveal elements visible so full-page captures aren't blank
+await send('Runtime.evaluate', { expression: 'document.querySelectorAll(".reveal").forEach((e)=>e.classList.add("in"))' });
+await new Promise((r) => setTimeout(r, 250));
 // measure full content height + horizontal overflow
 const m = await send('Runtime.evaluate', {
   expression: 'JSON.stringify({h:document.documentElement.scrollHeight,doc:document.documentElement.scrollWidth,iw:innerWidth})',
