@@ -55,8 +55,8 @@ await Promise.all(swarm.map((a) => a.exec("node subagent.js")));`,
     name: 'CLI',
     install: 'go install mitos.run/mitos/cmd/mitos@latest',
     code: `mitos sandbox create --pool agents --ready
-mitos fork vm·0 --count 8 --pool agents
-mitos lineage vm·0.3`,
+mitos fork vm-0 --count 8 --pool agents
+mitos lineage vm-0.3`,
   },
   {
     id: 'mcp',
@@ -214,13 +214,13 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
           <g class="fan-daughter" style={`--i:${n.i}`}>
             <circle class="cell-mem" cx="822" cy={n.y} r="23" fill="url(#fmem)" />
             <circle class="cell-core" cx="822" cy={n.y} r="10.5" fill="url(#fgenome)" />
-            <text x="855" y={n.y + 4}>vm·0.{n.i + 1}</text>
+            <text x="855" y={n.y + 4}>vm-0.{n.i + 1}</text>
           </g>
         ))}
         <g class="fan-parent">
           <circle class="cell-mem parent-mem" cx="150" cy="200" r="52" fill="url(#fmem)" />
           <circle class="cell-core" cx="150" cy="200" r="27" fill="url(#fgenome)" />
-          <text x="150" y="276" class="parent-label">vm·0</text>
+          <text x="150" y="276" class="parent-label">vm-0</text>
         </g>
       </svg>
 
