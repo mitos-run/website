@@ -459,7 +459,7 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
 
   /* generic section heads (page-scoped, light display weight) */
   .section-title { font-size: clamp(28px, 3.6vw, 42px); letter-spacing: var(--track-display); font-weight: 400; margin: 0 0 18px; }
-  .section-lede { color: var(--ink-2); font-size: 17px; max-width: 46em; margin: 0 0 48px; }
+  .section-lede { color: var(--ink-2); font-size: 17px; max-width: 42em; margin: 0 0 48px; }
   .section-lede .muted { display: block; font-size: 13px; margin-top: 8px; color: var(--ink-3); }
   .section-lede a:not(.btn) { color: var(--cyan); border-bottom: 1px solid color-mix(in srgb, var(--cyan) 30%, transparent); }
   .section-lede a:not(.btn):hover { border-bottom-color: var(--cyan); }
@@ -516,8 +516,6 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
 
   /* MANAGED + OSS */
   .hosted { border-top: 1px solid var(--hairline); }
-  .hosted-inner { text-align: center; }
-  .hosted-inner .section-lede { margin-left: auto; margin-right: auto; }
   .hosted-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin: 8px 0 42px; text-align: left; border-top: 1px solid var(--hairline); }
   .hosted-item { padding: 26px 24px 6px; border-left: 1px solid var(--hairline); }
   .hosted-item:first-child { border-left: none; padding-left: 0; }
