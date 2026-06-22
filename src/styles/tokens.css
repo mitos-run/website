@@ -8,6 +8,7 @@
   --field-2: #11141C;          /* raised +2: popover / inset */
   --hairline: rgba(255, 255, 255, 0.08);
   --hairline-strong: rgba(255, 255, 255, 0.14);
+  --mark-bg: #04050A;          /* the brand mark's ring-cut = the field */
 
   /* ---- Ink: white at opacity, never gray hex ---- */
   --ink: rgba(236, 240, 250, 0.94);

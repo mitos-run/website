@@ -115,15 +115,11 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
 <Site title={TITLE} description={DESC}>
   <!-- HERO -->
   <section class="hero">
+    <div class="hero-aura" aria-hidden="true"></div>
     <div class="container hero-grid">
       <div class="hero-copy reveal">
-        <h1>One agent divides<br />into a thousand.</h1>
-        <p class="lede">
-          Fork a running microVM into hundreds of <strong>isolated subagents</strong>
-          in about <span class="hl">27&nbsp;ms</span>, roughly 3&nbsp;MiB each. It copies
-          the live machine, memory and running processes and all, not a disk snapshot.
-        </p>
-        <p class="lede-sub">We run the metal. The engine is <strong>Apache&nbsp;2.0</strong>, so you are never locked in.</p>
+        <h1>Run agent swarms</h1>
+        <p class="lede">Isolated, forkable computers for your agents.</p>
         <div class="hero-actions">
           <a class="btn btn-primary btn-lg" href={SIGNUP}>Start building</a>
           <a class="btn btn-ghost btn-lg" href="/benchmarks/">See the benchmark</a>
@@ -175,23 +171,36 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
     </div>
 
     <div class="division-stage reveal" id="division">
-      <svg class="fan-svg" viewBox="0 0 1000 400" preserveAspectRatio="xMidYMid meet" role="img" aria-label="One running microVM forking into eight isolated subagent sandboxes">
+      <svg class="fan-svg" viewBox="0 0 1000 400" preserveAspectRatio="xMidYMid meet" role="img" aria-label="One running microVM cell dividing into eight isolated subagent cells">
+        <defs>
+          <radialGradient id="fgenome" cx="50%" cy="46%" r="55%">
+            <stop offset="0%" stop-color="#ffffff" />
+            <stop offset="44%" stop-color="#bfeeff" />
+            <stop offset="100%" stop-color="#3DDCFF" stop-opacity="0" />
+          </radialGradient>
+          <radialGradient id="fmem" cx="50%" cy="50%" r="50%">
+            <stop offset="32%" stop-color="#FF45C8" stop-opacity="0" />
+            <stop offset="64%" stop-color="#FF45C8" stop-opacity=".6" />
+            <stop offset="84%" stop-color="#FF45C8" stop-opacity=".2" />
+            <stop offset="100%" stop-color="#FF45C8" stop-opacity="0" />
+          </radialGradient>
+        </defs>
         <g class="d-paths">
           {daughters.map((n) => (
-            <path class="d-path" style={`--i:${n.i}`} d={`M232 200 C 470 200 545 ${n.y} 762 ${n.y}`} />
+            <path class="d-path" style={`--i:${n.i}`} d={`M210 200 C 470 200 545 ${n.y} 798 ${n.y}`} />
           ))}
         </g>
         {daughters.map((n) => (
           <g class="fan-daughter" style={`--i:${n.i}`}>
-            <rect x="762" y={n.y - 17} width="170" height="34" rx="8" />
-            <circle class="fan-core" cx="784" cy={n.y} r="3.5" />
-            <text x="800" y={n.y + 4}>vm·0.{n.i + 1}</text>
+            <circle class="cell-mem" cx="822" cy={n.y} r="23" fill="url(#fmem)" />
+            <circle class="cell-core" cx="822" cy={n.y} r="10.5" fill="url(#fgenome)" />
+            <text x="855" y={n.y + 4}>vm·0.{n.i + 1}</text>
           </g>
         ))}
         <g class="fan-parent">
-          <rect class="fan-parent-box" x="74" y="172" width="158" height="56" rx="10" />
-          <circle class="fan-parent-core" cx="98" cy="200" r="4.5" />
-          <text x="118" y="205">vm·0</text>
+          <circle class="cell-mem parent-mem" cx="150" cy="200" r="52" fill="url(#fmem)" />
+          <circle class="cell-core" cx="150" cy="200" r="27" fill="url(#fgenome)" />
+          <text x="150" y="276" class="parent-label">vm·0</text>
         </g>
       </svg>
 
@@ -385,8 +394,12 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
 
 <style>
   /* HERO */
-  .hero { padding: 84px 0 0; }
-  .hero-grid { display: grid; grid-template-columns: 1fr 1.06fr; gap: 52px; align-items: center; }
+  .hero { padding: 84px 0 0; position: relative; }
+  /* faint diegetic ambient: the specimen under illumination. Restrained (~5%). */
+  .hero-aura { position: absolute; top: -120px; left: 8%; width: 760px; height: 620px; z-index: 0; pointer-events: none;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--magenta) 12%, transparent), transparent 72%);
+    opacity: .5; filter: blur(8px); }
+  .hero-grid { display: grid; grid-template-columns: 1fr 1.06fr; gap: 52px; align-items: center; position: relative; z-index: 1; }
   .hero-copy h1 { font-size: clamp(40px, 5vw, 64px); line-height: 1.02; letter-spacing: var(--track-display); font-weight: 400; margin: 0 0 22px; }
   .lede { font-size: 18.5px; color: var(--ink-2); max-width: 27em; margin: 0 0 14px; line-height: 1.5; }
   .lede strong { color: var(--ink); font-weight: 500; }
@@ -435,18 +448,18 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
   .division-lede em { font-style: normal; color: var(--cyan); }
 
   .division-stage { position: relative; max-width: 940px; margin: 48px auto 14px; padding: 0 24px; }
-  .fan-svg { width: 100%; height: auto; display: block; overflow: visible; }
-  .d-path { fill: none; stroke: color-mix(in srgb, var(--magenta) 55%, transparent); stroke-width: 1.2; filter: drop-shadow(0 0 3px color-mix(in srgb, var(--magenta) 60%, transparent)); stroke-dasharray: 1400; stroke-dashoffset: 0; }
+  .fan-svg { width: 100%; height: auto; display: block; overflow: visible; mix-blend-mode: screen; }
+  .d-path { fill: none; stroke: color-mix(in srgb, var(--magenta) 50%, transparent); stroke-width: 1.2; filter: drop-shadow(0 0 3px color-mix(in srgb, var(--magenta) 55%, transparent)); stroke-dasharray: 1400; stroke-dashoffset: 0; }
   .division-stage.run .d-path { stroke-dashoffset: 1400; animation: dDraw .72s cubic-bezier(.4,0,.2,1) forwards; animation-delay: calc(.05s * var(--i) + .18s); }
   @keyframes dDraw { to { stroke-dashoffset: 0; } }
-  .fan-daughter rect { fill: var(--field-1); stroke: var(--hairline-strong); }
-  .fan-daughter .fan-core { fill: var(--cyan); filter: drop-shadow(0 0 4px var(--cyan)); }
-  .fan-daughter text { fill: var(--ink-2); font-family: var(--mono); font-size: 13px; }
-  .division-stage.run .fan-daughter { opacity: 0; transform: translateX(-8px); animation: dIn .42s cubic-bezier(.2,.8,.2,1) forwards; animation-delay: calc(.05s * var(--i) + .5s); }
+  .cell-core { filter: drop-shadow(0 0 5px color-mix(in srgb, var(--cyan) 80%, transparent)); }
+  .parent-mem { filter: drop-shadow(0 0 14px color-mix(in srgb, var(--magenta) 40%, transparent)); }
+  .fan-daughter text, .fan-parent text { font-family: var(--mono); fill: var(--ink-2); font-size: 13px; }
+  .fan-parent .parent-label { fill: var(--ink); font-size: 14px; text-anchor: middle; }
+  .division-stage.run .fan-daughter { opacity: 0; transform: translateX(-10px) scale(.8); transform-box: fill-box; transform-origin: center; animation: dIn .5s cubic-bezier(.2,.8,.2,1) forwards; animation-delay: calc(.05s * var(--i) + .5s); }
   @keyframes dIn { to { opacity: 1; transform: none; } }
-  .fan-parent-box { fill: var(--field-1); stroke: var(--magenta); stroke-width: 1.6; filter: drop-shadow(0 0 8px color-mix(in srgb, var(--magenta) 45%, transparent)); }
-  .fan-parent-core { fill: var(--magenta); filter: drop-shadow(0 0 6px var(--magenta)); }
-  .fan-parent text { fill: var(--ink); font-family: var(--mono); font-size: 14px; }
+  .division-stage.run .parent-mem { animation: pPulse 1s var(--ease); transform-box: fill-box; transform-origin: center; }
+  @keyframes pPulse { 0% { transform: scale(1); } 30% { transform: scale(1.06); } 100% { transform: scale(1); } }
 
   .division-meta { position: absolute; left: 50%; bottom: -10px; transform: translateX(-50%); display: flex; gap: 12px; align-items: center; font-size: 12.5px; color: var(--ink-2); flex-wrap: wrap; justify-content: center; }
   .run-btn { font-family: var(--mono); font-size: 12.5px; color: var(--magenta); background: transparent; border: 1px solid color-mix(in srgb, var(--magenta) 40%, transparent); border-radius: var(--r-sm); padding: 6px 12px; cursor: pointer; transition: border-color .14s var(--ease); }
