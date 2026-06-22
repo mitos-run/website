@@ -9,29 +9,38 @@ const GITHUB = 'https://github.com/mitos-run/mitos';
 const UPDATED = 'June 22, 2026';
 const TITLE = 'Privacy Policy: what mitos.run collects';
 const DESC =
-  'How mitos.run handles data: a static marketing and docs site with no analytics, no tracking cookies, and no accounts.';
+  'How mitos.run handles data: consent-based, EU-hosted analytics (PostHog), no accounts, and nothing tracked until you opt in.';
 ---
 
 <Site title={TITLE} description={DESC}>
   <section class="page-hero container">
     <p class="eyebrow mono">Legal</p>
     <h1>Privacy Policy</h1>
-    <p class="lede">What this site collects, which is almost nothing.</p>
+    <p class="lede">What this site collects, and the consent-based analytics you can turn off.</p>
     <p class="updated mono">Last updated: {UPDATED}</p>
   </section>
 
   <section class="container prose">
     <p>
       This policy covers <strong>mitos.run</strong>, the marketing and documentation site for the
-      mitos project. It is a static website. It has no user accounts, no sign-up, no analytics or
-      advertising trackers, and it does not set tracking cookies. When a hosted product or any
-      tracking is added, this policy will be updated before that ships.
+      mitos project. It is a static website with no user accounts and no sign-up. It uses one
+      privacy-friendly, EU-hosted analytics tool, and <strong>only after you opt in</strong>: no
+      analytics cookies are set and no analytics data is collected unless you choose "Accept" on the
+      consent banner. When a hosted product is added, this policy will be updated before that ships.
     </p>
 
     <h2>What we collect</h2>
     <p>
       <strong>Nothing through forms.</strong> There are no contact forms, sign-ups, or accounts on
       this site today, so we do not ask for or store your name, email, or other personal details.
+    </p>
+    <p>
+      <strong>Analytics, only with your consent.</strong> If you accept analytics, we use
+      <strong>PostHog</strong>, processed in the European Union, to understand which pages are
+      useful. It is configured for privacy: client IP addresses are discarded, sessions are never
+      recorded, and we never identify you (analytics are anonymous and not linked to a person). If
+      you decline, or never choose, PostHog is not loaded and nothing is sent. You can change your
+      choice anytime via "Cookie settings" in the footer.
     </p>
     <p>
       <strong>Standard server logs.</strong> The site is served by GitHub Pages, which may process
@@ -47,14 +56,19 @@ const DESC =
 
     <h2>Cookies and local storage</h2>
     <p>
-      We do not use cookies. The only browser storage we use is a single local-storage entry that
-      caches the GitHub star count, which you can clear at any time from your browser.
+      Until you opt in to analytics, we set <strong>no cookies</strong>. By default the only browser
+      storage used is a local-storage entry caching the GitHub star count, plus a record of your
+      analytics choice. If you accept analytics, PostHog stores a cookie and local-storage entries to
+      count visits. Decline, or change your mind via "Cookie settings" in the footer, and these are
+      not set. You can also clear them from your browser at any time.
     </p>
 
     <h2>Sub-processors</h2>
     <p>For the operation of this site we rely on:</p>
     <ul>
       <li><strong>GitHub, Inc.</strong> hosting (GitHub Pages) and the public GitHub API used for the star count.</li>
+      <li><strong>Cloudflare, Inc.</strong> CDN and edge security in front of the site (processes request traffic).</li>
+      <li><strong>PostHog</strong> product analytics, processed in the European Union, <strong>only if you opt in</strong>. IP addresses are discarded and sessions are never recorded.</li>
     </ul>
     <p>
       The open-source engine you run yourself does not send data to us. If you later use a hosted
@@ -64,9 +78,11 @@ const DESC =
 
     <h2>Your choices</h2>
     <p>
-      Because we do not collect personal data on this site, there is nothing for us to access,
-      export, or delete on your behalf. For questions about GitHub's processing of requests to its
-      service, see GitHub's privacy statement.
+      Analytics are off until you opt in, and you can withdraw consent at any time via "Cookie
+      settings" in the footer, which stops collection. Because analytics are anonymous, processed in
+      the EU, and stripped of IP addresses, the data is not tied to you personally. For questions
+      about GitHub's or Cloudflare's processing of requests to their services, see their respective
+      privacy statements.
     </p>
 
     <h2>Changes</h2>

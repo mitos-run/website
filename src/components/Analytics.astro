@@ -1,0 +1,83 @@
+---
+// Consent-gated, EU-hosted PostHog analytics (GDPR / ePrivacy).
+// PostHog is NOT loaded and NO network request is made until the visitor clicks
+// "Accept". Then: EU data residency, anonymous (person_profiles identified_only,
+// and we never identify), NO session recording, Do-Not-Track respected. The
+// choice persists in localStorage; visitors can change it via the footer
+// "Cookie settings" link (window.openCookieSettings).
+//
+// KEEP IN SYNC when touching this:
+//  - /privacy (src/pages/privacy.astro) must disclose PostHog + analytics cookies.
+//  - The Cloudflare CSP must allow eu(.|-assets.)i.posthog.com (see docs/ops/).
+//  - In the PostHog project: enable "Discard client IP data" and keep the EU region.
+const PH_KEY = 'phc_t6anh6zShJNraN2w2BjYjUWpXaDns9bHHwcrMoJHGHsp';
+const PH_HOST = 'https://eu.i.posthog.com';
+---
+<div id="cookie-banner" class="cookie-banner" role="dialog" aria-label="Analytics consent" aria-live="polite" hidden>
+  <p class="cookie-text">
+    We use privacy-friendly, EU-hosted analytics (PostHog) to see what is useful.
+    Nothing is tracked until you agree, and we never record sessions or sell data.
+    See our <a href="/privacy">privacy policy</a>.
+  </p>
+  <div class="cookie-actions">
+    <button id="cookie-decline" class="btn btn-ghost" type="button">Decline</button>
+    <button id="cookie-accept" class="btn btn-primary" type="button">Accept</button>
+  </div>
+</div>
+
+<script is:inline define:vars={{ PH_KEY, PH_HOST }}>
+  (function () {
+    var KEY = 'mitos-analytics-consent';
+
+    function loadPostHog() {
+      if (window.__phLoaded) return;
+      window.__phLoaded = true;
+      !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group identify setPersonProperties setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags resetGroups onFeatureFlags addFeatureFlagsHandler onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+      posthog.init(PH_KEY, {
+        api_host: PH_HOST,
+        defaults: '2026-01-30',
+        person_profiles: 'identified_only', // no profiles for anonymous visitors
+        capture_pageview: true,
+        autocapture: true,
+        disable_session_recording: true,    // never record sessions (PII risk)
+        respect_dnt: true,                   // honor Do-Not-Track
+        persistence: 'localStorage+cookie'
+      });
+    }
+
+    var banner;
+    function setBanner(open) { if (!banner) banner = document.getElementById('cookie-banner'); if (banner) banner.hidden = !open; }
+
+    // Let visitors reopen the choice (wire a footer link to this).
+    window.openCookieSettings = function () { setBanner(true); };
+
+    function read() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
+    function write(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
+
+    var choice = read();
+    if (choice === 'granted') loadPostHog();
+
+    document.addEventListener('DOMContentLoaded', function () {
+      if (read() === null) setBanner(true);
+      var accept = document.getElementById('cookie-accept');
+      var decline = document.getElementById('cookie-decline');
+      if (accept) accept.addEventListener('click', function () { write('granted'); loadPostHog(); setBanner(false); });
+      if (decline) decline.addEventListener('click', function () { write('denied'); if (window.posthog && window.posthog.opt_out_capturing) window.posthog.opt_out_capturing(); setBanner(false); });
+    });
+  })();
+</script>
+
+<style>
+  .cookie-banner {
+    position: fixed; z-index: 200; left: 16px; right: 16px; bottom: 16px; margin: 0 auto;
+    max-width: 560px; display: flex; flex-direction: column; gap: 14px;
+    background: var(--field-1); border: 1px solid var(--hairline-strong); border-radius: var(--r-lg);
+    padding: 18px 20px; box-shadow: 0 8px 40px rgba(0,0,0,.5);
+  }
+  .cookie-banner[hidden] { display: none; }
+  .cookie-text { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--ink-2); }
+  .cookie-text a { color: var(--cyan); border-bottom: 1px solid color-mix(in srgb, var(--cyan) 30%, transparent); }
+  .cookie-actions { display: flex; gap: 10px; justify-content: flex-end; }
+  .cookie-actions .btn { padding: 7px 16px; font-size: 13px; }
+  @media (max-width: 460px) { .cookie-actions { justify-content: stretch; } .cookie-actions .btn { flex: 1; } }
+</style>

@@ -5,6 +5,7 @@
 // monochrome, hosted-first. Never use em or en dashes in copy.
 import Mark from '../components/Mark.astro';
 import GhStars from '../components/GhStars.astro';
+import Analytics from '../components/Analytics.astro';
 import { getStars } from '../lib/stars';
 import '../styles/tokens.css';
 import '../styles/base.css';
@@ -168,9 +169,14 @@ const navLinks = [
       </div>
       <div class="container footer-bottom">
         <span class="muted mono">© 2026 mitos · Apache 2.0</span>
-        <a class="muted mono footer-privacy" href="/privacy">Privacy</a>
+        <span class="footer-bottom-links">
+          <button class="muted mono footer-privacy as-link" type="button" onclick="window.openCookieSettings && window.openCookieSettings()">Cookie settings</button>
+          <a class="muted mono footer-privacy" href="/privacy">Privacy</a>
+        </span>
       </div>
     </footer>
+
+    <Analytics />
 
     <script>
       // Scroll-reveal (reduced-motion safe).
@@ -350,7 +356,10 @@ const navLinks = [
       .footer-col a { display: block; color: var(--ink-2); font-size: 14px; padding: 4px 0; }
       .footer-col a:hover { color: var(--ink); }
       .footer-bottom { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--hairline); font-size: 13px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+      .footer-bottom-links { display: inline-flex; gap: 18px; align-items: center; }
+      .footer-privacy { font-size: 13px; }
       .footer-privacy:hover { color: var(--ink); }
+      .as-link { background: none; border: none; padding: 0; cursor: pointer; }
 
       @media (max-width: 900px) {
         .footer-grid { grid-template-columns: 1fr 1fr; }
