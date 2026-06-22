@@ -313,6 +313,7 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
       <div class="pillar reveal">
         <h3>Every fork is a real microVM, not a shared kernel</h3>
         <p>Each subagent runs in its own Firecracker microVM with its own kernel. A prompt injection that turns into a shell stays inside one disposable fork, not your host and not the other agents.</p>
+        <a class="btn btn-ghost" href="/architecture/">Read the architecture</a>
       </div>
       <div class="pillar reveal" id="pricing-teaser">
         <h3>Pay for divergence, not duplication</h3>
@@ -521,8 +522,10 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
 
   /* TRUST PILLARS (isolation + economics) */
   .pillars-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; }
-  .pillar h3 { font-size: clamp(21px, 2.3vw, 27px); font-weight: 400; letter-spacing: var(--track-display); line-height: 1.18; margin: 0 0 16px; text-wrap: balance; }
+  .pillar { display: flex; flex-direction: column; }
+  .pillar h3 { font-size: clamp(21px, 2.3vw, 27px); font-weight: 400; letter-spacing: var(--track-display); line-height: 1.18; margin: 0 0 16px; min-height: 2.36em; text-wrap: balance; }
   .pillar p { color: var(--ink-2); font-size: 16px; line-height: 1.6; margin: 0 0 22px; max-width: 34em; }
+  .pillar .btn { margin-top: auto; align-self: flex-start; }
 
   /* FAQ */
   .faq-list { max-width: 760px; }
