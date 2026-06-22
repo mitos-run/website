@@ -10,7 +10,8 @@ import Division from '../components/Division.astro';
 import pythonIcon from '../assets/lang/python.svg?raw';
 import tsIcon from '../assets/lang/typescript.svg?raw';
 import cliIcon from '../assets/lang/cli.svg?raw';
-const langIcons: Record<string, string> = { py: pythonIcon, ts: tsIcon, cli: cliIcon };
+import mcpIcon from '../assets/lang/mcp.svg?raw';
+const langIcons: Record<string, string> = { py: pythonIcon, ts: tsIcon, cli: cliIcon, mcp: mcpIcon };
 
 const GITHUB = 'https://github.com/mitos-run/mitos';
 const DOCS = '/quickstart/';
@@ -65,6 +66,18 @@ await Promise.all(swarm.map((a) => a.exec("node subagent.js")));`,
     code: `mitos sandbox create --pool agents --ready
 mitos fork vm·0 --count 8 --pool agents
 mitos lineage vm·0.3`,
+  },
+  {
+    id: 'mcp',
+    name: 'MCP',
+    install: 'go install mitos.run/mitos/cmd/mitos-mcp@latest',
+    code: `{
+  "mcpServers": {
+    "mitos": {
+      "command": "mitos-mcp"
+    }
+  }
+}`,
   },
 ];
 
@@ -412,7 +425,11 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
   .hero-aura { position: absolute; top: -80px; left: 6%; width: 800px; height: 640px; z-index: 0; pointer-events: none;
     background: radial-gradient(closest-side, color-mix(in srgb, var(--magenta) 12%, transparent), transparent 72%);
     opacity: .5; filter: blur(8px); }
-  .hero-grid { display: grid; grid-template-columns: 1fr 1.08fr; gap: 60px; align-items: center; position: relative; z-index: 1; }
+  .hero-grid { display: grid; grid-template-columns: 1fr minmax(0, 1.08fr); gap: 60px; align-items: center; position: relative; z-index: 1; }
+  /* min-width:0 lets the code column shrink so different snippet widths scroll
+     inside a fixed-width card instead of resizing the whole column. */
+  .hero-code { min-width: 0; }
+  .hero-code .card, .hero-code .install { min-width: 0; max-width: 100%; }
   .hero-copy h1 { font-size: clamp(46px, 6vw, 76px); line-height: 1.0; letter-spacing: -.035em; font-weight: 400; margin: 0 0 20px; }
   .lede { font-size: 19px; color: var(--ink-2); max-width: 24em; margin: 0 0 28px; line-height: 1.5; }
   .lede strong { color: var(--ink); font-weight: 500; }
@@ -425,7 +442,7 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
 
   /* hero code card */
   .install { display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 1px solid var(--hairline); border-radius: var(--r-md); padding: 10px 12px 10px 14px; margin-bottom: 12px; background: var(--field-1); }
-  .install-cmd { font-size: 13px; color: var(--ink); overflow-x: auto; white-space: nowrap; }
+  .install-cmd { font-size: 13px; color: var(--ink); overflow-x: auto; white-space: nowrap; min-width: 0; flex: 1; }
   .install-cmd::before { content: '$ '; color: var(--magenta); }
   .hcopy { border: 1px solid var(--hairline); border-radius: 6px; padding: 5px 10px; font-size: 11px; color: var(--ink-2); background: transparent; cursor: pointer; transition: color .12s var(--ease), border-color .12s var(--ease); white-space: nowrap; }
   .hcopy:hover { color: var(--ink); border-color: var(--hairline-strong); }
