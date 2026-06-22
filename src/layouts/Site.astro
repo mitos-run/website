@@ -4,6 +4,8 @@
 // their content into the slot and add page-specific <style>. Vercel-style
 // monochrome, hosted-first. Never use em or en dashes in copy.
 import Mark from '../components/Mark.astro';
+import '../styles/tokens.css';
+import '../styles/base.css';
 
 interface Props {
   title: string;
@@ -37,7 +39,7 @@ const navLinks = [
     <link rel="icon" href="/favicon-16.png" type="image/png" sizes="16x16" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta name="theme-color" content="#000000" />
+    <meta name="theme-color" content="#04050A" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -54,15 +56,11 @@ const navLinks = [
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="preload" href="/fonts/Satoshi-Variable.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/GeistMono-Variable.woff2" as="font" type="font/woff2" crossorigin />
   </head>
   <body>
-    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="field" aria-hidden="true"></div>
 
     <header class="nav" id="nav">
       <div class="container nav-inner">
@@ -151,45 +149,11 @@ const navLinks = [
     </script>
 
     <style is:global>
-      :root {
-        --bg: #000;
-        --surface: #0a0a0a;
-        --surface-2: #0d0d0d;
-        --border: rgba(255, 255, 255, 0.1);
-        --border-strong: rgba(255, 255, 255, 0.2);
-        --border-2: rgba(255, 255, 255, 0.16);
-        --elev: #141417;
-        --text: #fff;
-        --text-2: #e6e6e6;
-        --muted: #8a8a8a;
-        --dim: #5a5a5a;
-        --maxw: 1140px;
-        --mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-        --sans: 'Geist', system-ui, -apple-system, sans-serif;
-      }
-      * { box-sizing: border-box; }
-      html { scroll-behavior: smooth; scroll-padding-top: 84px; }
-      body {
-        margin: 0; background: var(--bg); color: var(--text); font-family: var(--sans);
-        -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
-        line-height: 1.6; overflow-x: hidden;
-      }
-      ::selection { background: #fff; color: #000; }
-      .container { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
-      .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
-      .muted { color: var(--muted); }
-      em { font-style: normal; border-bottom: 1px solid var(--border-strong); }
-      a { color: inherit; text-decoration: none; }
-      :focus-visible { outline: 2px solid #fff; outline-offset: 3px; border-radius: 4px; }
-      h1, h2, .section-title { text-wrap: balance; }
+      /* Component rules pending full restyle in plan 3; migrated onto Fluorescence
+         tokens. Base resets, :root tokens, fonts, the field, and the glow utility
+         now live in src/styles/tokens.css + src/styles/base.css. */
+      em { font-style: normal; border-bottom: 1px solid var(--hairline-strong); }
       .section-lede, p.lede { text-wrap: pretty; }
-
-      .hero-glow {
-        position: fixed; top: -320px; left: 50%; transform: translateX(-50%);
-        width: 1100px; height: 760px; z-index: 0; pointer-events: none;
-        background: radial-gradient(ellipse at center, rgba(255,255,255,.06), transparent 62%);
-      }
-      main, .nav, .footer { position: relative; z-index: 1; }
 
       .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s cubic-bezier(.2,.6,.2,1), transform .6s cubic-bezier(.2,.6,.2,1); }
       .reveal.in { opacity: 1; transform: none; }
@@ -200,52 +164,52 @@ const navLinks = [
       .btn-lg { padding: 12px 22px; font-size: 15px; }
       .btn-primary { background: #fff; color: #000; border-color: #fff; font-weight: 600; }
       .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px -8px rgba(255,255,255,.35); }
-      .btn-ghost { background: transparent; color: var(--text); border-color: var(--border-strong); }
+      .btn-ghost { background: transparent; color: var(--ink); border-color: var(--hairline-strong); }
       .btn-ghost:hover { border-color: #fff; background: rgba(255,255,255,.05); transform: translateY(-1px); }
       .btn:active { transform: translateY(0); }
-      .copy-btn { border: 1px solid var(--border-2); border-radius: 6px; padding: 5px 10px; font-size: 11px; color: var(--muted); background: transparent; cursor: pointer; transition: all .12s ease; white-space: nowrap; font-family: var(--mono); }
-      .copy-btn:hover { color: var(--text); border-color: #fff; }
+      .copy-btn { border: 1px solid var(--hairline-strong); border-radius: 6px; padding: 5px 10px; font-size: 11px; color: var(--ink-2); background: transparent; cursor: pointer; transition: all .12s ease; white-space: nowrap; font-family: var(--mono); }
+      .copy-btn:hover { color: var(--ink); border-color: #fff; }
       .copy-btn.copied { color: #fff; border-color: #fff; }
 
       /* nav */
-      .nav { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(12px); background: rgba(0,0,0,.55); border-bottom: 1px solid transparent; transition: border-color .2s ease; }
-      .nav.scrolled { border-bottom-color: var(--border); }
+      .nav { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(12px); background: rgba(4,5,10,.55); border-bottom: 1px solid transparent; transition: border-color .2s ease; }
+      .nav.scrolled { border-bottom-color: var(--hairline); }
       .nav-inner { display: flex; align-items: center; gap: 32px; height: 64px; }
       .brand { font-weight: 600; font-size: 17px; letter-spacing: -.02em; display: inline-flex; align-items: center; gap: 8px; }
       .brand-mark { height: 18px; width: auto; }
       .nav-links { display: flex; gap: 26px; margin-right: auto; }
-      .nav-links a { color: var(--muted); font-size: 14px; }
-      .nav-links a:hover { color: var(--text); }
+      .nav-links a { color: var(--ink-2); font-size: 14px; }
+      .nav-links a:hover { color: var(--ink); }
       .nav-cta { display: flex; align-items: center; gap: 16px; }
-      .ghost-link { color: var(--muted); font-size: 14px; }
-      .ghost-link:hover { color: var(--text); }
+      .ghost-link { color: var(--ink-2); font-size: 14px; }
+      .ghost-link:hover { color: var(--ink); }
 
       /* generic sections */
       section { padding: 100px 0; }
       .section-title { font-size: clamp(28px, 4vw, 40px); letter-spacing: -.03em; font-weight: 600; margin: 0 0 18px; }
-      .section-lede { color: var(--muted); font-size: 17px; max-width: 46em; margin: 0 0 48px; }
+      .section-lede { color: var(--ink-2); font-size: 17px; max-width: 46em; margin: 0 0 48px; }
 
       /* generic code block */
-      .code-block { background: var(--elev); border: 1px solid var(--border-2); border-radius: 10px; padding: 16px 18px; font-family: var(--mono); font-size: 12.5px; line-height: 1.7; color: #ededed; overflow-x: auto; margin: 0; }
+      .code-block { background: var(--field-2); border: 1px solid var(--hairline-strong); border-radius: 10px; padding: 16px 18px; font-family: var(--mono); font-size: 12.5px; line-height: 1.7; color: #ededed; overflow-x: auto; margin: 0; }
 
       /* page hero (shared by sub-pages) */
       .page-hero { padding: 88px 0 8px; }
-      .page-hero .eyebrow { color: var(--muted); font-size: 12.5px; margin: 0 0 18px; }
+      .page-hero .eyebrow { color: var(--ink-2); font-size: 12.5px; margin: 0 0 18px; }
       .page-hero h1 { font-size: clamp(38px, 5vw, 60px); line-height: 1.02; letter-spacing: -.04em; font-weight: 600; margin: 0 0 20px; }
-      .page-hero .lede { font-size: 19px; color: var(--muted); max-width: 32em; margin: 0 0 28px; }
-      .page-hero .lede strong { color: var(--text); font-weight: 600; }
+      .page-hero .lede { font-size: 19px; color: var(--ink-2); max-width: 32em; margin: 0 0 28px; }
+      .page-hero .lede strong { color: var(--ink); font-weight: 600; }
       .page-actions { display: flex; gap: 12px; flex-wrap: wrap; }
 
       /* footer */
-      .footer { border-top: 1px solid var(--border); padding: 56px 0 32px; background: var(--surface); margin-top: 40px; }
+      .footer { border-top: 1px solid var(--hairline); padding: 56px 0 32px; background: var(--field-1); margin-top: 40px; }
       .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 32px; }
       .footer-brand .brand { margin-bottom: 12px; }
       .footer-brand p { font-size: 14px; max-width: 26em; margin: 0 0 8px; }
-      .oss-badge { font-size: 12px; } .oss-badge a:hover { color: var(--text); }
-      .footer-col h5 { margin: 0 0 14px; font-size: 13px; font-weight: 500; color: var(--muted); }
-      .footer-col a { display: block; color: var(--muted); font-size: 14px; padding: 4px 0; }
-      .footer-col a:hover { color: var(--text); }
-      .footer-bottom { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 13px; }
+      .oss-badge { font-size: 12px; } .oss-badge a:hover { color: var(--ink); }
+      .footer-col h5 { margin: 0 0 14px; font-size: 13px; font-weight: 500; color: var(--ink-2); }
+      .footer-col a { display: block; color: var(--ink-2); font-size: 14px; padding: 4px 0; }
+      .footer-col a:hover { color: var(--ink); }
+      .footer-bottom { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--hairline); font-size: 13px; }
 
       @media (max-width: 900px) {
         .footer-grid { grid-template-columns: 1fr 1fr; }
