@@ -46,7 +46,7 @@ for agent in swarm:
 const run = new AgentRun();
 const sb = await run.sandbox("python", { ready: true });
 
-// divide a running VM into a swarm. each daughter is its own microVM
+// divide a running VM into a swarm. each fork is its own microVM
 const swarm = await sb.fork(8);
 await Promise.all(swarm.map((a) => a.exec("node subagent.js")));`,
   },
@@ -99,7 +99,7 @@ const useCases = [
 
 const steps = [
   { n: '01', title: 'Grab a warm sandbox', body: 'Ask for an image and get a running, isolated computer back in milliseconds. The pool was already warm, so there is no cold start.', code: `sb = AgentRun().sandbox("python", ready=True)` },
-  { n: '02', title: 'Fork it', body: 'Copy the running VM as many times as you want. Each fork is its own microVM and shares the parent in memory, so eight cost about 3 MiB each.', code: `swarm = sb.fork(8)   # ~3 MiB each, not 8 whole VMs` },
+  { n: '02', title: 'Fork it', body: 'Copy the running VM as many times as you want. Each fork is its own microVM and shares the parent in memory.', code: `swarm = sb.fork(8)` },
   { n: '03', title: 'Keep what worked', body: 'Commit the sandbox that succeeded and throw the rest away. The result is versioned, and you can fork it again whenever you want.', code: `winner.workspace.commit()` },
 ];
 
@@ -116,14 +116,14 @@ const hostedItems = [
 const compCols = ['mitos', 'E2B', 'Modal', 'Daytona', 'Morph'];
 const compRows = [
   { feat: 'Live fork of a running VM (memory + processes)', cells: [{ s: 'y' }, { s: 'n', t: 'snapshot' }, { s: 'n', t: 'snapshot' }, { s: 'p', t: 'filesystem' }, { s: 'p', t: 'snapshot' }] },
-  { feat: 'Published marginal cost per daughter', cells: [{ s: 'y', t: '~3 MiB' }, { s: 'n' }, { s: 'n' }, { s: 'n' }, { s: 'n' }] },
+  { feat: 'Published marginal cost per fork', cells: [{ s: 'y', t: '~3 MiB' }, { s: 'n' }, { s: 'n' }, { s: 'n' }, { s: 'n' }] },
   { feat: 'microVM isolation (own kernel)', cells: [{ s: 'y', t: 'KVM' }, { s: 'y' }, { s: 'n', t: 'gVisor' }, { s: 'n', t: 'gVisor' }, { s: 'p', t: 'undisclosed' }] },
   { feat: 'Open source', cells: [{ s: 'y', t: 'Apache 2.0' }, { s: 'y', t: 'Apache 2.0' }, { s: 'n' }, { s: 'p', t: 'AGPL' }, { s: 'n' }] },
   { feat: 'Fully managed cloud', cells: [{ s: 'y' }, { s: 'y' }, { s: 'y' }, { s: 'y' }, { s: 'y' }] },
 ];
 
 const faqs = [
-  { q: 'Is the fork really unique?', a: 'No, and we will not pretend it is. A few others can branch a VM. No one else combines a live fork of running memory at about 27ms and 3 MiB per daughter, microVM-isolated, managed, and Apache-2.0.' },
+  { q: 'Is the fork really unique?', a: 'No, and we will not pretend it is. A few others can branch a VM. No one else combines a live fork of running memory at about 27ms and 3 MiB per fork, microVM-isolated, managed, and Apache-2.0.' },
   { q: 'How many forks can I run at once?', a: 'Hundreds to thousands from one warm parent. They share its memory, so cost grows with what each one writes, not with the count.' },
   { q: 'Can I run it myself?', a: 'Yes. The engine is Apache-2.0 on GitHub, the same code the managed service runs.' },
   { q: 'How are subagents isolated?', a: 'Each fork is a Firecracker microVM with its own kernel, isolated by KVM.' },
@@ -223,6 +223,14 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
           <text x="150" y="276" class="parent-label">vm-0</text>
         </g>
       </svg>
+    </div>
+
+    <div class="container division-foot reveal">
+      <div class="division-stats">
+        <div><span class="sv mono">~27 ms</span><span class="sl">per fork</span></div>
+        <div><span class="sv mono">~3 MiB</span><span class="sl">per subagent</span></div>
+        <div><span class="sv mono">N-way</span><span class="sl">live fork</span></div>
+      </div>
     </div>
   </section>
 
@@ -473,6 +481,10 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
   .division-stage.run .parent-mem { animation: pPulse 1s var(--ease); transform-box: fill-box; transform-origin: center; }
   @keyframes pPulse { 0% { transform: scale(1); } 30% { transform: scale(1.06); } 100% { transform: scale(1); } }
 
+  .division-foot { text-align: center; margin-top: 24px; }
+  .division-stats { display: inline-flex; gap: 48px; }
+  .division-stats .sv { display: block; font-size: 24px; color: var(--ink); letter-spacing: -.03em; }
+  .division-stats .sl { font-size: 12px; color: var(--ink-3); }
   @media (prefers-reduced-motion: reduce) { .division-stage .d-path { stroke-dashoffset: 0; } .division-stage .fan-daughter { opacity: 1; transform: none; } }
 
   /* USE CASES */
@@ -489,7 +501,8 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
   .step-n { color: var(--magenta); font-size: 13px; }
   .step h3 { margin: 0; font-size: 18px; font-weight: 500; color: var(--ink); letter-spacing: -.01em; }
   .step p { color: var(--ink-2); font-size: 14.5px; line-height: 1.6; margin: 0 0 26px; }
-  .step .code-block { margin-top: auto; }
+  .step { min-width: 0; }
+  .step .code-block { margin-top: auto; width: 100%; box-sizing: border-box; }
 
   /* MANAGED + OSS */
   .hosted { }
