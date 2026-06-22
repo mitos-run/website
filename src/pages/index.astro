@@ -409,7 +409,7 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
 
 <style>
   /* HERO */
-  .hero { padding: 128px 0 32px; position: relative; }
+  .hero { padding: 184px 0 40px; position: relative; }
   /* faint diegetic ambient: the specimen under illumination. Restrained (~5%). */
   .hero-aura { position: absolute; top: -80px; left: 6%; width: 800px; height: 640px; z-index: 0; pointer-events: none;
     background: radial-gradient(closest-side, color-mix(in srgb, var(--magenta) 12%, transparent), transparent 72%);
@@ -465,7 +465,7 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
   .section-lede a:not(.btn):hover { border-bottom-color: var(--cyan); }
 
   /* THE DIVISION */
-  .division-section { border-top: 1px solid var(--hairline); padding: 104px 0 96px; }
+  .division-section { padding: 104px 0 96px; }
   .division-head { text-align: center; max-width: 760px; margin: 0 auto; }
   .division-h { font-size: clamp(28px, 4vw, 44px); letter-spacing: var(--track-display); margin: 0 0 18px; line-height: 1.08; font-weight: 400; text-wrap: balance; }
   .division-h-hl { color: var(--magenta); }
@@ -498,7 +498,7 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
   @media (prefers-reduced-motion: reduce) { .division-stage .d-path { stroke-dashoffset: 0; } .division-stage .fan-daughter { opacity: 1; transform: none; } }
 
   /* USE CASES */
-  .uc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 1px solid var(--hairline); margin-top: 8px; }
+  .uc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 8px; }
   .uc-item { padding: 26px 24px 24px; border-left: 1px solid var(--hairline); }
   .uc-item:nth-child(3n+1) { border-left: none; padding-left: 0; }
   .uc-item h4 { margin: 0 0 8px; font-size: 15px; font-weight: 500; color: var(--ink); }
@@ -506,8 +506,7 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
 
   /* HOW */
   .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 56px; align-items: stretch; margin-top: 8px; }
-  .step { display: flex; flex-direction: column; padding: 30px 0 0; border-top: 1px solid var(--hairline-strong); transition: border-color .2s var(--ease); }
-  .step:hover { border-top-color: var(--magenta); }
+  .step { display: flex; flex-direction: column; }
   .step-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; }
   .step-n { color: var(--magenta); font-size: 13px; }
   .step h3 { margin: 0; font-size: 18px; font-weight: 500; color: var(--ink); letter-spacing: -.01em; }
@@ -515,8 +514,8 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
   .step .code-block { margin-top: auto; }
 
   /* MANAGED + OSS */
-  .hosted { border-top: 1px solid var(--hairline); }
-  .hosted-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin: 8px 0 42px; text-align: left; border-top: 1px solid var(--hairline); }
+  .hosted { }
+  .hosted-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin: 8px 0 42px; text-align: left; }
   .hosted-item { padding: 26px 24px 24px; border-left: 1px solid var(--hairline); }
   .hosted-item:first-child { border-left: none; padding-left: 0; }
   .hosted-item h4 { margin: 0 0 8px; font-size: 15px; font-weight: 500; color: var(--ink); }
@@ -539,21 +538,21 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
   .comp-table .own .mk-y { color: var(--magenta); }
 
   /* SECURITY + ECON */
-  .security, .econ { border-top: 1px solid var(--hairline); }
+  .security, .econ { }
   .sec-inner, .econ-inner { max-width: 720px; }
   .econ-inner .section-lede { margin-bottom: 26px; }
 
   /* FAQ */
-  .faq-list { max-width: 760px; border-top: 1px solid var(--hairline); }
-  .faq-item { border-bottom: 1px solid var(--hairline); }
-  .faq-item summary { list-style: none; cursor: pointer; padding: 20px 0; font-size: 16px; color: var(--ink); display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .faq-list { max-width: 760px; }
+  .faq-item summary { list-style: none; cursor: pointer; padding: 16px 0; font-size: 16px; color: var(--ink); display: flex; align-items: center; justify-content: space-between; gap: 16px; transition: color .14s var(--ease); }
+  .faq-item summary:hover { color: var(--magenta); }
   .faq-item summary::-webkit-details-marker { display: none; }
   .faq-item summary::after { content: '+'; color: var(--magenta); font-family: var(--mono); font-size: 18px; }
   .faq-item[open] summary::after { content: '−'; }
   .faq-item p { margin: 0 0 22px; color: var(--ink-2); font-size: 14.5px; line-height: 1.6; max-width: 60em; }
 
   /* FINAL CTA */
-  .final-cta { text-align: center; border-top: 1px solid var(--hairline); }
+  .final-cta { text-align: center; }
   .final-cta h2 { font-size: clamp(30px, 5vw, 52px); letter-spacing: var(--track-display); margin: 0 0 28px; font-weight: 400; }
 
   @media (max-width: 900px) {
