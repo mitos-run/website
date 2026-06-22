@@ -2,7 +2,8 @@
 // Consent-gated, EU-hosted PostHog analytics (GDPR / ePrivacy).
 // PostHog is NOT loaded and NO network request is made until the visitor clicks
 // "Accept". Then: EU data residency, anonymous (person_profiles identified_only,
-// and we never identify), NO session recording, Do-Not-Track respected. The
+// and we never identify), session replay with all inputs masked, Do-Not-Track
+// respected. The
 // choice persists in localStorage; visitors can change it via the footer
 // "Cookie settings" link (window.openCookieSettings).
 //
@@ -17,8 +18,9 @@ const PH_HOST = 'https://eu.i.posthog.com';
 <div id="cookie-banner" class="cookie-banner" role="dialog" aria-label="Analytics consent" aria-live="polite" hidden>
   <p class="cookie-eyebrow mono"><span class="cookie-dot" aria-hidden="true"></span>analytics</p>
   <p class="cookie-text">
-    PostHog (EU-hosted) so we can see which docs and pages actually help. No session recording, no
-    data sold, IPs discarded, and the script doesn't even load until you accept. <a href="/privacy">Details</a>.
+    Help us make mitos better. We use PostHog (EU-hosted) to see how the site is really used,
+    including session replays with every input masked. Opt-in only, IPs discarded, never sold, and
+    nothing loads until you accept. <a href="/privacy">Details</a>.
   </p>
   <div class="cookie-actions">
     <button id="cookie-decline" class="cookie-btn" type="button">Decline</button>
@@ -40,7 +42,10 @@ const PH_HOST = 'https://eu.i.posthog.com';
         person_profiles: 'identified_only', // no profiles for anonymous visitors
         capture_pageview: true,
         autocapture: true,
-        disable_session_recording: true,    // never record sessions (PII risk)
+        // Session replay ON but privacy-masked: every form input is masked so no
+        // typed values are ever captured (the site has no login/PII fields anyway).
+        disable_session_recording: false,
+        session_recording: { maskAllInputs: true },
         respect_dnt: true,                   // honor Do-Not-Track
         persistence: 'localStorage+cookie'
       });

@@ -37,8 +37,9 @@ const DESC =
     <p>
       <strong>Analytics, only with your consent.</strong> If you accept analytics, we use
       <strong>PostHog</strong>, processed in the European Union, to understand which pages are
-      useful. It is configured for privacy: client IP addresses are discarded, sessions are never
-      recorded, and we never identify you (analytics are anonymous and not linked to a person). If
+      useful. It is configured for privacy: client IP addresses are discarded, session replays are
+      captured with every form input masked (so typed values are never recorded), and we never
+      identify you (analytics are anonymous and not linked to a person). If
       you decline, or never choose, PostHog is not loaded and nothing is sent. You can change your
       choice anytime via "Cookie settings" in the footer.
     </p>
@@ -68,7 +69,7 @@ const DESC =
     <ul>
       <li><strong>GitHub, Inc.</strong> hosting (GitHub Pages) and the public GitHub API used for the star count.</li>
       <li><strong>Cloudflare, Inc.</strong> CDN and edge security in front of the site (processes request traffic).</li>
-      <li><strong>PostHog</strong> product analytics, processed in the European Union, <strong>only if you opt in</strong>. IP addresses are discarded and sessions are never recorded.</li>
+      <li><strong>PostHog</strong> product analytics and masked session replay, processed in the European Union, <strong>only if you opt in</strong>. IP addresses are discarded and every form input is masked.</li>
     </ul>
     <p>
       The open-source engine you run yourself does not send data to us. If you later use a hosted

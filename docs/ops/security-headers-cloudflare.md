@@ -57,9 +57,10 @@ default-src 'self';
 base-uri 'self';
 script-src 'self' 'unsafe-inline' https://eu-assets.i.posthog.com;
 style-src 'self' 'unsafe-inline';
-img-src 'self' data:;
+img-src 'self' data: blob:;
 font-src 'self';
 connect-src 'self' https://api.github.com https://eu.i.posthog.com https://eu-assets.i.posthog.com;
+worker-src 'self' blob:;
 frame-ancestors 'none';
 form-action 'self';
 upgrade-insecure-requests
@@ -67,8 +68,9 @@ upgrade-insecure-requests
 
 > The `eu(-assets)?.i.posthog.com` entries are required for the consent-gated
 > PostHog analytics (`src/components/Analytics.astro`). They only matter after a
-> visitor opts in; without them the analytics script is blocked by CSP. If you
-> later enable PostHog **session replay**, also add `worker-src 'self' blob:`.
+> visitor opts in; without them the analytics script is blocked by CSP.
+> `worker-src 'self' blob:` and `blob:` in `img-src` are required for PostHog
+> **session replay**, which is enabled (with all form inputs masked).
 
 (One line, no line breaks, when pasted into Cloudflare.)
 
