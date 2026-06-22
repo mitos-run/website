@@ -223,19 +223,6 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
           <text x="150" y="276" class="parent-label">vm-0</text>
         </g>
       </svg>
-
-      <div class="division-meta mono">
-        <button class="run-btn" id="run-fork" type="button" aria-label="Replay the fork">▷ Run <span class="run-call">sb.fork(8)</span></button>
-        <span class="dm-out">→ 8 subagents · <span class="dm-hl">~27&nbsp;ms</span> · +3&nbsp;MiB each</span>
-      </div>
-    </div>
-
-    <div class="container division-foot reveal">
-      <div class="division-stats">
-        <div><span class="sv mono">~27 ms</span><span class="sl">per fork</span></div>
-        <div><span class="sv mono">~3 MiB</span><span class="sl">per subagent</span></div>
-        <div><span class="sv mono">N-way</span><span class="sl">live fork</span></div>
-      </div>
     </div>
   </section>
 
@@ -472,7 +459,7 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
   .division-lede { color: var(--ink-2); font-size: 16.5px; margin: 0 auto; max-width: 42em; text-wrap: pretty; line-height: 1.55; }
   .division-lede em { font-style: normal; color: var(--cyan); }
 
-  .division-stage { position: relative; max-width: 940px; margin: 48px auto 14px; padding: 0 24px; }
+  .division-stage { position: relative; max-width: 900px; margin: 24px auto 0; padding: 0 24px; }
   .fan-svg { width: 100%; height: auto; display: block; overflow: visible; mix-blend-mode: screen; }
   .d-path { fill: none; stroke: color-mix(in srgb, var(--magenta) 50%, transparent); stroke-width: 1.2; filter: drop-shadow(0 0 3px color-mix(in srgb, var(--magenta) 55%, transparent)); stroke-dasharray: 1400; stroke-dashoffset: 0; }
   .division-stage.run .d-path { stroke-dashoffset: 1400; animation: dDraw .72s cubic-bezier(.4,0,.2,1) forwards; animation-delay: calc(.05s * var(--i) + .18s); }
@@ -486,15 +473,6 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
   .division-stage.run .parent-mem { animation: pPulse 1s var(--ease); transform-box: fill-box; transform-origin: center; }
   @keyframes pPulse { 0% { transform: scale(1); } 30% { transform: scale(1.06); } 100% { transform: scale(1); } }
 
-  .division-meta { position: absolute; left: 50%; bottom: -10px; transform: translateX(-50%); display: flex; gap: 12px; align-items: center; font-size: 12.5px; color: var(--ink-2); flex-wrap: wrap; justify-content: center; }
-  .run-btn { font-family: var(--mono); font-size: 12.5px; color: var(--magenta); background: transparent; border: 1px solid color-mix(in srgb, var(--magenta) 40%, transparent); border-radius: var(--r-sm); padding: 6px 12px; cursor: pointer; transition: border-color .14s var(--ease); }
-  .run-btn:hover { border-color: var(--magenta); }
-  .dm-out { color: var(--ink-3); }
-  .dm-hl { color: var(--cyan); }
-  .division-foot { text-align: center; margin-top: 40px; }
-  .division-stats { display: inline-flex; gap: 48px; }
-  .division-stats .sv { display: block; font-size: 24px; color: var(--ink); letter-spacing: -.03em; }
-  .division-stats .sl { font-size: 12px; color: var(--ink-3); }
   @media (prefers-reduced-motion: reduce) { .division-stage .d-path { stroke-dashoffset: 0; } .division-stage .fan-daughter { opacity: 1; transform: none; } }
 
   /* USE CASES */
