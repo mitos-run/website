@@ -514,6 +514,9 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
   .comp-table tbody tr:last-child td { border-bottom: none; }
   .comp-table tbody tr:hover td { background: rgba(255,255,255,.02); }
   .comp-table .feat { color: var(--ink-2); }
+  /* pin the Capability column so rows stay labelled while competitors scroll */
+  .comp-table th:first-child, .comp-table td:first-child { position: sticky; left: 0; background: var(--field); }
+  .comp-table thead th:first-child { background: var(--field-1); }
   .comp-table .mk { font-size: 15px; display: block; line-height: 1.15; }
   .mk-y { color: var(--magenta); } .mk-n { color: var(--ink-3); } .mk-p { color: var(--ink-2); }
   .comp-table .ct { color: var(--ink-3); font-size: 11px; margin-top: 3px; font-family: var(--mono); display: block; line-height: 1.15; }
