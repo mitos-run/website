@@ -108,7 +108,7 @@ export const competitors: Competitor[] = [
     blurb: 'Full Python ML platform with GPU sandboxes. gVisor isolation, snapshots not live forks, closed source.',
     title: 'mitos vs Modal: microVM fork vs gVisor sandbox',
     description:
-      'mitos vs Modal for AI agent sandboxes: mitos forks a running Firecracker microVM in ~27ms and is open source; Modal is a closed, gVisor-based Python/GPU platform.',
+      'mitos vs Modal for AI agent sandboxes: mitos forks a running microVM in ~27ms and is open source; Modal is a closed, gVisor-based Python/GPU platform.',
     h1: 'mitos vs Modal',
     lede:
       'Modal is a full serverless platform for Python and ML, with native GPU sandboxes. mitos is narrower and sharper: a live fork of a running Firecracker microVM, open source, managed. The isolation model and the cost of fanning out are where they diverge.',

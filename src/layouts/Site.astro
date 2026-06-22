@@ -120,8 +120,10 @@ const navLinks = [
       </div>
     </header>
 
-    <!-- Mobile menu overlay (inert while closed so its links are not focusable) -->
-    <div class="nav-menu" id="nav-menu" aria-hidden="true" inert>
+    <!-- Mobile menu overlay. `inert` while closed removes it from focus AND the
+         a11y tree, so we do NOT also set aria-hidden (that would flag focusable
+         links inside an aria-hidden container). -->
+    <div class="nav-menu" id="nav-menu" inert>
       <nav class="nav-menu-links" aria-label="Mobile">
         {navLinks.map((l) => <a href={l.href}>{l.label}</a>)}
       </nav>
@@ -198,7 +200,6 @@ const navLinks = [
           navMenu.classList.toggle('open', open);
           navToggle.setAttribute('aria-expanded', String(open));
           navToggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
-          navMenu.setAttribute('aria-hidden', String(!open));
           if (open) navMenu.removeAttribute('inert'); else navMenu.setAttribute('inert', '');
           document.body.classList.toggle('nav-open', open);
         };
