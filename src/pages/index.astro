@@ -21,15 +21,6 @@ const TITLE = 'mitos: one agent divides into a thousand';
 const DESC =
   'Fork a running microVM into hundreds of isolated subagents in about 27ms, roughly 3 MiB each. Live state, not a disk snapshot. Managed, and Apache-2.0 so you are never locked in.';
 
-// Real GitHub stars, fetched at build time. Falls back to "open source" if the
-// count is unavailable or too small to be worth showing.
-let stars: number | null = null;
-try {
-  const r = await fetch('https://api.github.com/repos/mitos-run/mitos');
-  if (r.ok) { const d = await r.json(); stars = typeof d.stargazers_count === 'number' ? d.stargazers_count : null; }
-} catch (e) { /* offline build: fall back */ }
-const showStars = typeof stars === 'number' && stars >= 50;
-
 // Hero surfaces: install + copy-to-paste example per language. The fork(8) line
 // is the aha. Snippets are runnable against the real API.
 const surfaces = [
@@ -182,8 +173,6 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
     <!-- TRUST STRIP -->
     <div class="container trust reveal">
       <span>Apache&nbsp;2.0</span>
-      {showStars && <span><a href={GITHUB} target="_blank" rel="noopener">★ {stars!.toLocaleString()} on GitHub</a></span>}
-      {!showStars && <span><a href={GITHUB} target="_blank" rel="noopener">Open source on GitHub</a></span>}
       <span>~27&nbsp;ms per fork</span>
       <span>~3&nbsp;MiB per subagent</span>
       <span>microVM isolated</span>
@@ -466,8 +455,7 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
   .surf-note span { color: var(--ink-2); }
 
   /* TRUST STRIP */
-  .trust { display: flex; flex-wrap: wrap; gap: 10px 26px; align-items: center; justify-content: center; margin-top: 64px; padding: 18px 24px; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); font-family: var(--mono); font-size: 12.5px; color: var(--ink-3); }
-  .trust a { color: var(--ink-2); } .trust a:hover { color: var(--magenta); }
+  .trust { display: flex; flex-wrap: wrap; gap: 10px 28px; align-items: center; justify-content: center; margin-top: 52px; padding: 4px 24px; font-family: var(--mono); font-size: 12.5px; color: var(--ink-3); }
 
   /* generic section heads (page-scoped, light display weight) */
   .section-title { font-size: clamp(28px, 3.6vw, 42px); letter-spacing: var(--track-display); font-weight: 400; margin: 0 0 18px; }
