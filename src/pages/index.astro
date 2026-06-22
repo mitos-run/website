@@ -541,10 +541,34 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
   .final-cta h2 { font-size: clamp(30px, 5vw, 52px); letter-spacing: var(--track-display); margin: 0 0 28px; font-weight: 400; }
 
   @media (max-width: 900px) {
-    .hero-grid { grid-template-columns: 1fr; }
+    .hero { padding-block: 104px 28px; }
+    .hero-grid { grid-template-columns: 1fr; gap: 40px; }
     .uc-grid, .hosted-grid, .steps, .pillars-grid { grid-template-columns: 1fr; gap: 40px; }
     .uc-item, .hosted-item { border-left: none; padding-left: 0; }
     .uc-item:nth-child(3n+1) { padding-left: 0; }
+    .pillar h3 { min-height: 0; }
     .division-stats { gap: 28px; }
+  }
+  @media (max-width: 600px) {
+    section { padding-block: 64px; }
+    .hero { padding-block: 72px 24px; }
+    .hero-aura { left: -12%; width: 95%; }
+    .hero-copy h1 { font-size: clamp(30px, 8.4vw, 48px); line-height: 1.06; }
+    .lede { font-size: 17px; }
+    .division-section { padding-block: 60px 52px; overflow: hidden; }
+    .division-head { max-width: 100%; }
+    .division-h { font-size: 21px; line-height: 1.25; overflow-wrap: break-word; text-wrap: wrap; }
+    .division-lede { font-size: 15px; }
+    .division-stage { margin-top: 16px; }
+    .fan-daughter text, .fan-parent text { display: none; } /* labels unreadable at this scale */
+    .division-stats { gap: 18px; }
+    .division-stats .sv { font-size: 20px; }
+    .section-title { font-size: clamp(24px, 7vw, 32px); }
+    .pillar h3 { font-size: 22px; }
+    /* code card: shrink tabs so all four fit, tighten the panel */
+    .tab { padding: 10px 9px; font-size: 12px; gap: 5px; }
+    .tab-ic :global(svg) { width: 13px; height: 13px; }
+    .install-cmd { font-size: 12px; }
+    .code-panel { font-size: 11.5px; padding: 16px 14px; height: 218px; }
   }
 </style>
