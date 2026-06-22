@@ -106,7 +106,7 @@ const steps = [
 const hostedItems = [
   { h: 'No cluster to run', p: 'No KVM hosts to patch, no snapshot storage to babysit, no 3am page.' },
   { h: 'Pools stay warm', p: 'Pre-forked VMs stay hot, so forks land in milliseconds, one or five hundred.' },
-  { h: 'Open source is your exit', p: 'Same Apache-2.0 engine you can run yourself. No rewrite, no lock-in.' },
+  { h: 'No lock-in', p: 'The engine is open source, so you are never trapped in our cloud.' },
   { h: 'Dev and prod match', p: 'Same engine, same API, laptop to production.' },
 ];
 
@@ -264,8 +264,7 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
     <div class="container hosted-inner reveal">
       <h2 class="section-title">We run the cluster. You call the API.</h2>
       <p class="section-lede">
-        We keep the bare-metal fleet alive so you don't. Same engine you can
-        <a href={GITHUB} target="_blank" rel="noopener">run yourself</a>, so you are never locked in.
+        We keep the bare-metal fleet alive, warm, and scaled. You ship against an API and never touch a cluster.
       </p>
       <div class="hosted-grid">
         {hostedItems.map((it) => (
@@ -308,26 +307,18 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
     </div>
   </section>
 
-  <!-- SECURITY -->
-  <section class="security container" id="security">
-    <div class="sec-inner reveal">
-      <h2 class="section-title">Every fork is a real microVM, not a shared kernel</h2>
-      <p class="section-lede">
-        Each subagent runs in its own Firecracker microVM with its own kernel. A prompt injection
-        that turns into a shell stays inside one disposable fork, not your host and not the other agents.
-      </p>
-    </div>
-  </section>
-
-  <!-- ECONOMICS -->
-  <section class="econ container" id="pricing-teaser">
-    <div class="econ-inner reveal">
-      <h2 class="section-title">Pay for divergence, not duplication</h2>
-      <p class="section-lede">
-        Forks share the parent's memory until they write, so you pay for the pages they dirty, about
-        3&nbsp;MiB each, not whole VMs. Hard spend caps are on by default.
-      </p>
-      <a class="btn btn-ghost" href="/pricing/">See pricing</a>
+  <!-- TRUST PILLARS: isolation + economics -->
+  <section class="pillars container" id="security">
+    <div class="pillars-grid">
+      <div class="pillar reveal">
+        <h3>Every fork is a real microVM, not a shared kernel</h3>
+        <p>Each subagent runs in its own Firecracker microVM with its own kernel. A prompt injection that turns into a shell stays inside one disposable fork, not your host and not the other agents.</p>
+      </div>
+      <div class="pillar reveal" id="pricing-teaser">
+        <h3>Pay for divergence, not duplication</h3>
+        <p>Forks share the parent's memory until they write, so you pay for the pages they dirty, about 3&nbsp;MiB each, not whole VMs. Hard spend caps are on by default.</p>
+        <a class="btn btn-ghost" href="/pricing/">See pricing</a>
+      </div>
     </div>
   </section>
 
@@ -515,23 +506,23 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
   /* COMPARISON */
   .table-wrap { overflow-x: auto; border: 1px solid var(--hairline); border-radius: var(--r-lg); }
   .comp-table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 760px; }
-  .comp-table th, .comp-table td { text-align: left; padding: 14px 18px; border-bottom: 1px solid var(--hairline); }
+  .comp-table th, .comp-table td { text-align: left; padding: 16px 18px; border-bottom: 1px solid var(--hairline); vertical-align: top; }
   .comp-table thead th { background: var(--field-1); color: var(--ink-3); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
   .comp-table tbody tr:last-child td { border-bottom: none; }
   .comp-table tbody tr:hover td { background: rgba(255,255,255,.02); }
   .comp-table .feat { color: var(--ink-2); }
-  .comp-table .mk { font-size: 15px; }
+  .comp-table .mk { font-size: 15px; display: block; line-height: 1.15; }
   .mk-y { color: var(--magenta); } .mk-n { color: var(--ink-3); } .mk-p { color: var(--ink-2); }
-  .comp-table .ct { color: var(--ink-3); font-size: 12px; margin-left: 8px; font-family: var(--mono); }
+  .comp-table .ct { color: var(--ink-3); font-size: 11px; margin-top: 3px; font-family: var(--mono); display: block; line-height: 1.15; }
   .comp-table .own { color: var(--ink); }
   .comp-table thead th.own { color: var(--magenta); text-align: center; }
   .comp-table thead th:not(:first-child), .comp-table td:not(.feat) { text-align: center; }
   .comp-table .own .mk-y { color: var(--magenta); }
 
-  /* SECURITY + ECON */
-  .security, .econ { }
-  .sec-inner, .econ-inner { max-width: 720px; }
-  .econ-inner .section-lede { margin-bottom: 26px; }
+  /* TRUST PILLARS (isolation + economics) */
+  .pillars-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; }
+  .pillar h3 { font-size: clamp(21px, 2.3vw, 27px); font-weight: 400; letter-spacing: var(--track-display); line-height: 1.18; margin: 0 0 16px; text-wrap: balance; }
+  .pillar p { color: var(--ink-2); font-size: 16px; line-height: 1.6; margin: 0 0 22px; max-width: 34em; }
 
   /* FAQ */
   .faq-list { max-width: 760px; }
@@ -548,7 +539,7 @@ const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i
 
   @media (max-width: 900px) {
     .hero-grid { grid-template-columns: 1fr; }
-    .uc-grid, .hosted-grid, .steps { grid-template-columns: 1fr; gap: 0; }
+    .uc-grid, .hosted-grid, .steps, .pillars-grid { grid-template-columns: 1fr; gap: 40px; }
     .uc-item, .hosted-item { border-left: none; padding-left: 0; }
     .uc-item:nth-child(3n+1) { padding-left: 0; }
     .division-stats { gap: 28px; }
