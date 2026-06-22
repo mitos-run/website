@@ -52,7 +52,6 @@ const vendorContext = [
   <section class="hero container">
     <div class="hero-aura" aria-hidden="true"></div>
     <div class="hero-in reveal">
-      <p class="eyebrow mono">Benchmarks</p>
       <h1>Reproducible numbers. Run them yourself.</h1>
       <p class="lede">
         Every figure here comes from the open-source engine and is
@@ -158,12 +157,11 @@ const vendorContext = [
 
 <style>
   /* HERO */
-  .hero { padding-block: 96px 0; position: relative; }
+  .hero { padding-block: 184px 0; position: relative; }
   .hero-aura { position: absolute; top: -60px; left: 4%; width: 680px; max-width: 90vw; height: 520px; z-index: 0; pointer-events: none;
     background: radial-gradient(closest-side, color-mix(in srgb, var(--magenta) 11%, transparent), transparent 72%); opacity: .5; filter: blur(8px); }
   .hero-in { position: relative; z-index: 1; max-width: 720px; }
-  .eyebrow { color: var(--ink-3); font-size: 12.5px; letter-spacing: .04em; text-transform: uppercase; margin: 0 0 16px; }
-  .hero h1 { font-size: clamp(38px, 5.2vw, 62px); line-height: 1.03; letter-spacing: var(--track-display); font-weight: 400; margin: 0 0 20px; }
+  .hero h1 { font-size: clamp(46px, 6vw, 76px); line-height: 1.0; letter-spacing: -.035em; font-weight: 400; margin: 0 0 20px; }
   .lede { font-size: 19px; color: var(--ink-2); max-width: 34em; margin: 0 0 28px; line-height: 1.5; }
   .lede .hl { color: var(--cyan); }
   .lede strong { color: var(--ink); font-weight: 500; }
@@ -224,14 +222,14 @@ const vendorContext = [
   .final-cta h2 { font-size: clamp(28px, 4.6vw, 46px); letter-spacing: var(--track-display); margin: 0 0 28px; font-weight: 400; }
 
   @media (max-width: 900px) {
-    .hero { padding-block: 88px 0; }
+    .hero { padding-block: 104px 0; }
     .repro { grid-template-columns: 1fr; gap: 24px; }
     .stats { gap: 32px; }
   }
   @media (max-width: 600px) {
     section { padding-block: 56px; }
-    .hero { padding-block: 64px 0; }
-    .hero h1 { font-size: clamp(30px, 8.2vw, 46px); }
+    .hero { padding-block: 72px 0; }
+    .hero h1 { font-size: clamp(30px, 8.4vw, 48px); line-height: 1.06; }
     .section-title { font-size: clamp(24px, 7vw, 32px); }
     .stats { gap: 24px 36px; margin-top: 44px; }
     .final-cta { margin-top: 56px; }
