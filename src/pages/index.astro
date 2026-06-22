@@ -1,29 +1,32 @@
 ---
-// mitos landing — "Light & premium" pass (Stripe-grade restraint).
-// Warm off-white canvas, near-black ink, ONE restrained accent (indigo) used
-// only where it carries meaning: the fork primitive, links, focus. The mitosis
-// concept stays, rendered as a quiet, precise black-line division schematic —
-// no glow, no neon. Code lives in a polished dark island floating on the page.
-// See docs/brand/2026-06-21-brand-and-landing-research.md
-// Numbers are real (engine bench/); no fabricated logos or star counts.
-import Mark from '../components/Mark.astro';
+// mitos landing — "Fluorescence" (dark, magenta-dominant, microscope field).
+// Position: the live-fork / swarm primitive (Act 3 of the category), not "a
+// secure sandbox". Managed is the product; Apache-2.0 is the no-lock-in trust
+// signal. Numbers are real (engine bench/). No fabricated logos/testimonials.
+// Never use em or en dashes in copy. See docs/brand/brand-book.md and
+// docs/superpowers/plans/2026-06-22-fluorescence-page-rebuild.md.
+import Site from '../layouts/Site.astro';
+import Division from '../components/Division.astro';
 
 const GITHUB = 'https://github.com/mitos-run/mitos';
 const DOCS = '/quickstart/';
-const SIGNUP = '/quickstart/'; // TODO: hosted console signup when live
+const SIGNUP = '/quickstart/'; // hosted console not live yet; OSS run-now path
 
-const canonical = new URL(Astro.url.pathname, Astro.site).href;
-const ogImage = new URL('/og.png', Astro.site).href;
+const TITLE = 'mitos: one agent divides into a thousand';
+const DESC =
+  'Fork a running microVM into hundreds of isolated subagents in about 27ms, roughly 3 MiB each. Live state, not a disk snapshot. Managed, and Apache-2.0 so you are never locked in.';
 
-const navLinks = [
-  { label: 'How it works', href: '#how' },
-  { label: 'Benchmarks', href: '/benchmarks/' },
-  { label: 'Pricing', href: '/pricing/' },
-  { label: 'Docs', href: DOCS },
-];
+// Real GitHub stars, fetched at build time. Falls back to "open source" if the
+// count is unavailable or too small to be worth showing.
+let stars: number | null = null;
+try {
+  const r = await fetch('https://api.github.com/repos/mitos-run/mitos');
+  if (r.ok) { const d = await r.json(); stars = typeof d.stargazers_count === 'number' ? d.stargazers_count : null; }
+} catch (e) { /* offline build: fall back */ }
+const showStars = typeof stars === 'number' && stars >= 50;
 
-// Hero surfaces: install + copy-to-paste example per language. The fork(8)
-// line is the aha. Snippets are runnable against the real API.
+// Hero surfaces: install + copy-to-paste example per language. The fork(8) line
+// is the aha. Snippets are runnable against the real API.
 const surfaces = [
   {
     id: 'py',
@@ -61,626 +64,467 @@ mitos lineage vm·0.3`,
   },
 ];
 
-const hostedItems = [
-  { h: 'No cluster to run', p: 'No KVM hosts to patch, no snapshot storage to babysit, no 3am page. You call the API; we keep the metal alive.' },
-  { h: 'Pools stay warm', p: 'We keep pre-forked VMs hot and the autoscaler tuned, so forks land in milliseconds whether you need one or five hundred.' },
-  { h: 'Pay for what you dirty', p: 'Fork a thousand subagents and scale back to zero. You pay for the memory they actually write, not a thousand whole VMs.' },
-  { h: 'Dev and prod match', p: 'The hosted service is the same open-source engine behind the same API. What runs on your laptop runs in production.' },
+const useCases = [
+  { h: 'Best-of-N attempts', p: 'Fork a warm VM, run N divergent attempts in parallel, commit the one that worked and drop the rest.' },
+  { h: 'RL rollouts and fan-out', p: 'Spin thousands of parallel environments from a single warm template each training step, then collapse them back to zero.' },
+  { h: 'Tree search and test-time compute', p: 'Branch a running agent mid-thought for MCTS or speculative exploration. Parallel beats serial, and forks are cheap.' },
+  { h: 'Multi-agent evals', p: 'Give every agent its own real computer, isolated from the others, so one crash or escape cannot touch the rest.' },
+  { h: 'Untrusted code', p: 'Run model-written code in a microVM with its own kernel. A bad command stays inside one disposable fork.' },
 ];
 
 const steps = [
-  {
-    n: '01',
-    title: 'Grab a warm sandbox',
-    body: 'Ask for an image and get a running, isolated computer back in milliseconds. The pool was already warm, so there is no cold start.',
-    code: `sb = AgentRun().sandbox("python", ready=True)`,
-  },
-  {
-    n: '02',
-    title: 'Fork it',
-    body: 'Copy the running VM as many times as you want. Each fork is its own sandbox and shares the parent in memory, so eight of them cost about 3 MiB each.',
-    code: `swarm = sb.fork(8)   # ~3 MiB each, not 8 whole VMs`,
-  },
-  {
-    n: '03',
-    title: 'Keep what worked',
-    body: 'Commit the sandbox that succeeded and throw the rest away. The result is versioned, and you can fork it again whenever you want.',
-    code: `winner.workspace.commit()`,
-  },
+  { n: '01', title: 'Grab a warm sandbox', body: 'Ask for an image and get a running, isolated computer back in milliseconds. The pool was already warm, so there is no cold start.', code: `sb = AgentRun().sandbox("python", ready=True)` },
+  { n: '02', title: 'Fork it', body: 'Copy the running VM as many times as you want. Each fork is its own microVM and shares the parent in memory, so eight cost about 3 MiB each.', code: `swarm = sb.fork(8)   # ~3 MiB each, not 8 whole VMs` },
+  { n: '03', title: 'Keep what worked', body: 'Commit the sandbox that succeeded and throw the rest away. The result is versioned, and you can fork it again whenever you want.', code: `winner.workspace.commit()` },
 ];
 
-// Capability matrix. Cells: s = 'y' (yes) | 'n' (no) | 'p' (partial), t = short note.
-// Honest and capability-based (not a latency head-to-head). Only mitos is 'y' on
-// BOTH live fork and open source, which is the whole point.
+const hostedItems = [
+  { h: 'No cluster to run', p: 'No KVM hosts to patch, no snapshot storage to babysit, no 3am page. You call the API; we keep the metal alive.' },
+  { h: 'Pools stay warm', p: 'We keep pre-forked VMs hot and the autoscaler tuned, so forks land in milliseconds whether you need one or five hundred.' },
+  { h: 'Open source is your exit', p: 'The hosted service runs the same Apache-2.0 engine you can run yourself. If you ever want out, you just leave. No rewrite, no lock-in.' },
+  { h: 'Dev and prod match', p: 'The same engine behind the same API on your laptop and in production. What you build against locally is what ships.' },
+];
+
+// Honest, capability-based comparison from public docs (not a head-to-head
+// benchmark). s = 'y' yes | 'n' no | 'p' partial; t = short note. Only mitos is
+// 'y' on live-fork AND microVM AND Apache-2.0 AND managed at once.
 const compCols = ['mitos', 'E2B', 'Modal', 'Daytona', 'Morph'];
 const compRows = [
-  { feat: 'Live fork of a running VM', cells: [{ s: 'y' }, { s: 'n' }, { s: 'n' }, { s: 'n' }, { s: 'y' }] },
-  { feat: 'microVM isolation per subagent', cells: [{ s: 'y', t: 'KVM' }, { s: 'y' }, { s: 'n', t: 'gVisor' }, { s: 'n', t: 'container' }, { s: 'y' }] },
-  { feat: 'Warm pool, no cold start', cells: [{ s: 'y' }, { s: 'y' }, { s: 'y' }, { s: 'y' }, { s: 'y' }] },
-  { feat: 'Durable, forkable workspaces', cells: [{ s: 'y' }, { s: 'n' }, { s: 'p', t: 'volumes' }, { s: 'p', t: 'snapshots' }, { s: 'y' }] },
-  { feat: 'Open source', cells: [{ s: 'y', t: 'Apache 2.0' }, { s: 'p' }, { s: 'n' }, { s: 'p' }, { s: 'n' }] },
+  { feat: 'Live fork of a running VM (memory + processes)', cells: [{ s: 'y' }, { s: 'n', t: 'snapshot' }, { s: 'n', t: 'snapshot' }, { s: 'p', t: 'filesystem' }, { s: 'p', t: 'snapshot' }] },
+  { feat: 'Published marginal cost per daughter', cells: [{ s: 'y', t: '~3 MiB' }, { s: 'n' }, { s: 'n' }, { s: 'n' }, { s: 'n' }] },
+  { feat: 'microVM isolation (own kernel)', cells: [{ s: 'y', t: 'KVM' }, { s: 'y' }, { s: 'n', t: 'gVisor' }, { s: 'n', t: 'gVisor' }, { s: 'p', t: 'undisclosed' }] },
+  { feat: 'Open source', cells: [{ s: 'y', t: 'Apache 2.0' }, { s: 'y', t: 'Apache 2.0' }, { s: 'n' }, { s: 'p', t: 'AGPL' }, { s: 'n' }] },
+  { feat: 'Fully managed cloud', cells: [{ s: 'y' }, { s: 'y' }, { s: 'y' }, { s: 'y' }, { s: 'y' }] },
 ];
 
-// The Division — child node geometry in the SVG viewBox (1000x400). One parent
-// node at (170,200) divides into eight daughters fanned on the right. Rendered
-// as quiet precise linework (no glow); the fork primitive carries the accent.
+const faqs = [
+  { q: 'Is the fork really unique?', a: 'No, and we will not pretend it is. A few others can branch a VM. The difference is the combination: a live copy-on-write fork of running memory at about 27ms and 3 MiB per daughter, with microVM isolation, fully managed, and Apache-2.0 so you can run it yourself. No one else holds all of those at once.' },
+  { q: 'How many forks can I run at once?', a: 'The fork primitive is built for fan-out: hundreds to thousands of daughters from one warm parent. They share the parent in memory, so the cost grows with what each one writes, not with the count.' },
+  { q: 'Can I run it myself?', a: 'Yes. The engine is Apache-2.0 on GitHub, the same code the managed service runs. Self-hosting is your insurance against lock-in, not a worse version of the product.' },
+  { q: 'How are subagents isolated?', a: 'Each fork is a Firecracker microVM with its own kernel, isolated by KVM. That is the boundary you want when an agent runs code it wrote itself or pulled from the web.' },
+  { q: 'Will I get a surprise bill?', a: 'Hard spend caps are on by default. Copy-on-write means you pay for the pages your forks actually dirty, not for whole VMs, so a runaway loop cannot quietly turn into a five-figure invoice.' },
+  { q: 'Which languages and SDKs?', a: 'Python, TypeScript, and a CLI today, plus an MCP server. The sandbox runs any Linux workload.' },
+];
+
+// The Division — one parent at (170,200) divides into eight daughters fanned on
+// the right of a 1000x400 viewBox. Fluorescence: magenta parent (the fork
+// primitive), cyan daughters (the genome), additive glow.
 const daughters = Array.from({ length: 8 }, (_, i) => ({ i, y: Math.round(48 + i * (304 / 7)) }));
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href="/favicon.ico" sizes="32x32" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
-    <link rel="icon" href="/favicon-16.png" type="image/png" sizes="16x16" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/site.webmanifest" />
-    <meta name="theme-color" content="#FBFBF9" />
-    <title>mitos: one agent divides into a thousand</title>
-    <meta
-      name="description"
-      content="Fork a running microVM into hundreds of isolated subagents in about 27ms. Each one is a real microVM, not a container. Self-host the open-source engine, or let us run it."
-    />
-    <link rel="canonical" href={canonical} />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="mitos" />
-    <meta property="og:url" content={canonical} />
-    <meta property="og:title" content="mitos: one agent divides into a thousand" />
-    <meta property="og:description" content="Fork a running microVM into hundreds of isolated subagents in about 27ms. Each one is a real microVM, not a container. Open source, or fully hosted." />
-    <meta property="og:image" content={ogImage} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="mitos logo with the tagline: one agent divides into a thousand" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="mitos: one agent divides into a thousand" />
-    <meta name="twitter:description" content="Fork a running microVM into hundreds of isolated subagents in about 27ms. Each one is a real microVM, not a container. Open source, or fully hosted." />
-    <meta name="twitter:image" content={ogImage} />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
-    <!-- NAV -->
-    <header class="nav" id="nav">
-      <div class="container nav-inner">
-        <a class="brand" href="/"><Mark class="brand-mark" /> mitos</a>
-        <nav class="nav-links">
-          {navLinks.map((l) => <a href={l.href}>{l.label}</a>)}
-        </nav>
-        <div class="nav-cta">
-          <a class="ghost-link" href={GITHUB} target="_blank" rel="noopener">GitHub ↗</a>
-          <a class="btn btn-primary" href={SIGNUP}>Start building</a>
+<Site title={TITLE} description={DESC}>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy reveal">
+        <h1>One agent divides<br />into a thousand.</h1>
+        <p class="lede">
+          Fork a running microVM into hundreds of <strong>isolated subagents</strong>
+          in about <span class="hl">27&nbsp;ms</span>, roughly 3&nbsp;MiB each. It copies
+          the live machine, memory and running processes and all, not a disk snapshot.
+        </p>
+        <p class="lede-sub">We run the metal. The engine is <strong>Apache&nbsp;2.0</strong>, so you are never locked in.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary btn-lg" href={SIGNUP}>Start building</a>
+          <a class="btn btn-ghost btn-lg" href="/benchmarks/">See the benchmark</a>
         </div>
+        <p class="spec mono">~27&nbsp;ms per fork&nbsp;·&nbsp;~3&nbsp;MiB per subagent (copy-on-write)&nbsp;·&nbsp;microVM isolation</p>
       </div>
-    </header>
 
-    <main>
-      <!-- HERO -->
-      <section class="hero">
-        <div class="container hero-grid">
-          <div class="hero-copy reveal">
-            <h1>One agent divides<br />into a thousand.</h1>
-            <p class="lede">
-              Fork a running microVM into hundreds of <strong>isolated subagents</strong>
-              in about <span class="hl">27&nbsp;ms</span>. Each one is a real computer,
-              not a container. Host it yourself, or let us run it.
-            </p>
-            <div class="hero-actions">
-              <a class="btn btn-primary btn-lg" href={SIGNUP}>Start building</a>
-              <a class="btn btn-ghost btn-lg" href="/benchmarks/">See the benchmark →</a>
-            </div>
-            <p class="spec mono">~27&nbsp;ms per fork&nbsp;·&nbsp;~3&nbsp;MiB per subagent (copy-on-write)&nbsp;·&nbsp;scales to thousands</p>
-          </div>
-
-          <div class="hero-code reveal">
-            <div class="install">
-              <code class="install-cmd mono" id="install-cmd">pip install mitos</code>
-              <button class="copy-btn mono" data-copy="install" aria-label="Copy install command">⧉ copy</button>
-            </div>
-            <div class="card">
-              <div class="card-tabs" role="tablist">
-                {surfaces.map((s, i) => (
-                  <button class={`tab mono ${i === 0 ? 'on' : ''}`} data-tab={s.id} role="tab" aria-selected={i === 0 ? 'true' : 'false'}>{s.name}</button>
-                ))}
-                <button class="copy-btn card-copy mono" data-copy="code" aria-label="Copy code">⧉ copy</button>
-              </div>
-              {surfaces.map((s, i) => (
-                <pre class={`code-panel ${i === 0 ? "on" : ""}`} data-panel={s.id} data-install={s.install}>{s.code}</pre>
-              ))}
-            </div>
-            <p class="surf-note mono">Python · TypeScript · CLI · <span>+ MCP server</span></p>
-          </div>
+      <div class="hero-code reveal">
+        <div class="install">
+          <code class="install-cmd mono" id="install-cmd">pip install mitos</code>
+          <button class="hcopy mono" data-copy="install" type="button" aria-label="Copy install command">⧉ copy</button>
         </div>
-      </section>
-
-      <!-- THE DIVISION (signature centerpiece) -->
-      <section class="division-section" id="swarm">
-        <div class="container division-head reveal">
-          <h2 class="division-h">Most sandboxes cold-boot. <span class="division-h-dim">mitos forks a running one.</span></h2>
-          <p class="division-lede">
-            A fork copies the <em>live</em> VM: memory, running processes, open files
-            and all. The copies share the original's pages and only pay for what they
-            change, so eight forks cost about 3&nbsp;MiB each instead of eight whole VMs.
-            Keep the one that worked, kill the rest.
-          </p>
-        </div>
-
-        <div class="division-stage reveal" id="division">
-          <svg class="division-svg" viewBox="0 0 1000 400" preserveAspectRatio="xMidYMid meet" role="img" aria-label="One running microVM forking into eight isolated subagent sandboxes">
-            <!-- division paths: parent → each daughter -->
-            <g class="d-paths">
-              {daughters.map((n) => (
-                <path class="d-path" style={`--i:${n.i}`} d={`M232 200 C 470 200 545 ${n.y} 762 ${n.y}`} />
-              ))}
-            </g>
-            <!-- daughters: a sandbox node -->
-            {daughters.map((n) => (
-              <g class="daughter" style={`--i:${n.i}`}>
-                <rect x="762" y={n.y - 17} width="156" height="34" rx="8" />
-                <circle class="core" cx="782" cy={n.y} r="3.5" />
-                <text x="797" y={n.y + 4}>vm·0.{n.i + 1}</text>
-              </g>
+        <div class="card">
+          <div class="card-tabs" role="tablist">
+            {surfaces.map((s, i) => (
+              <button class={`tab mono ${i === 0 ? 'on' : ''}`} data-tab={s.id} role="tab" aria-selected={i === 0 ? 'true' : 'false'}>{s.name}</button>
             ))}
-            <!-- parent node (the fork primitive — carries the accent) -->
-            <g class="parent">
-              <rect class="parent-box" x="84" y="172" width="148" height="56" rx="10" />
-              <circle class="parent-core" cx="106" cy="200" r="4" />
-              <text x="124" y="205">vm·0</text>
-            </g>
-          </svg>
-
-          <div class="division-meta mono">
-            <button class="run-btn" id="run-fork" type="button" aria-label="Replay the fork">▷ Run <span class="run-call">sb.fork(8)</span></button>
-            <span class="dm-out">→ 8 subagents · <span class="dm-ms">~27&nbsp;ms</span> · +3&nbsp;MiB each</span>
+            <button class="hcopy card-copy mono" data-copy="code" type="button" aria-label="Copy code">⧉ copy</button>
           </div>
-        </div>
-
-        <div class="container division-foot reveal">
-          <div class="division-stats">
-            <div><span class="sv mono">~27 ms</span><span class="sl">per fork</span></div>
-            <div><span class="sv mono">~3 MiB</span><span class="sl">per subagent</span></div>
-            <div><span class="sv mono">N-way</span><span class="sl">live fork</span></div>
-          </div>
-          <p class="division-uses mono">Parallel attempts · RL rollouts · test-time scaling · multi-agent evals</p>
-        </div>
-      </section>
-
-      <!-- WHY HOSTED -->
-      <section class="hosted" id="hosted">
-        <div class="container hosted-inner reveal">
-          <h2 class="section-title">Milliseconds, without running the cluster yourself</h2>
-          <p class="section-lede">
-            We run the engine so you don’t babysit a fleet of bare-metal nodes. It’s the
-            same Apache-2.0 engine you can <a href={GITHUB} target="_blank" rel="noopener">self-host</a>,
-            so if you ever want out, you just leave.
-          </p>
-          <div class="hosted-grid">
-            {hostedItems.map((it) => (
-              <div class="hosted-item"><h4>{it.h}</h4><p>{it.p}</p></div>
-            ))}
-          </div>
-          <a class="btn btn-primary" href={SIGNUP}>Start building</a>
-        </div>
-      </section>
-
-      <!-- HOW IT WORKS -->
-      <section class="how container" id="how">
-        <h2 class="section-title reveal">From one computer to a swarm in three calls</h2>
-        <div class="steps">
-          {steps.map((s) => (
-            <div class="step reveal">
-              <div class="step-head"><span class="step-n mono">{s.n}</span><h3>{s.title}</h3></div>
-              <p>{s.body}</p>
-              <pre class="code-block mono">{s.code}</pre>
-            </div>
+          {surfaces.map((s, i) => (
+            <pre class={`code-panel mono ${i === 0 ? 'on' : ''}`} data-panel={s.id} data-install={s.install}>{s.code}</pre>
           ))}
         </div>
-      </section>
+        <p class="surf-note mono">Python · TypeScript · CLI · <span>+ MCP server</span></p>
+      </div>
+    </div>
 
-      <!-- COMPARISON -->
-      <section class="compare container" id="compare">
-        <h2 class="section-title reveal">Nobody else does both</h2>
-        <p class="section-lede reveal">
-          The runtimes that can fork a running VM are closed and hosted-only. The open
-          ones can’t live-fork. mitos does both, and “open” here means Apache&nbsp;2.0 with
-          the real engine on GitHub, not a teaser.
-          <span class="muted">Competitor capabilities from their public docs, not a head-to-head benchmark.</span>
-        </p>
-        <div class="table-wrap reveal">
-          <table class="comp-table">
-            <thead>
-              <tr>
-                <th>Capability</th>
-                {compCols.map((c, i) => <th class={i === 0 ? 'own' : ''}>{c}</th>)}
-              </tr>
-            </thead>
-            <tbody>
-              {compRows.map((r) => (
-                <tr>
-                  <td class="feat">{r.feat}</td>
-                  {r.cells.map((cell, i) => (
-                    <td class={i === 0 ? 'own' : ''}>
-                      <span class={`mk mk-${cell.s}`}>{cell.s === 'y' ? '✓' : cell.s === 'n' ? '✗' : '◐'}</span>
-                      {cell.t && <span class="ct">{cell.t}</span>}
-                    </td>
-                  ))}
-                </tr>
+    <!-- TRUST STRIP -->
+    <div class="container trust reveal">
+      <span>Apache&nbsp;2.0</span>
+      {showStars && <span><a href={GITHUB} target="_blank" rel="noopener">★ {stars!.toLocaleString()} on GitHub</a></span>}
+      {!showStars && <span><a href={GITHUB} target="_blank" rel="noopener">Open source on GitHub</a></span>}
+      <span>~27&nbsp;ms per fork</span>
+      <span>~3&nbsp;MiB per subagent</span>
+      <span>microVM isolated</span>
+    </div>
+  </section>
+
+  <!-- THE DIVISION -->
+  <section class="division-section" id="swarm">
+    <div class="container division-head reveal">
+      <h2 class="division-h">Most sandboxes cold-boot or restore a snapshot.<br /><span class="division-h-hl">mitos forks the running machine.</span></h2>
+      <p class="division-lede">
+        A fork copies the <em>live</em> VM: memory, running processes, open files and all.
+        Daughters share the parent's pages copy-on-write and only pay for what they change,
+        so eight forks cost about 3&nbsp;MiB each instead of eight whole VMs. The parent keeps
+        running. Keep the one that worked, kill the rest.
+      </p>
+    </div>
+
+    <div class="division-stage reveal" id="division">
+      <svg class="fan-svg" viewBox="0 0 1000 400" preserveAspectRatio="xMidYMid meet" role="img" aria-label="One running microVM forking into eight isolated subagent sandboxes">
+        <g class="d-paths">
+          {daughters.map((n) => (
+            <path class="d-path" style={`--i:${n.i}`} d={`M232 200 C 470 200 545 ${n.y} 762 ${n.y}`} />
+          ))}
+        </g>
+        {daughters.map((n) => (
+          <g class="fan-daughter" style={`--i:${n.i}`}>
+            <rect x="762" y={n.y - 17} width="170" height="34" rx="8" />
+            <circle class="fan-core" cx="784" cy={n.y} r="3.5" />
+            <text x="800" y={n.y + 4}>vm·0.{n.i + 1}</text>
+          </g>
+        ))}
+        <g class="fan-parent">
+          <rect class="fan-parent-box" x="74" y="172" width="158" height="56" rx="10" />
+          <circle class="fan-parent-core" cx="98" cy="200" r="4.5" />
+          <text x="118" y="205">vm·0</text>
+        </g>
+      </svg>
+
+      <div class="division-meta mono">
+        <button class="run-btn" id="run-fork" type="button" aria-label="Replay the fork">▷ Run <span class="run-call">sb.fork(8)</span></button>
+        <span class="dm-out">→ 8 subagents · <span class="dm-hl">~27&nbsp;ms</span> · +3&nbsp;MiB each</span>
+      </div>
+    </div>
+
+    <div class="container division-foot reveal">
+      <div class="division-stats">
+        <div><span class="sv mono">~27 ms</span><span class="sl">per fork</span></div>
+        <div><span class="sv mono">~3 MiB</span><span class="sl">per subagent</span></div>
+        <div><span class="sv mono">N-way</span><span class="sl">live fork</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- USE CASES -->
+  <section class="usecases container" id="usecases">
+    <h2 class="section-title reveal">Built for the work that needs many of them</h2>
+    <p class="section-lede reveal">The category moved past "run one sandbox safely." The work that is growing wants a warm machine to explode into a swarm and collapse back down.</p>
+    <div class="uc-grid">
+      {useCases.map((u) => (
+        <div class="uc-item reveal"><h4>{u.h}</h4><p>{u.p}</p></div>
+      ))}
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how container" id="how">
+    <h2 class="section-title reveal">From one computer to a swarm in three calls</h2>
+    <div class="steps">
+      {steps.map((s) => (
+        <div class="step reveal">
+          <div class="step-head"><span class="step-n mono">{s.n}</span><h3>{s.title}</h3></div>
+          <p>{s.body}</p>
+          <pre class="code-block mono">{s.code}</pre>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- MANAGED + OSS -->
+  <section class="hosted" id="hosted">
+    <div class="container hosted-inner reveal">
+      <h2 class="section-title">We run the cluster. You call the API.</h2>
+      <p class="section-lede">
+        We keep the bare-metal fleet alive so you do not. It is the same Apache-2.0 engine
+        you can <a href={GITHUB} target="_blank" rel="noopener">run yourself</a>, which makes
+        open source your insurance, not your homework.
+      </p>
+      <div class="hosted-grid">
+        {hostedItems.map((it) => (
+          <div class="hosted-item"><h4>{it.h}</h4><p>{it.p}</p></div>
+        ))}
+      </div>
+      <a class="btn btn-primary" href={SIGNUP}>Start building</a>
+    </div>
+  </section>
+
+  <!-- COMPARISON -->
+  <section class="compare container" id="compare">
+    <h2 class="section-title reveal">Live fork, microVM isolation, and actually open</h2>
+    <p class="section-lede reveal">
+      Some runtimes fork. Some are open. Some isolate with a real kernel. mitos is the one
+      that does all of it at once.
+      <span class="muted">Capabilities from each project's public docs, not a head-to-head benchmark.</span>
+    </p>
+    <div class="table-wrap reveal">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>Capability</th>
+            {compCols.map((c, i) => <th class={i === 0 ? 'own' : ''}>{c}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {compRows.map((r) => (
+            <tr>
+              <td class="feat">{r.feat}</td>
+              {r.cells.map((cell, i) => (
+                <td class={i === 0 ? 'own' : ''}>
+                  <span class={`mk mk-${cell.s}`}>{cell.s === 'y' ? '✓' : cell.s === 'n' ? '✗' : '◐'}</span>
+                  {cell.t && <span class="ct">{cell.t}</span>}
+                </td>
               ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
 
-      <!-- FINAL CTA -->
-      <section class="final-cta">
-        <div class="container reveal">
-          <h2>Give your agents a swarm of computers.</h2>
-          <div class="hero-actions center">
-            <a class="btn btn-primary btn-lg" href={SIGNUP}>Start building</a>
-            <a class="btn btn-ghost btn-lg" href={DOCS}>Read the docs →</a>
-          </div>
-        </div>
-      </section>
-    </main>
+  <!-- SECURITY -->
+  <section class="security container" id="security">
+    <div class="sec-inner reveal">
+      <h2 class="section-title">Every fork is a real microVM, not a shared kernel</h2>
+      <p class="section-lede">
+        Each subagent runs in its own Firecracker microVM with its own kernel, isolated by KVM.
+        That is the boundary you want when an agent runs code it wrote itself or pulled from the
+        web. A prompt injection that turns into a shell stays inside one disposable fork, not your
+        host and not the other agents.
+      </p>
+    </div>
+  </section>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-      <div class="container footer-grid">
-        <div class="footer-brand">
-          <a class="brand" href="/"><Mark class="brand-mark" /> mitos</a>
-          <p class="muted">Fork running microVMs into agent swarms. Open source, or fully hosted.</p>
-          <p class="muted mono oss-badge">Open source · Apache 2.0 · <a href={GITHUB} target="_blank" rel="noopener">GitHub ↗</a></p>
-        </div>
-        <div class="footer-col">
-          <h5>Product</h5>
-          <a href="#how">How it works</a>
-          <a href="/benchmarks/">Benchmarks</a>
-          <a href="/pricing/">Pricing</a>
-          <a href="#compare">Comparison</a>
-        </div>
-        <div class="footer-col">
-          <h5>Developers</h5>
-          <a href={DOCS}>Docs</a>
-          <a href="/quickstart/">Quickstart</a>
-          <a href="/architecture/">Architecture</a>
-          <a href={GITHUB} target="_blank" rel="noopener">GitHub</a>
-        </div>
-        <div class="footer-col">
-          <h5>Company</h5>
-          <a href="/blog/">Blog</a>
-          <a href={`${GITHUB}/blob/main/SECURITY.md`} target="_blank" rel="noopener">Security</a>
-          <a href={`${GITHUB}/blob/main/LICENSE`} target="_blank" rel="noopener">License</a>
-        </div>
+  <!-- ECONOMICS -->
+  <section class="econ container" id="pricing-teaser">
+    <div class="econ-inner reveal">
+      <h2 class="section-title">Pay for divergence, not duplication</h2>
+      <p class="section-lede">
+        Fork a thousand subagents and they share the parent's memory until they write. You pay for
+        the pages they actually dirty, roughly 3&nbsp;MiB each, not a thousand whole VMs. Hard spend
+        caps are on by default, so a runaway loop cannot hand you a surprise five-figure bill.
+      </p>
+      <a class="btn btn-ghost" href="/pricing/">See pricing</a>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq container" id="faq">
+    <h2 class="section-title reveal">Questions worth asking</h2>
+    <div class="faq-list reveal">
+      {faqs.map((f) => (
+        <details class="faq-item">
+          <summary>{f.q}</summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="final-cta">
+    <div class="container reveal">
+      <h2>Give your agents a swarm of computers.</h2>
+      <div class="hero-actions center">
+        <a class="btn btn-primary btn-lg" href={SIGNUP}>Start building</a>
+        <a class="btn btn-ghost btn-lg" href={DOCS}>Read the docs</a>
       </div>
-      <div class="container footer-bottom">
-        <span class="muted mono">© 2026 mitos · Apache 2.0</span>
-      </div>
-    </footer>
+    </div>
+  </section>
+</Site>
 
-    <script>
-      // Hero code tabs: switch panels + retarget copy + swap install command.
-      const tabs = document.querySelectorAll('.tab');
-      const panels = document.querySelectorAll('.code-panel');
-      const installCmd = document.getElementById('install-cmd');
-      tabs.forEach((tab) => {
-        tab.addEventListener('click', () => {
-          const id = (tab as HTMLElement).dataset.tab;
-          tabs.forEach((t) => {
-            const on = t === tab;
-            t.classList.toggle('on', on);
-            t.setAttribute('aria-selected', String(on));
-          });
-          panels.forEach((p) => {
-            const on = (p as HTMLElement).dataset.panel === id;
-            p.classList.toggle('on', on);
-            if (on && installCmd && (p as HTMLElement).dataset.install) installCmd.textContent = (p as HTMLElement).dataset.install;
-          });
-        });
+<script>
+  // Hero code tabs: switch panels + swap install command.
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.code-panel');
+  const installCmd = document.getElementById('install-cmd');
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const id = (tab as HTMLElement).dataset.tab;
+      tabs.forEach((t) => { const on = t === tab; t.classList.toggle('on', on); t.setAttribute('aria-selected', String(on)); });
+      panels.forEach((p) => {
+        const on = (p as HTMLElement).dataset.panel === id;
+        p.classList.toggle('on', on);
+        if (on && installCmd && (p as HTMLElement).dataset.install) installCmd.textContent = (p as HTMLElement).dataset.install;
       });
+    });
+  });
 
-      // Copy buttons: install command, or the active code panel.
-      document.querySelectorAll('.copy-btn').forEach((btn) => {
-        btn.addEventListener('click', async () => {
-          let text = '';
-          if ((btn as HTMLElement).dataset.copy === 'install') {
-            text = (installCmd && installCmd.textContent) || '';
-          } else {
-            const active = document.querySelector('.code-panel.on');
-            text = (active && (active as HTMLElement).innerText) || '';
-          }
-          try {
-            await navigator.clipboard.writeText(text.trim());
-            const prev = btn.textContent;
-            btn.textContent = '✓ copied';
-            btn.classList.add('copied');
-            setTimeout(() => { btn.textContent = prev; btn.classList.remove('copied'); }, 1400);
-          } catch (e) {}
-        });
-      });
+  // Hero copy buttons (install command or active code panel).
+  document.querySelectorAll('.hcopy').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      let text = '';
+      if ((btn as HTMLElement).dataset.copy === 'install') text = (installCmd && installCmd.textContent) || '';
+      else { const active = document.querySelector('.code-panel.on'); text = (active && (active as HTMLElement).innerText) || ''; }
+      try {
+        await navigator.clipboard.writeText(text.trim());
+        const prev = btn.textContent; btn.textContent = '✓ copied'; btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = prev; btn.classList.remove('copied'); }, 1400);
+      } catch (e) {}
+    });
+  });
 
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const noIO = ('IntersectionObserver' in window) === false;
+  // The Division fan-out: replay on first view and on button click.
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const noIO = ('IntersectionObserver' in window) === false;
+  const division = document.getElementById('division');
+  const runBtn = document.getElementById('run-fork');
+  if (division && !reduceMotion) {
+    const play = () => { division.classList.remove('run'); void (division as HTMLElement).offsetWidth; division.classList.add('run'); };
+    if (noIO) { play(); } else {
+      const vio = new IntersectionObserver((entries) => { entries.forEach((e) => { if (e.isIntersecting) { play(); vio.unobserve(division); } }); }, { threshold: 0.4 });
+      vio.observe(division);
+    }
+    if (runBtn) runBtn.addEventListener('click', play);
+  }
+</script>
 
-      // Scroll-reveal.
-      const reveals = document.querySelectorAll('.reveal');
-      if (reduceMotion || noIO) {
-        reveals.forEach((el) => el.classList.add('in'));
-      } else {
-        const io = new IntersectionObserver((entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) { entry.target.classList.add('in'); io.unobserve(entry.target); }
-          });
-        }, { threshold: 0.18, rootMargin: '0px 0px -8% 0px' });
-        reveals.forEach((el) => io.observe(el));
-      }
+<style>
+  /* HERO */
+  .hero { padding: 84px 0 0; }
+  .hero-grid { display: grid; grid-template-columns: 1fr 1.06fr; gap: 52px; align-items: center; }
+  .hero-copy h1 { font-size: clamp(40px, 5vw, 64px); line-height: 1.02; letter-spacing: var(--track-display); font-weight: 400; margin: 0 0 22px; }
+  .lede { font-size: 18.5px; color: var(--ink-2); max-width: 27em; margin: 0 0 14px; line-height: 1.5; }
+  .lede strong { color: var(--ink); font-weight: 500; }
+  .lede .hl { color: var(--cyan); font-weight: 500; }
+  .lede-sub { font-size: 15px; color: var(--ink-2); margin: 0 0 28px; }
+  .lede-sub strong { color: var(--magenta); font-weight: 500; }
+  .hero-actions { display: flex; gap: 12px; margin-bottom: 22px; flex-wrap: wrap; }
+  .hero-actions.center { justify-content: center; }
+  .spec { font-size: 12.5px; color: var(--ink-3); margin: 0; letter-spacing: -.01em; }
 
-      // The Division: a quiet, replayable division. Resting state shows the
-      // completed schematic (graceful for no-JS / reduced-motion); adding `.run`
-      // redraws it once. Plays once on first view; replays on button click.
-      const division = document.getElementById('division');
-      const runBtn = document.getElementById('run-fork');
-      if (division && !reduceMotion) {
-        const play = () => {
-          division.classList.remove('run');
-          void (division as HTMLElement).offsetWidth; // force reflow to restart animation
-          division.classList.add('run');
-        };
-        if (noIO) { play(); } else {
-          const vio = new IntersectionObserver((entries) => {
-            entries.forEach((e) => { if (e.isIntersecting) { play(); vio.unobserve(division); } });
-          }, { threshold: 0.4 });
-          vio.observe(division);
-        }
-        if (runBtn) runBtn.addEventListener('click', play);
-      }
+  /* hero code card */
+  .install { display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 1px solid var(--hairline); border-radius: var(--r-md); padding: 10px 12px 10px 14px; margin-bottom: 12px; background: var(--field-1); }
+  .install-cmd { font-size: 13px; color: var(--ink); overflow-x: auto; white-space: nowrap; }
+  .install-cmd::before { content: '$ '; color: var(--magenta); }
+  .hcopy { border: 1px solid var(--hairline); border-radius: 6px; padding: 5px 10px; font-size: 11px; color: var(--ink-2); background: transparent; cursor: pointer; transition: color .12s var(--ease), border-color .12s var(--ease); white-space: nowrap; }
+  .hcopy:hover { color: var(--ink); border-color: var(--hairline-strong); }
+  .hcopy.copied { color: var(--green); border-color: var(--green); }
+  .card { background: var(--field-1); border: 1px solid var(--hairline); border-radius: var(--r-lg); overflow: hidden; }
+  .card-tabs { display: flex; align-items: center; border-bottom: 1px solid var(--hairline); background: var(--field-2); }
+  .tab { font-size: 12px; color: var(--ink-2); padding: 11px 16px; border: none; border-bottom: 1px solid transparent; background: transparent; cursor: pointer; transition: color .12s var(--ease); }
+  .tab:hover { color: var(--ink); }
+  .tab.on { color: var(--ink); border-bottom-color: var(--magenta); }
+  .card-copy { margin-left: auto; margin-right: 8px; }
+  .code-panel { display: none; margin: 0; padding: 18px 20px; min-height: 196px; font-size: 12.5px; line-height: 1.85; color: var(--ink); overflow-x: auto; }
+  .code-panel.on { display: block; }
+  .surf-note { text-align: center; color: var(--ink-3); font-size: 12px; margin: 14px 0 0; }
+  .surf-note span { color: var(--ink-2); }
 
-      // Nav hairline on scroll.
-      const nav = document.getElementById('nav');
-      const onScroll = () => { if (nav) nav.classList.toggle('scrolled', window.scrollY > 8); };
-      onScroll();
-      window.addEventListener('scroll', onScroll, { passive: true });
-    </script>
+  /* TRUST STRIP */
+  .trust { display: flex; flex-wrap: wrap; gap: 10px 26px; align-items: center; justify-content: center; margin-top: 64px; padding: 18px 24px; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); font-family: var(--mono); font-size: 12.5px; color: var(--ink-3); }
+  .trust a { color: var(--ink-2); } .trust a:hover { color: var(--magenta); }
 
-    <style is:global>
-      :root {
-        /* Light & premium — warm paper, near-black ink, one restrained accent. */
-        --bg: #FBFBF9;            /* warm off-white canvas */
-        --surface: #FFFFFF;       /* raised panels */
-        --surface-2: #F6F6F3;     /* subtle fills (table head, code-step) */
-        --ink: #0A0A0A;           /* near-black text */
-        --ink-2: #3A3A38;         /* secondary text */
-        --muted: #6B6B66;         /* muted text */
-        --dim: #9A9A93;           /* faint text */
-        --border: rgba(10, 10, 10, 0.10);
-        --border-2: rgba(10, 10, 10, 0.14);
-        --border-strong: rgba(10, 10, 10, 0.22);
-        /* the one restrained accent — desaturated emerald, used only where it
-           carries meaning (the fork primitive · links · focus). No AI-purple. */
-        --accent: #0F7A5F;        /* deep emerald — "alive / go", on-brand for colony */
-        --accent-ink: #0B5A46;
-        --accent-soft: rgba(15, 122, 95, 0.10);
-        /* dark code island that floats on the light page */
-        --code-bg: #0E0F13;
-        --code-bg-2: #15171D;
-        --code-ink: #E7E8EC;
-        --code-dim: #8A8F9C;
-        --maxw: 1140px;
-        --mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-        --sans: 'Geist', system-ui, -apple-system, sans-serif;
-      }
-      * { box-sizing: border-box; }
-      html { scroll-behavior: smooth; scroll-padding-top: 84px; }
-      body {
-        margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans);
-        -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
-        line-height: 1.6; overflow-x: hidden;
-      }
-      ::selection { background: var(--accent-soft); color: var(--accent-ink); }
-      /* horizontal-only padding: using the `padding` shorthand here would reset
-         vertical padding to 0 on sections that are themselves `.container`
-         (.how, .compare), wiping their section padding. padding-inline keeps the
-         gutter without touching top/bottom. */
-      .container { max-width: var(--maxw); margin: 0 auto; padding-inline: 24px; }
-      .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
-      .muted { color: var(--muted); }
-      h1, h2, .section-title, .division-h, .final-cta h2 { text-wrap: balance; }
-      .lede, .section-lede, .division-lede, .step p, .hosted-item p { text-wrap: pretty; }
-      em { font-style: normal; border-bottom: 1px solid var(--border-strong); }
-      a { color: inherit; text-decoration: none; }
-      .section-lede a, .hosted-inner a:not(.btn) { color: var(--accent-ink); border-bottom: 1px solid var(--accent-soft); transition: border-color .15s ease; }
-      .section-lede a:hover, .hosted-inner a:not(.btn):hover { border-bottom-color: var(--accent); }
-      :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
-      .hl { color: var(--accent-ink); font-weight: 500; }
+  /* generic section heads (page-scoped, light display weight) */
+  .section-title { font-size: clamp(28px, 3.6vw, 42px); letter-spacing: var(--track-display); font-weight: 400; margin: 0 0 18px; }
+  .section-lede { color: var(--ink-2); font-size: 17px; max-width: 46em; margin: 0 0 48px; }
+  .section-lede .muted { display: block; font-size: 13px; margin-top: 8px; color: var(--ink-3); }
+  .section-lede a:not(.btn) { color: var(--cyan); border-bottom: 1px solid color-mix(in srgb, var(--cyan) 30%, transparent); }
+  .section-lede a:not(.btn):hover { border-bottom-color: var(--cyan); }
 
-      main, .nav, .footer { position: relative; z-index: 1; }
+  /* THE DIVISION */
+  .division-section { border-top: 1px solid var(--hairline); padding: 104px 0 96px; }
+  .division-head { text-align: center; max-width: 760px; margin: 0 auto; }
+  .division-h { font-size: clamp(28px, 4vw, 44px); letter-spacing: var(--track-display); margin: 0 0 18px; line-height: 1.08; font-weight: 400; text-wrap: balance; }
+  .division-h-hl { color: var(--magenta); }
+  .division-lede { color: var(--ink-2); font-size: 16.5px; margin: 0 auto; max-width: 42em; text-wrap: pretty; line-height: 1.55; }
+  .division-lede em { font-style: normal; color: var(--cyan); }
 
-      /* reveal */
-      .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s cubic-bezier(.2,.6,.2,1), transform .6s cubic-bezier(.2,.6,.2,1); }
-      .reveal.in { opacity: 1; transform: none; }
-      .steps .step:nth-child(2) { transition-delay: .08s; }
-      .steps .step:nth-child(3) { transition-delay: .16s; }
-      @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+  .division-stage { position: relative; max-width: 940px; margin: 48px auto 14px; padding: 0 24px; }
+  .fan-svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .d-path { fill: none; stroke: color-mix(in srgb, var(--magenta) 55%, transparent); stroke-width: 1.2; filter: drop-shadow(0 0 3px color-mix(in srgb, var(--magenta) 60%, transparent)); stroke-dasharray: 1400; stroke-dashoffset: 0; }
+  .division-stage.run .d-path { stroke-dashoffset: 1400; animation: dDraw .72s cubic-bezier(.4,0,.2,1) forwards; animation-delay: calc(.05s * var(--i) + .18s); }
+  @keyframes dDraw { to { stroke-dashoffset: 0; } }
+  .fan-daughter rect { fill: var(--field-1); stroke: var(--hairline-strong); }
+  .fan-daughter .fan-core { fill: var(--cyan); filter: drop-shadow(0 0 4px var(--cyan)); }
+  .fan-daughter text { fill: var(--ink-2); font-family: var(--mono); font-size: 13px; }
+  .division-stage.run .fan-daughter { opacity: 0; transform: translateX(-8px); animation: dIn .42s cubic-bezier(.2,.8,.2,1) forwards; animation-delay: calc(.05s * var(--i) + .5s); }
+  @keyframes dIn { to { opacity: 1; transform: none; } }
+  .fan-parent-box { fill: var(--field-1); stroke: var(--magenta); stroke-width: 1.6; filter: drop-shadow(0 0 8px color-mix(in srgb, var(--magenta) 45%, transparent)); }
+  .fan-parent-core { fill: var(--magenta); filter: drop-shadow(0 0 6px var(--magenta)); }
+  .fan-parent text { fill: var(--ink); font-family: var(--mono); font-size: 14px; }
 
-      /* buttons */
-      .btn { display: inline-flex; align-items: center; gap: 8px; font-weight: 500; font-size: 14px; border-radius: 8px; padding: 9px 17px; border: 1px solid transparent; cursor: pointer; transition: background .14s ease, border-color .14s ease, transform .14s ease, box-shadow .14s ease, color .14s ease; white-space: nowrap; }
-      .btn-lg { padding: 12px 22px; font-size: 15px; }
-      .btn-primary { background: var(--ink); color: #fff; border-color: var(--ink); font-weight: 560; }
-      .btn-primary:hover { background: #1f1f1d; transform: translateY(-1px); box-shadow: 0 10px 24px -12px rgba(10,10,10,.5); }
-      .btn-ghost { background: transparent; color: var(--ink); border-color: var(--border-strong); }
-      .btn-ghost:hover { border-color: var(--ink); background: rgba(10,10,10,.03); transform: translateY(-1px); }
-      .btn:active { transform: translateY(0) scale(.985); }
+  .division-meta { position: absolute; left: 50%; bottom: -10px; transform: translateX(-50%); display: flex; gap: 12px; align-items: center; font-size: 12.5px; color: var(--ink-2); flex-wrap: wrap; justify-content: center; }
+  .run-btn { font-family: var(--mono); font-size: 12.5px; color: var(--magenta); background: transparent; border: 1px solid color-mix(in srgb, var(--magenta) 40%, transparent); border-radius: var(--r-sm); padding: 6px 12px; cursor: pointer; transition: border-color .14s var(--ease); }
+  .run-btn:hover { border-color: var(--magenta); }
+  .dm-out { color: var(--ink-3); }
+  .dm-hl { color: var(--cyan); }
+  .division-foot { text-align: center; margin-top: 40px; }
+  .division-stats { display: inline-flex; gap: 48px; }
+  .division-stats .sv { display: block; font-size: 24px; color: var(--ink); letter-spacing: -.03em; }
+  .division-stats .sl { font-size: 12px; color: var(--ink-3); }
+  @media (prefers-reduced-motion: reduce) { .division-stage .d-path { stroke-dashoffset: 0; } .division-stage .fan-daughter { opacity: 1; transform: none; } }
 
-      /* nav */
-      .nav { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(12px); background: rgba(251,251,249,.72); border-bottom: 1px solid transparent; transition: border-color .2s ease; }
-      .nav.scrolled { border-bottom-color: var(--border); }
-      .nav-inner { display: flex; align-items: center; gap: 32px; height: 64px; }
-      .brand { font-weight: 600; font-size: 17px; letter-spacing: -.02em; display: inline-flex; align-items: center; gap: 8px; color: var(--ink); }
-      .brand-mark { height: 18px; width: auto; --mark-bg: var(--bg); }
-      .nav-links { display: flex; gap: 26px; margin-right: auto; }
-      .nav-links a { color: var(--muted); font-size: 14px; }
-      .nav-links a:hover { color: var(--ink); }
-      .nav-cta { display: flex; align-items: center; gap: 16px; }
-      .ghost-link { color: var(--muted); font-size: 14px; }
-      .ghost-link:hover { color: var(--ink); }
+  /* USE CASES */
+  .uc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 1px solid var(--hairline); margin-top: 8px; }
+  .uc-item { padding: 26px 24px 24px; border-left: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); }
+  .uc-item:nth-child(3n+1) { border-left: none; padding-left: 0; }
+  .uc-item h4 { margin: 0 0 8px; font-size: 15px; font-weight: 500; color: var(--ink); }
+  .uc-item p { margin: 0; color: var(--ink-2); font-size: 14px; line-height: 1.55; }
 
-      /* hero */
-      .hero { padding: 100px 0 92px; }
-      .hero-grid { display: grid; grid-template-columns: 1fr 1.06fr; gap: 52px; align-items: center; }
-      h1 { font-size: clamp(38px, 4.8vw, 58px); line-height: 1.04; letter-spacing: -.04em; font-weight: 600; margin: 0 0 22px; color: var(--ink); }
-      .lede { font-size: 18.5px; color: var(--ink-2); max-width: 25em; margin: 0 0 30px; line-height: 1.5; }
-      .lede strong { color: var(--ink); font-weight: 600; }
-      .hero-actions { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
-      .hero-actions.center { justify-content: center; }
-      .spec { font-size: 12.5px; color: var(--dim); margin: 0; letter-spacing: -.01em; }
+  /* HOW */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 56px; align-items: stretch; margin-top: 8px; }
+  .step { display: flex; flex-direction: column; padding: 30px 0 0; border-top: 1px solid var(--hairline-strong); transition: border-color .2s var(--ease); }
+  .step:hover { border-top-color: var(--magenta); }
+  .step-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; }
+  .step-n { color: var(--magenta); font-size: 13px; }
+  .step h3 { margin: 0; font-size: 18px; font-weight: 500; color: var(--ink); letter-spacing: -.01em; }
+  .step p { color: var(--ink-2); font-size: 14.5px; line-height: 1.6; margin: 0 0 26px; }
+  .step .code-block { margin-top: auto; }
 
-      /* hero code — a polished dark island on the light page */
-      .install { display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 1px solid var(--border); border-radius: 9px; padding: 10px 12px 10px 14px; margin-bottom: 12px; background: var(--surface); box-shadow: 0 1px 2px rgba(10,10,10,.04); }
-      .install-cmd { font-size: 13px; color: var(--ink); overflow-x: auto; white-space: nowrap; }
-      .install-cmd::before { content: '$ '; color: var(--accent-ink); }
-      .copy-btn { border: 1px solid var(--border); border-radius: 6px; padding: 5px 10px; font-size: 11px; color: var(--muted); background: transparent; cursor: pointer; transition: all .12s ease; white-space: nowrap; }
-      .copy-btn:hover { color: var(--ink); border-color: var(--border-strong); }
-      .copy-btn.copied { color: var(--accent-ink); border-color: var(--accent); }
-      .card { background: var(--code-bg); border: 1px solid rgba(255,255,255,.07); border-radius: 12px; overflow: hidden; box-shadow: 0 28px 60px -28px rgba(10,12,20,.5), 0 4px 12px -6px rgba(10,12,20,.25); }
-      .card-tabs { display: flex; align-items: center; border-bottom: 1px solid rgba(255,255,255,.08); background: var(--code-bg-2); }
-      .tab { font-size: 12px; color: var(--code-dim); padding: 11px 16px; border: none; border-bottom: 1px solid transparent; background: transparent; cursor: pointer; transition: color .12s ease; }
-      .tab:hover { color: var(--code-ink); }
-      .tab.on { color: #fff; border-bottom-color: var(--accent); }
-      .card-copy { margin-left: auto; margin-right: 8px; color: var(--code-dim); border-color: rgba(255,255,255,.14); }
-      .card-copy:hover { color: #fff; border-color: rgba(255,255,255,.3); }
-      .code-panel { display: none; margin: 0; padding: 18px 20px; min-height: 200px; font-family: var(--mono); font-size: 12.5px; line-height: 1.85; color: var(--code-ink); overflow-x: auto; }
-      .code-panel.on { display: block; }
-      .surf-note { text-align: center; color: var(--dim); font-size: 12px; margin: 14px 0 0; }
-      .surf-note span { color: var(--muted); }
+  /* MANAGED + OSS */
+  .hosted { border-top: 1px solid var(--hairline); }
+  .hosted-inner { text-align: center; }
+  .hosted-inner .section-lede { margin-left: auto; margin-right: auto; }
+  .hosted-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin: 8px 0 42px; text-align: left; border-top: 1px solid var(--hairline); }
+  .hosted-item { padding: 26px 24px 6px; border-left: 1px solid var(--hairline); }
+  .hosted-item:first-child { border-left: none; padding-left: 0; }
+  .hosted-item h4 { margin: 0 0 8px; font-size: 15px; font-weight: 500; color: var(--ink); }
+  .hosted-item p { margin: 0; color: var(--ink-2); font-size: 14px; line-height: 1.55; }
 
-      /* sections */
-      section { padding: 124px 0; }
-      .section-title { font-size: clamp(28px, 4vw, 41px); letter-spacing: -.035em; font-weight: 600; margin: 0 0 18px; color: var(--ink); }
-      .section-lede { color: var(--muted); font-size: 17px; max-width: 46em; margin: 0 0 48px; }
-      .section-lede .muted { display: block; font-size: 13px; margin-top: 8px; color: var(--dim); }
+  /* COMPARISON */
+  .table-wrap { overflow-x: auto; border: 1px solid var(--hairline); border-radius: var(--r-lg); }
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 760px; }
+  .comp-table th, .comp-table td { text-align: left; padding: 14px 18px; border-bottom: 1px solid var(--hairline); }
+  .comp-table thead th { background: var(--field-1); color: var(--ink-3); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+  .comp-table tbody tr:last-child td { border-bottom: none; }
+  .comp-table tbody tr:hover td { background: rgba(255,255,255,.02); }
+  .comp-table .feat { color: var(--ink-2); }
+  .comp-table .mk { font-size: 15px; }
+  .mk-y { color: var(--magenta); } .mk-n { color: var(--ink-3); } .mk-p { color: var(--ink-2); }
+  .comp-table .ct { color: var(--ink-3); font-size: 12px; margin-left: 8px; font-family: var(--mono); }
+  .comp-table .own { color: var(--ink); }
+  .comp-table thead th.own { color: var(--magenta); text-align: center; }
+  .comp-table thead th:not(:first-child), .comp-table td:not(.feat) { text-align: center; }
+  .comp-table .own .mk-y { color: var(--magenta); }
 
-      /* THE DIVISION — quiet precise schematic */
-      .division-section { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 124px 0 116px; background: linear-gradient(180deg, var(--surface), var(--bg)); }
-      .division-head { text-align: center; max-width: 720px; margin: 0 auto; }
-      .division-h { font-size: clamp(30px,4.4vw,46px); letter-spacing: -.035em; margin: 0 0 16px; line-height: 1.05; font-weight: 600; text-wrap: balance; color: var(--ink); }
-      .division-h-dim { color: var(--muted); }
-      .division-lede { color: var(--muted); font-size: 17px; margin: 0 auto; max-width: 40em; text-wrap: pretty; }
-      .division-lede em { border-bottom: 1px solid var(--border-strong); }
+  /* SECURITY + ECON */
+  .security, .econ { border-top: 1px solid var(--hairline); }
+  .sec-inner, .econ-inner { max-width: 720px; }
+  .econ-inner .section-lede { margin-bottom: 26px; }
 
-      .division-stage { position: relative; max-width: 940px; margin: 46px auto 12px; padding: 0 24px; }
-      .division-svg { width: 100%; height: auto; display: block; overflow: visible; }
+  /* FAQ */
+  .faq-list { max-width: 760px; border-top: 1px solid var(--hairline); }
+  .faq-item { border-bottom: 1px solid var(--hairline); }
+  .faq-item summary { list-style: none; cursor: pointer; padding: 20px 0; font-size: 16px; color: var(--ink); display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::after { content: '+'; color: var(--magenta); font-family: var(--mono); font-size: 18px; }
+  .faq-item[open] summary::after { content: '−'; }
+  .faq-item p { margin: 0 0 22px; color: var(--ink-2); font-size: 14.5px; line-height: 1.6; max-width: 60em; }
 
-      /* division paths — hairline ink */
-      .d-path { fill: none; stroke: rgba(10,10,10,.22); stroke-width: 1.1; stroke-dasharray: 1400; stroke-dashoffset: 0; }
-      .division-stage.run .d-path { stroke-dashoffset: 1400; animation: dDraw .72s cubic-bezier(.4,0,.2,1) forwards; animation-delay: calc(.05s * var(--i) + .18s); }
-      @keyframes dDraw { to { stroke-dashoffset: 0; } }
+  /* FINAL CTA */
+  .final-cta { text-align: center; border-top: 1px solid var(--hairline); }
+  .final-cta h2 { font-size: clamp(30px, 5vw, 52px); letter-spacing: var(--track-display); margin: 0 0 28px; font-weight: 400; }
 
-      /* daughters (resting = visible) */
-      .daughter rect { fill: var(--surface); stroke: var(--border-2); }
-      .daughter .core { fill: var(--dim); }
-      .daughter text { fill: var(--ink-2); font-family: var(--mono); font-size: 13px; }
-      .division-stage.run .daughter { opacity: 0; transform: translateX(-8px); animation: dIn .42s cubic-bezier(.2,.8,.2,1) forwards; animation-delay: calc(.05s * var(--i) + .5s); }
-      @keyframes dIn { to { opacity: 1; transform: none; } }
-
-      /* parent node — the fork primitive carries the accent */
-      .parent-box { fill: var(--surface); stroke: var(--accent); stroke-width: 1.6; }
-      .parent-core { fill: var(--accent); }
-      .parent text { fill: var(--ink); font-family: var(--mono); font-size: 14px; }
-      .division-stage.run .parent-box { animation: dPulse .9s ease-out; transform-box: fill-box; transform-origin: center; }
-      @keyframes dPulse { 0% { transform: scale(1); } 26% { transform: scale(1.04); } 100% { transform: scale(1); } }
-
-      .division-meta { position: absolute; left: 50%; bottom: -8px; transform: translateX(-50%); display: flex; gap: 12px; align-items: center; font-size: 12.5px; color: var(--muted); flex-wrap: wrap; justify-content: center; }
-      .run-btn { font-family: var(--mono); font-size: 12.5px; color: var(--accent-ink); background: var(--accent-soft); border: 1px solid var(--accent-soft); border-radius: 7px; padding: 6px 12px; cursor: pointer; transition: border-color .14s ease, background .14s ease; }
-      .run-btn:hover { border-color: var(--accent); }
-      .run-call { color: var(--accent-ink); }
-      .dm-out { color: var(--dim); }
-      .dm-ms { color: var(--accent-ink); }
-
-      .division-foot { text-align: center; margin-top: 38px; }
-      .division-stats { display: inline-flex; gap: 48px; margin-bottom: 18px; }
-      .division-stats .sv { display: block; font-size: 24px; color: var(--ink); letter-spacing: -.03em; }
-      .division-stats .sl { font-size: 12px; color: var(--muted); }
-      .division-uses { color: var(--dim); font-size: 12px; margin: 0; }
-      @media (prefers-reduced-motion: reduce) {
-        .division-stage .d-path { stroke-dashoffset: 0; }
-        .division-stage .daughter { opacity: 1; transform: none; }
-      }
-
-      /* hosted */
-      .hosted { background: var(--surface); border-bottom: 1px solid var(--border); }
-      .hosted-inner { text-align: center; }
-      .hosted-inner .section-lede { margin-left: auto; margin-right: auto; }
-      .hosted-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; margin: 8px 0 42px; text-align: left; border-top: 1px solid var(--border); }
-      .hosted-item { padding: 26px 24px 6px; border-left: 1px solid var(--border); }
-      .hosted-item:first-child { border-left: none; padding-left: 0; }
-      .hosted-item h4 { margin: 0 0 8px; font-size: 15px; font-weight: 600; color: var(--ink); }
-      .hosted-item p { margin: 0; color: var(--muted); font-size: 14px; }
-
-      /* how — rule-divided gallery; equal-height columns with code blocks
-         anchored to a shared baseline so the row reads as a clean grid */
-      .steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 0 56px; align-items: stretch; margin-top: 8px; }
-      .step { display: flex; flex-direction: column; padding: 30px 0 0; border-top: 1px solid var(--border-2); transition: border-color .2s ease; }
-      .step:hover { border-top-color: var(--ink); }
-      .step-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; }
-      .step-n { color: var(--accent-ink); font-size: 13px; font-weight: 600; }
-      .step h3 { margin: 0; font-size: 18px; font-weight: 600; color: var(--ink); letter-spacing: -.01em; }
-      .step p { color: var(--muted); font-size: 14.5px; line-height: 1.6; margin: 0 0 26px; }
-      .code-block { margin-top: auto; min-height: 80px; display: flex; align-items: center; background: var(--code-bg); border: 1px solid rgba(255,255,255,.06); border-radius: 9px; padding: 14px 16px; font-size: 12px; line-height: 1.65; color: var(--code-ink); overflow-x: auto; white-space: pre-wrap; }
-
-      /* comparison */
-      .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
-      .comp-table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 740px; }
-      .comp-table th, .comp-table td { text-align: left; padding: 14px 18px; border-bottom: 1px solid var(--border); }
-      .comp-table thead th { background: var(--surface-2); color: var(--muted); font-weight: 500; font-size: 13px; }
-      .comp-table tbody tr:last-child td { border-bottom: none; }
-      .comp-table tbody tr { transition: background .12s ease; }
-      .comp-table tbody tr:hover td { background: rgba(10,10,10,.015); }
-      .comp-table .feat { font-weight: 500; color: var(--ink-2); }
-      .comp-table .mk { font-size: 15px; }
-      .mk-y { color: var(--accent-ink); } .mk-n { color: var(--dim); } .mk-p { color: var(--muted); }
-      .comp-table .ct { color: var(--muted); font-size: 12px; margin-left: 8px; font-family: var(--mono); }
-      .comp-table .own { background: var(--accent-soft); color: var(--ink); font-weight: 500; border-left: 1px solid var(--accent-soft); border-right: 1px solid var(--accent-soft); }
-      .comp-table .own .mk-y { color: var(--accent-ink); }
-      .comp-table thead th.own { color: var(--accent-ink); text-align: center; }
-      .comp-table thead th:not(:first-child), .comp-table td:not(.feat) { text-align: center; }
-
-      /* final cta */
-      .final-cta { text-align: center; border-top: 1px solid var(--border); }
-      .final-cta h2 { font-size: clamp(30px,5vw,52px); letter-spacing: -.045em; margin: 0 0 28px; font-weight: 600; color: var(--ink); }
-
-      /* footer */
-      .footer { border-top: 1px solid var(--border); padding: 56px 0 32px; background: var(--surface-2); }
-      .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 32px; }
-      .footer-brand .brand { margin-bottom: 12px; }
-      .footer-brand p { font-size: 14px; max-width: 26em; margin: 0 0 8px; }
-      .oss-badge { font-size: 12px; } .oss-badge a:hover { color: var(--accent-ink); }
-      .footer-col h5 { margin: 0 0 14px; font-size: 13px; font-weight: 500; color: var(--muted); }
-      .footer-col a { display: block; color: var(--muted); font-size: 14px; padding: 4px 0; }
-      .footer-col a:hover { color: var(--ink); }
-      .footer-bottom { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 13px; }
-
-      /* responsive */
-      @media (max-width: 900px) {
-        .hero-grid { grid-template-columns: 1fr; }
-        .hosted-grid, .steps { grid-template-columns: 1fr; gap: 0; }
-        /* stacked: dividers become top rules, not left borders */
-        .hosted-item { border-left: none; border-top: 1px solid var(--border); padding: 22px 0 6px; }
-        .hosted-item:first-child { border-top: none; }
-        .step { margin-top: 4px; }
-        .footer-grid { grid-template-columns: 1fr 1fr; }
-        .nav-links { display: none; }
-        .division-stats { gap: 28px; }
-      }
-      @media (max-width: 560px) {
-        .division-stats { gap: 20px; }
-        .division-stats .sv { font-size: 20px; }
-        .division-meta { font-size: 11px; }
-      }
-    </style>
-  </body>
-</html>
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .uc-grid, .hosted-grid, .steps { grid-template-columns: 1fr; gap: 0; }
+    .uc-item, .hosted-item { border-left: none; padding-left: 0; }
+    .uc-item:nth-child(3n+1) { padding-left: 0; }
+    .division-stats { gap: 28px; }
+  }
+</style>
