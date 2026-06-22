@@ -4,6 +4,8 @@
 // their content into the slot and add page-specific <style>. Vercel-style
 // monochrome, hosted-first. Never use em or en dashes in copy.
 import Mark from '../components/Mark.astro';
+import GhStars from '../components/GhStars.astro';
+import { getStars } from '../lib/stars';
 import '../styles/tokens.css';
 import '../styles/base.css';
 
@@ -12,6 +14,7 @@ interface Props {
   description: string;
 }
 const { title, description } = Astro.props;
+const stars = await getStars();
 
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL('/og.png', Astro.site).href;
@@ -69,7 +72,7 @@ const navLinks = [
           {navLinks.map((l) => <a href={l.href}>{l.label}</a>)}
         </nav>
         <div class="nav-cta">
-          <a class="ghost-link" href={GITHUB} target="_blank" rel="noopener">GitHub ↗</a>
+          <GhStars count={stars} class="nav-stars" />
           <a class="btn btn-primary" href={SIGNUP}>Start swarming</a>
           <button class="nav-toggle" id="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-menu">
             <span class="nav-toggle-bar"></span>
@@ -83,8 +86,8 @@ const navLinks = [
     <div class="nav-menu" id="nav-menu" aria-hidden="true">
       <nav class="nav-menu-links" aria-label="Mobile">
         {navLinks.map((l) => <a href={l.href}>{l.label}</a>)}
-        <a href={GITHUB} target="_blank" rel="noopener">GitHub ↗</a>
       </nav>
+      <GhStars count={stars} class="nav-menu-stars" />
     </div>
 
     <main>
@@ -96,7 +99,8 @@ const navLinks = [
         <div class="footer-brand">
           <a class="brand" href="/"><Mark class="brand-mark" /> mitos</a>
           <p class="muted">Millisecond microVM sandbox forking for agent swarms.</p>
-          <p class="muted mono oss-badge">Open source · Apache 2.0 · <a href={GITHUB} target="_blank" rel="noopener">GitHub ↗</a></p>
+          <GhStars count={stars} class="footer-stars" />
+          <p class="muted mono oss-badge">Open source · Apache 2.0</p>
         </div>
         <div class="footer-col">
           <h5>Product</h5>
@@ -165,6 +169,28 @@ const navLinks = [
         window.addEventListener('resize', () => { if (window.innerWidth > 900) setMenu(false); });
       }
 
+      // Live GitHub stars: refresh the baked-in count (cached 1h in localStorage).
+      (function () {
+        const starEls = document.querySelectorAll('[data-gh-star] .gh-star-count');
+        if (!starEls.length) return;
+        const KEY = 'mitos-gh-stars';
+        const fmt = (n) => (n >= 1000 ? (n / 1000).toFixed(n < 10000 ? 1 : 0).replace(/\.0$/, '') + 'k' : String(n));
+        const set = (n) => starEls.forEach((e) => { e.textContent = fmt(n); });
+        try {
+          const c = JSON.parse(localStorage.getItem(KEY) || 'null');
+          if (c && Date.now() - c.t < 3600000) { set(c.n); return; }
+        } catch (e) {}
+        fetch('https://api.github.com/repos/mitos-run/mitos')
+          .then((r) => (r.ok ? r.json() : null))
+          .then((d) => {
+            if (d && typeof d.stargazers_count === 'number') {
+              set(d.stargazers_count);
+              try { localStorage.setItem(KEY, JSON.stringify({ n: d.stargazers_count, t: Date.now() })); } catch (e) {}
+            }
+          })
+          .catch(() => {});
+      })();
+
       // Generic copy-to-clipboard for [data-copy-text] buttons.
       document.querySelectorAll('.copy-btn[data-copy-text]').forEach((btn) => {
         btn.addEventListener('click', async () => {
@@ -218,14 +244,22 @@ const navLinks = [
       .ghost-link { color: var(--ink-2); font-size: 14px; }
       .ghost-link:hover { color: var(--ink); }
 
+      /* GitHub star button */
+      .gh-star { display: inline-flex; align-items: center; gap: 6px; padding: 6px 11px; border: 1px solid var(--hairline-strong); border-radius: 999px; color: var(--ink-2); font-size: 13px; line-height: 1; white-space: nowrap; transition: border-color .14s var(--ease), color .14s var(--ease); }
+      .gh-star:hover { color: var(--ink); border-color: color-mix(in srgb, var(--ink) 30%, transparent); }
+      .gh-star-mark { flex-shrink: 0; }
+      .gh-star-glyph { color: var(--amber); font-size: 12px; }
+      .gh-star-count { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+      .footer-stars { margin: 4px 0 14px; }
+      .nav-menu-stars { margin-top: 30px; align-self: flex-start; }
+
       /* mobile hamburger + overlay menu */
       .nav-toggle { display: none; width: 40px; height: 40px; margin-right: -8px; padding: 0; background: transparent; border: none; cursor: pointer; flex-direction: column; align-items: center; justify-content: center; gap: 5px; }
       .nav-toggle-bar { width: 22px; height: 2px; background: var(--ink); border-radius: 2px; transition: transform .25s var(--ease), opacity .2s var(--ease); }
       .nav-toggle.open .nav-toggle-bar:first-child { transform: translateY(3.5px) rotate(45deg); }
       .nav-toggle.open .nav-toggle-bar:last-child { transform: translateY(-3.5px) rotate(-45deg); }
       .nav-menu { position: fixed; inset: 0; z-index: 90; background: var(--field); padding: 88px 28px 40px; display: none; }
-      .nav-menu.open { display: flex; flex-direction: column; animation: navMenuIn .24s var(--ease) both; }
-      @keyframes navMenuIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+      .nav-menu.open { display: flex; flex-direction: column; }
       .nav-menu-links { display: flex; flex-direction: column; }
       .nav-menu-links a { font-size: 23px; color: var(--ink); padding: 19px 2px; border-bottom: 1px solid var(--hairline); letter-spacing: -.01em; transition: color .14s var(--ease); }
       .nav-menu-links a:hover { color: var(--magenta); }
@@ -276,7 +310,7 @@ const navLinks = [
       @media (max-width: 900px) {
         .footer-grid { grid-template-columns: 1fr 1fr; }
         .nav-links { display: none; }
-        .ghost-link { display: none; }
+        .nav-stars { display: none; }
         .nav-toggle { display: flex; }
         .brand { margin-right: auto; }
       }
