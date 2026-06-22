@@ -26,6 +26,11 @@ export default defineConfig({
         alt: 'mitos',
       },
       favicon: '/favicon.svg',
+      // Mount the consent-gated PostHog analytics on docs pages too (they use
+      // Starlight's layout, not Site.astro). See src/components/starlight/Footer.astro.
+      components: {
+        Footer: './src/components/starlight/Footer.astro',
+      },
       head: [
         { tag: 'link', attrs: { rel: 'icon', href: '/favicon.ico', sizes: '32x32' } },
         { tag: 'link', attrs: { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' } },

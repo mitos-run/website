@@ -1,0 +1,11 @@
+---
+// Starlight Footer override: render Starlight's default footer, then mount the
+// shared consent-gated Analytics component so the docs pages (which use
+// Starlight's layout, not Site.astro) also get the consent banner + PostHog.
+// Consent state is shared via localStorage, so a visitor who already chose on a
+// marketing page won't see the banner again here.
+import Default from '@astrojs/starlight/components/Footer.astro';
+import Analytics from '../Analytics.astro';
+---
+<Default><slot /></Default>
+<Analytics />

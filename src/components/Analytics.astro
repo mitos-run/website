@@ -10,18 +10,19 @@
 //  - /privacy (src/pages/privacy.astro) must disclose PostHog + analytics cookies.
 //  - The Cloudflare CSP must allow eu(.|-assets.)i.posthog.com (see docs/ops/).
 //  - In the PostHog project: enable "Discard client IP data" and keep the EU region.
+import '../styles/tokens.css'; // ensure brand tokens exist on Starlight docs pages too
 const PH_KEY = 'phc_t6anh6zShJNraN2w2BjYjUWpXaDns9bHHwcrMoJHGHsp';
 const PH_HOST = 'https://eu.i.posthog.com';
 ---
 <div id="cookie-banner" class="cookie-banner" role="dialog" aria-label="Analytics consent" aria-live="polite" hidden>
+  <p class="cookie-eyebrow mono"><span class="cookie-dot" aria-hidden="true"></span>analytics</p>
   <p class="cookie-text">
-    We use privacy-friendly, EU-hosted analytics (PostHog) to see what is useful.
-    Nothing is tracked until you agree, and we never record sessions or sell data.
-    See our <a href="/privacy">privacy policy</a>.
+    PostHog (EU-hosted) so we can see which docs and pages actually help. No session recording, no
+    data sold, IPs discarded, and the script doesn't even load until you accept. <a href="/privacy">Details</a>.
   </p>
   <div class="cookie-actions">
-    <button id="cookie-decline" class="btn btn-ghost" type="button">Decline</button>
-    <button id="cookie-accept" class="btn btn-primary" type="button">Accept</button>
+    <button id="cookie-decline" class="cookie-btn" type="button">Decline</button>
+    <button id="cookie-accept" class="cookie-btn cookie-btn-accept" type="button">Accept</button>
   </div>
 </div>
 
@@ -69,15 +70,34 @@ const PH_HOST = 'https://eu.i.posthog.com';
 
 <style>
   .cookie-banner {
-    position: fixed; z-index: 200; left: 16px; right: 16px; bottom: 16px; margin: 0 auto;
-    max-width: 560px; display: flex; flex-direction: column; gap: 14px;
-    background: var(--field-1); border: 1px solid var(--hairline-strong); border-radius: var(--r-lg);
-    padding: 18px 20px; box-shadow: 0 8px 40px rgba(0,0,0,.5);
+    position: fixed; z-index: 200; right: 20px; bottom: 20px; left: auto;
+    width: min(384px, calc(100vw - 32px));
+    display: flex; flex-direction: column; gap: 11px;
+    background: color-mix(in srgb, var(--field-1) 90%, transparent);
+    -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+    border: 1px solid var(--hairline-strong); border-radius: var(--r-lg);
+    padding: 18px; box-shadow: 0 16px 50px rgba(0, 0, 0, .55);
+    animation: cookie-in .42s var(--ease) both;
   }
   .cookie-banner[hidden] { display: none; }
-  .cookie-text { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--ink-2); }
-  .cookie-text a { color: var(--cyan); border-bottom: 1px solid color-mix(in srgb, var(--cyan) 30%, transparent); }
-  .cookie-actions { display: flex; gap: 10px; justify-content: flex-end; }
-  .cookie-actions .btn { padding: 7px 16px; font-size: 13px; }
-  @media (max-width: 460px) { .cookie-actions { justify-content: stretch; } .cookie-actions .btn { flex: 1; } }
+  @keyframes cookie-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+  .cookie-eyebrow { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-3); }
+  .cookie-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--magenta); box-shadow: 0 0 8px color-mix(in srgb, var(--magenta) 85%, transparent); flex-shrink: 0; }
+  .cookie-text { margin: 0; font-size: 13px; line-height: 1.6; color: var(--ink-2); }
+  .cookie-text a { color: var(--cyan); border-bottom: 1px solid color-mix(in srgb, var(--cyan) 32%, transparent); }
+  .cookie-text a:hover { border-bottom-color: var(--cyan); }
+
+  /* Decline and Accept are equal-width / equal-weight: rejecting must be as easy
+     as accepting (GDPR/ePrivacy — no dark-pattern nudge). Accept carries the
+     magenta brand signal but the same size. */
+  .cookie-actions { display: flex; gap: 8px; margin-top: 3px; }
+  .cookie-btn { flex: 1; padding: 9px 14px; font-size: 13px; font-weight: 500; line-height: 1; border-radius: var(--r-md); cursor: pointer; border: 1px solid var(--hairline-strong); background: transparent; color: var(--ink); transition: border-color .14s var(--ease), color .14s var(--ease), background .14s var(--ease), transform .14s var(--ease); }
+  .cookie-btn:hover { border-color: color-mix(in srgb, var(--ink) 32%, transparent); transform: translateY(-1px); }
+  .cookie-btn:active { transform: translateY(0); }
+  .cookie-btn-accept { border-color: color-mix(in srgb, var(--magenta) 55%, transparent); color: var(--magenta); }
+  .cookie-btn-accept:hover { border-color: var(--magenta); background: color-mix(in srgb, var(--magenta) 12%, transparent); }
+  .cookie-btn:focus-visible { outline: 2px solid var(--magenta); outline-offset: 2px; }
+
+  @media (prefers-reduced-motion: reduce) { .cookie-banner { animation: none; } .cookie-btn:hover { transform: none; } }
 </style>
