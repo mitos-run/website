@@ -1,0 +1,35 @@
+---
+// OG image render target (1200x630). Screenshot this to public/og.png, then it
+// can stay (underscore-free so it builds, but it is noindex and not linked).
+import '../styles/tokens.css';
+import '../styles/base.css';
+import Division from '../components/Division.astro';
+---
+<html lang="en">
+  <head><meta charset="utf-8" /><meta name="robots" content="noindex" /><title>og</title></head>
+  <body style="margin:0;">
+    <div class="field" aria-hidden="true"></div>
+    <div class="og">
+      <div class="og-left">
+        <div class="og-mark mono">mitos</div>
+        <h1 class="og-title">One agent divides<br />into a thousand.</h1>
+        <div class="og-stats mono">
+          <span><b>~27ms</b> per fork</span>
+          <span><b>~3 MiB</b> per subagent</span>
+          <span><b>Apache 2.0</b></span>
+        </div>
+      </div>
+      <div class="og-right"><Division size={300} trigger={false} /></div>
+    </div>
+    <style>
+      .og { position: relative; z-index: 1; width: 1200px; height: 630px; box-sizing: border-box; display: flex; align-items: center; gap: 40px; padding: 72px 80px; }
+      .og-left { flex: 1; }
+      .og-mark { color: var(--magenta); font-size: 22px; letter-spacing: .04em; margin-bottom: 28px; filter: drop-shadow(0 0 8px color-mix(in srgb, var(--magenta) 55%, transparent)); }
+      .og-title { font-family: var(--sans); font-weight: 400; font-size: 72px; line-height: 1.0; letter-spacing: -.03em; color: var(--ink); margin: 0 0 36px; }
+      .og-stats { display: flex; gap: 30px; font-size: 17px; color: var(--ink-3); }
+      .og-stats b { color: var(--cyan); font-weight: 500; }
+      .og-stats span:last-child b { color: var(--magenta); }
+      .og-right { width: 340px; display: flex; align-items: center; justify-content: center; }
+    </style>
+  </body>
+</html>
