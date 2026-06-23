@@ -11,6 +11,11 @@ export default defineConfig({
   // Clean URLs without a trailing slash (e.g. /pricing, not /pricing/).
   trailingSlash: 'never',
   build: { format: 'file' },
+  // Code highlighting for markdown (the blog). High-contrast dark theme so
+  // strings and their quotes read clearly on the near-black code panel.
+  markdown: {
+    shikiConfig: { theme: 'github-dark-default' },
+  },
   integrations: [
     // Starlight detects @astrojs/sitemap and uses this config. Drop the OG
     // render target (/og-template) so it never enters the index.

@@ -106,6 +106,30 @@ const schema = [
     )}
   </section>
 
+  {toc.length > 0 && (
+    <script is:inline>
+      (function () {
+        const links = Array.from(document.querySelectorAll('.toc a'));
+        const headings = Array.from(document.querySelectorAll('.prose h2[id]'));
+        if (!links.length || !headings.length) return;
+        const byId = new Map(links.map((a) => [a.getAttribute('href').slice(1), a]));
+        let active = null;
+        const setActive = (id) => {
+          if (id === active || !byId.has(id)) return;
+          active = id;
+          links.forEach((a) => a.classList.remove('active'));
+          byId.get(id).classList.add('active');
+        };
+        const io = new IntersectionObserver((entries) => {
+          const onscreen = entries.filter((e) => e.isIntersecting)
+            .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+          if (onscreen[0]) setActive(onscreen[0].target.id);
+        }, { rootMargin: '-90px 0px -68% 0px', threshold: 0 });
+        headings.forEach((h) => io.observe(h));
+      })();
+    </script>
+  )}
+
   {related.length > 0 && (
     <section class="container related">
       <h2 class="rel-h">Related</h2>
@@ -140,8 +164,10 @@ const schema = [
   .toc ol { margin: 0; padding: 0; list-style: none; counter-reset: toc; display: grid; gap: 9px; }
   .toc li { counter-increment: toc; display: flex; gap: 11px; align-items: baseline; }
   .toc li::before { content: counter(toc, decimal-leading-zero); color: var(--ink-3); font-family: var(--mono); font-size: 11px; flex: none; }
-  .toc a { color: var(--ink-2); font-size: 14px; line-height: 1.4; }
+  .toc a { color: var(--ink-2); font-size: 14px; line-height: 1.4; transition: color .14s var(--ease); }
   .toc a:hover { color: var(--magenta); }
+  .toc a.active { color: var(--magenta); }
+  .toc li:has(a.active)::before { color: var(--magenta); }
 
   .prose { max-width: 52em; }
   .prose :global(p) { color: var(--ink-2); font-size: 17px; line-height: 1.7; margin: 0 0 22px; }

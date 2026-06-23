@@ -30,9 +30,9 @@ Boot each from scratch and you re-pay for the whole environment every time, the 
 
 ## What it means to fork a running microVM
 
-mitos forks the running machine instead. The live memory and processes of a warm Firecracker microVM are copied on write into N daughters, each its own microVM with its own kernel under KVM. A daughter resumes already warm and only pays for the pages it changes, so the marginal cost of one more agent stays small.
+mitos forks the running machine instead. The live memory and processes of a warm [Firecracker](https://github.com/firecracker-microvm/firecracker) microVM are copied on write into N daughters, each its own microVM with its own kernel under [KVM](https://www.linux-kvm.org). A daughter resumes already warm and only pays for the pages it changes, so the marginal cost of one more agent stays small.
 
-The mental model is the `fork()` system call, applied to a whole machine: one warm base becomes a thousand independent copies, not a thousand cold boots.
+The mental model is the [`fork()` system call](https://man7.org/linux/man-pages/man2/fork.2.html), applied to a whole machine: one warm base becomes a thousand independent copies, not a thousand cold boots.
 
 ## Forking vs rebuilding vs snapshots
 
@@ -71,11 +71,11 @@ Each fork is independent: a write in one is invisible to the others. The same `f
 
 ## Works with your agent stack
 
-mitos ships adapters for the tools agent teams already use. The **Claude Agent SDK**, the **OpenAI Agents SDK**, and **LangChain** can drive sandboxes directly, and the built-in **MCP server** exposes create, exec, fork, and file operations as tools any MCP-aware agent can call. Already on E2B? A migration shim lets you switch with a one-line import change.
+mitos ships adapters for the tools agent teams already use. The [**Claude Agent SDK**](https://docs.anthropic.com), the [**OpenAI Agents SDK**](https://github.com/openai/openai-agents-python), and [**LangChain**](https://www.langchain.com) can drive sandboxes directly, and the built-in [**MCP server**](https://modelcontextprotocol.io) exposes create, exec, fork, and file operations as tools any MCP-aware agent can call. Already on E2B? A migration shim lets you switch with a one-line import change.
 
 ## Open source, with numbers you can run
 
-The engine is **Apache-2.0** and self-hostable on any KVM Kubernetes cluster, so the fork is something you can read, run, and verify rather than a black box. On the reference node it activates a warm fork in about **27 ms**, restores a snapshot in **6 to 16 ms**, and adds about **3 MiB** of memory per fork.
+The [engine](https://github.com/mitos-run/mitos) is **Apache-2.0** and self-hostable on any KVM Kubernetes cluster, so the fork is something you can read, run, and verify rather than a black box. On the reference node it activates a warm fork in about **27 ms**, restores a snapshot in **6 to 16 ms**, and adds about **3 MiB** of memory per fork.
 
 Every figure is reproducible from the benchmark scripts in the repository. They are engine measurements on bare metal, not end-to-end wall-clock times or a matched head-to-head against other vendors, and we label them that way on the [benchmarks](/benchmarks) page.
 
