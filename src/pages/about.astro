@@ -4,9 +4,9 @@
 import Site from '../layouts/Site.astro';
 
 const GITHUB = 'https://github.com/mitos-run/mitos';
-const TITLE = 'About mitos: infrastructure for agent swarms';
+const TITLE = 'About Mitos: infrastructure for agent swarms';
 const DESC =
-  'mitos is managed, open-source infrastructure for AI agent swarms: fork a running Firecracker microVM into hundreds of isolated subagents. Why we build it.';
+  'Mitos is managed, open-source infrastructure for AI agent swarms: fork a running Firecracker microVM into hundreds of isolated subagents. Why we build it.';
 ---
 
 <Site title={TITLE} description={DESC}>
@@ -15,7 +15,7 @@ const DESC =
     <div class="hero-in reveal">
       <h1>Infrastructure for agent swarms.</h1>
       <p class="lede">
-        mitos forks a running machine into a fleet of isolated microVMs, so one agent becomes a thousand.
+        Mitos forks a running machine into a fleet of isolated microVMs, so one agent becomes a thousand.
       </p>
       <div class="hero-actions">
         <a class="btn btn-primary btn-lg" href="/quickstart">Start with the open engine</a>
@@ -33,7 +33,7 @@ const DESC =
       rollouts, tree search, and large multi-agent evals.
     </p>
     <p>
-      mitos is built for that. Instead of cold-booting or restoring a snapshot for every new
+      Mitos is built for that. Instead of cold-booting or restoring a snapshot for every new
       environment, it <strong>forks a running Firecracker microVM</strong>: the live memory and
       processes of a warm machine are copied-on-write into hundreds of isolated daughters, each its
       own microVM, in about 27 ms and roughly 3 MiB apiece. One agent divides into a thousand.

@@ -30,13 +30,13 @@ const caveats = [
   'Numbers are from a bare-metal reference node (Talos on Hetzner). Your hardware will differ.',
   'Verified single-node today. Multi-node fan-out is designed and tracked, not yet measured at N greater than 1.',
   'A warm-claim activate is a fork from a warm parent. It is not the same operation as a cold boot.',
-  'mitos is pre-1.0. These numbers move as the engine evolves; the scripts in bench/ are the source of truth.',
+  'Mitos is pre-1.0. These numbers move as the engine evolves; the scripts in bench/ are the source of truth.',
 ];
 
 // Context only. Other vendors' published figures, for different operations, on
 // different hardware, with different methodology. NOT a head-to-head benchmark.
 const vendorContext = [
-  { name: 'mitos', figure: '~27 ms', op: 'warm-claim activate (ours)', ms: 27, own: true },
+  { name: 'Mitos', figure: '~27 ms', op: 'warm-claim activate (ours)', ms: 27, own: true },
   { name: 'Daytona', figure: 'sub-90 ms', op: 'create from snapshot', ms: 90 },
   { name: 'E2B', figure: '~150 ms', op: 'sandbox create', ms: 150 },
   { name: 'CodeSandbox', figure: '~495 ms', op: 'memory resume', ms: 495 },
@@ -47,7 +47,7 @@ const maxMs = 1000;
 ---
 
 <Site
-  title="mitos benchmarks: reproducible numbers from the engine"
+  title="Mitos benchmarks: reproducible numbers from the engine"
   description="Warm-claim activate ~27ms P50, snapshot restore ~6-16ms, ~3 MiB marginal memory per fork. Every number is reproducible from the repo's bench scripts."
 >
   <section class="hero container">

@@ -32,9 +32,9 @@ const schema = [
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'mitos', item: 'https://mitos.run' },
+      { '@type': 'ListItem', position: 1, name: 'Mitos', item: 'https://mitos.run' },
       { '@type': 'ListItem', position: 2, name: 'Alternatives', item: 'https://mitos.run/alternatives' },
-      { '@type': 'ListItem', position: 3, name: `mitos vs ${c.name}`, item: `https://mitos.run/compare/${c.slug}` },
+      { '@type': 'ListItem', position: 3, name: `Mitos vs ${c.name}`, item: `https://mitos.run/compare/${c.slug}` },
     ],
   },
 ];
@@ -65,7 +65,7 @@ const others = competitors.filter((o) => o.slug !== c.slug);
 
   <!-- CAPABILITY TABLE -->
   <section class="container cmp-section">
-    <h2 class="section-title reveal">mitos vs {c.name}, capability by capability</h2>
+    <h2 class="section-title reveal">Mitos vs {c.name}, capability by capability</h2>
     <p class="section-lede reveal">
       Capabilities from each project's public docs as of June 2026, not a head-to-head benchmark.
       Numbers move; the source of truth is each project's own repo and docs.
@@ -75,7 +75,7 @@ const others = competitors.filter((o) => o.slug !== c.slug);
         <thead>
           <tr>
             <th>Capability</th>
-            <th class="own">mitos</th>
+            <th class="own">Mitos</th>
             <th>{c.name}</th>
           </tr>
         </thead>
@@ -100,7 +100,7 @@ const others = competitors.filter((o) => o.slug !== c.slug);
 
   <!-- DIFFERENCES -->
   <section class="container diffs-sec">
-    <h2 class="section-title reveal">What sets mitos apart</h2>
+    <h2 class="section-title reveal">What sets Mitos apart</h2>
     <div class="diffs">
       {c.sections.map((s) => (
         <div class="diff reveal">
@@ -114,7 +114,7 @@ const others = competitors.filter((o) => o.slug !== c.slug);
   <!-- WHY MITOS WINS -->
   <section class="container winwrap">
     <div class="winwrap-inner reveal">
-      <h2 class="section-title">Why teams pick mitos over {c.name}</h2>
+      <h2 class="section-title">Why teams pick Mitos over {c.name}</h2>
       <ul class="win-list">
         {c.mitosWins.map((w) => <li>{w}</li>)}
       </ul>
@@ -123,7 +123,7 @@ const others = competitors.filter((o) => o.slug !== c.slug);
 
   <!-- FAQ -->
   <section class="container faq">
-    <h2 class="section-title reveal">mitos vs {c.name}, in brief</h2>
+    <h2 class="section-title reveal">Mitos vs {c.name}, in brief</h2>
     <div class="faq-list reveal">
       {c.faqs.map((f) => (
         <details class="faq-item">
@@ -144,7 +144,7 @@ const others = competitors.filter((o) => o.slug !== c.slug);
       </a>
       {others.map((o) => (
         <a class="more-card" href={`/compare/${o.slug}`}>
-          <span class="more-name">mitos vs {o.name}</span>
+          <span class="more-name">Mitos vs {o.name}</span>
           <span class="more-blurb">{o.blurb}</span>
         </a>
       ))}

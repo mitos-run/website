@@ -38,9 +38,9 @@ export interface Competitor {
   /** The us-focused TL;DR shown up top. */
   verdict: string;
   rows: Row[];
-  /** 2-3 prose sections, each leading with mitos. */
+  /** 2-3 prose sections, each leading with Mitos. */
   sections: { h: string; body: string }[];
-  /** Why teams pick mitos over this competitor (us-focused). */
+  /** Why teams pick Mitos over this competitor (us-focused). */
   mitosWins: string[];
   faqs: { q: string; a: string }[];
 }
@@ -62,14 +62,14 @@ export const competitors: Competitor[] = [
     slug: 'e2b',
     name: 'E2B',
     blurb: 'Apache-2.0 microVM sandbox with a big SDK. Creates fresh sandboxes; no live fork of a running one.',
-    title: 'mitos vs E2B: fork a running agent vs fresh sandboxes',
+    title: 'Mitos vs E2B: fork a running agent vs fresh sandboxes',
     description:
-      'mitos vs E2B for AI agents. Both are Apache-2.0 Firecracker microVMs, but mitos forks a running agent into a fleet while E2B creates fresh sandboxes.',
-    h1: 'mitos vs E2B',
+      'Mitos vs E2B for AI agents. Both are Apache-2.0 Firecracker microVMs, but Mitos forks a running agent into a fleet while E2B creates fresh sandboxes.',
+    h1: 'Mitos vs E2B',
     lede:
-      'mitos forks a running agent into a fleet, so you can run many at once from one warm machine. E2B runs each agent in a fresh sandbox and does not fork a live one.',
+      'Mitos forks a running agent into a fleet, so you can run many at once from one warm machine. E2B runs each agent in a fresh sandbox and does not fork a live one.',
     verdict:
-      'Both run agents in Apache-2.0 Firecracker microVMs, so isolation and license tie. The difference is the fleet: mitos forks one running machine into many warm copies; E2B builds each from scratch, and closed the live-fork request as out of scope.',
+      'Both run agents in Apache-2.0 Firecracker microVMs, so isolation and license tie. The difference is the fleet: Mitos forks one running machine into many warm copies; E2B builds each from scratch, and closed the live-fork request as out of scope.',
     rows: [
       row('Fork a running VM (memory + processes)', { s: 'n', t: 'fresh sandbox' }, MITOS.liveFork),
       row('Published marginal cost per fork', { s: 'n' }, MITOS.marginal),
@@ -80,7 +80,7 @@ export const competitors: Competitor[] = [
     sections: [
       {
         h: 'Run many at once',
-        body: 'mitos forks the running VM into many daughters that share memory copy-on-write, so each starts warm and you pay only for what changes, about 3 MiB at fork time. E2B builds a fresh sandbox per agent, so each one rebuilds its state from scratch.',
+        body: 'Mitos forks the running VM into many daughters that share memory copy-on-write, so each starts warm and you pay only for what changes, about 3 MiB at fork time. E2B builds a fresh sandbox per agent, so each one rebuilds its state from scratch.',
       },
       {
         h: 'Same isolation, same license',
@@ -88,7 +88,7 @@ export const competitors: Competitor[] = [
       },
       {
         h: 'Built for the fleet',
-        body: 'Fanning one agent into many is what mitos is built around, managed and open. E2B users asked for a live fork in issue #928, and it was closed as out of scope, pointing instead to snapshots that pause and resume a single sandbox.',
+        body: 'Fanning one agent into many is what Mitos is built around, managed and open. E2B users asked for a live fork in issue #928, and it was closed as out of scope, pointing instead to snapshots that pause and resume a single sandbox.',
       },
     ],
     mitosWins: [
@@ -97,8 +97,8 @@ export const competitors: Competitor[] = [
       'The same Apache-2.0 microVM isolation, plus the live fork E2B closed as out of scope.',
     ],
     faqs: [
-      { q: 'Can E2B fork a running sandbox?', a: 'No. E2B creates fresh microVM sandboxes; it does not copy a running one into many. mitos is built around that live fork, so a warmed agent becomes a fleet in milliseconds.' },
-      { q: 'Are mitos and E2B both open source?', a: 'Yes, both Apache 2.0. mitos adds the live fork and a published per-fork memory cost, and the managed service runs the same engine you can self-host.' },
+      { q: 'Can E2B fork a running sandbox?', a: 'No. E2B creates fresh microVM sandboxes; it does not copy a running one into many. Mitos is built around that live fork, so a warmed agent becomes a fleet in milliseconds.' },
+      { q: 'Are Mitos and E2B both open source?', a: 'Yes, both Apache 2.0. Mitos adds the live fork and a published per-fork memory cost, and the managed service runs the same engine you can self-host.' },
       { q: 'Is the isolation different?', a: 'No. Both run each sandbox as a Firecracker microVM with its own kernel. Isolation is a tie; the fork into a fleet is not.' },
     ],
   },
@@ -107,14 +107,14 @@ export const competitors: Competitor[] = [
     slug: 'modal',
     name: 'Modal',
     blurb: 'Closed Python and ML platform with GPU. Isolates with gVisor; offers snapshots, not a live fork.',
-    title: 'mitos vs Modal: microVM fork vs gVisor sandbox',
+    title: 'Mitos vs Modal: microVM fork vs gVisor sandbox',
     description:
-      'mitos vs Modal for AI agents: mitos forks a running microVM and is open source; Modal is a closed, gVisor-based Python and ML platform.',
-    h1: 'mitos vs Modal',
+      'Mitos vs Modal for AI agents: Mitos forks a running microVM and is open source; Modal is a closed, gVisor-based Python and ML platform.',
+    h1: 'Mitos vs Modal',
     lede:
-      'mitos gives each agent its own kernel and forks a running one into a fleet. Modal runs agent code on gVisor with snapshots, and is closed source.',
+      'Mitos gives each agent its own kernel and forks a running one into a fleet. Modal runs agent code on gVisor with snapshots, and is closed source.',
     verdict:
-      'mitos is the open, microVM-isolated primitive: an own kernel per agent and a live fork of running memory. Modal isolates with gVisor, offers snapshot and restore rather than a live fork, and is a closed runtime. For running and forking many agents safely and openly, mitos is built for it.',
+      'Mitos is the open, microVM-isolated primitive: an own kernel per agent and a live fork of running memory. Modal isolates with gVisor, offers snapshot and restore rather than a live fork, and is a closed runtime. For running and forking many agents safely and openly, Mitos is built for it.',
     rows: [
       row('Fork a running VM (memory + processes)', { s: 'n', t: 'snapshot' }, MITOS.liveFork),
       row('Isolation model', { s: 'n', t: 'gVisor' }, MITOS.isolation),
@@ -126,15 +126,15 @@ export const competitors: Competitor[] = [
     sections: [
       {
         h: 'Own kernel vs shared kernel',
-        body: 'mitos runs each agent in a Firecracker microVM with its own kernel under KVM. Modal isolates with gVisor, a userspace kernel that shares the host kernel surface. For untrusted, model-written code, an own-kernel boundary is the stronger default.',
+        body: 'Mitos runs each agent in a Firecracker microVM with its own kernel under KVM. Modal isolates with gVisor, a userspace kernel that shares the host kernel surface. For untrusted, model-written code, an own-kernel boundary is the stronger default.',
       },
       {
         h: 'A live fork, not a snapshot',
-        body: 'mitos copies a running machine’s memory and processes into many daughters at once, so they resume warm and share pages copy-on-write. Modal offers snapshot and restore, which is not the same as branching one running machine into a fleet.',
+        body: 'Mitos copies a running machine’s memory and processes into many daughters at once, so they resume warm and share pages copy-on-write. Modal offers snapshot and restore, which is not the same as branching one running machine into a fleet.',
       },
       {
         h: 'Open, so you are never trapped',
-        body: 'The mitos engine is Apache 2.0, the same code the managed service runs, so you can read it, self-host it, and verify it yourself. Modal is a closed runtime, so the only place to run your workloads is on Modal’s cloud.',
+        body: 'The Mitos engine is Apache 2.0, the same code the managed service runs, so you can read it, self-host it, and verify it yourself. Modal is a closed runtime, so the only place to run your workloads is on Modal’s cloud.',
       },
     ],
     mitosWins: [
@@ -143,9 +143,9 @@ export const competitors: Competitor[] = [
       'An Apache-2.0 engine you can run yourself; Modal is closed.',
     ],
     faqs: [
-      { q: 'Does Modal use microVMs?', a: 'Modal isolates with gVisor, a userspace kernel, not a microVM with its own kernel. mitos runs every fork as a Firecracker microVM under KVM, the stronger default for untrusted code.' },
-      { q: 'Can Modal fork a running sandbox?', a: 'Modal offers snapshot and restore, not a live fork of running memory into many daughters. That live fork is what mitos is built around.' },
-      { q: 'Is Modal open source?', a: 'No, Modal is closed. The mitos engine is Apache 2.0, so you can self-host and you are never locked in.' },
+      { q: 'Does Modal use microVMs?', a: 'Modal isolates with gVisor, a userspace kernel, not a microVM with its own kernel. Mitos runs every fork as a Firecracker microVM under KVM, the stronger default for untrusted code.' },
+      { q: 'Can Modal fork a running sandbox?', a: 'Modal offers snapshot and restore, not a live fork of running memory into many daughters. That live fork is what Mitos is built around.' },
+      { q: 'Is Modal open source?', a: 'No, Modal is closed. The Mitos engine is Apache 2.0, so you can self-host and you are never locked in.' },
     ],
   },
 
@@ -153,14 +153,14 @@ export const competitors: Competitor[] = [
     slug: 'daytona',
     name: 'Daytona',
     blurb: 'Fast container sandboxes with Computer Use. Memory fork is experimental and gated; the server is AGPL.',
-    title: 'mitos vs Daytona: microVM fork vs container sandboxes',
+    title: 'Mitos vs Daytona: microVM fork vs container sandboxes',
     description:
-      'mitos vs Daytona for AI agents: mitos forks running memory by default, microVM-isolated and Apache-2.0; Daytona is container-default with an AGPL server.',
-    h1: 'mitos vs Daytona',
+      'Mitos vs Daytona for AI agents: Mitos forks running memory by default, microVM-isolated and Apache-2.0; Daytona is container-default with an AGPL server.',
+    h1: 'Mitos vs Daytona',
     lede:
-      'mitos forks running memory into a fleet by default, each agent in its own microVM. Daytona runs containers by default, its memory fork is experimental and access-gated, and its server is AGPL.',
+      'Mitos forks running memory into a fleet by default, each agent in its own microVM. Daytona runs containers by default, its memory fork is experimental and access-gated, and its server is AGPL.',
     verdict:
-      'mitos forks running memory by default: generally available, microVM-isolated, and Apache-2.0. Daytona added a memory fork, but it is experimental and access-gated, its default isolation is containers, and its server is AGPL. For a fork you can rely on today, openly, mitos is built for it.',
+      'Mitos forks running memory by default: generally available, microVM-isolated, and Apache-2.0. Daytona added a memory fork, but it is experimental and access-gated, its default isolation is containers, and its server is AGPL. For a fork you can rely on today, openly, Mitos is built for it.',
     rows: [
       row('Fork a running VM, generally available + ungated', { s: 'p', t: 'experimental, gated' }, { s: 'y', t: 'default' }),
       row('microVM isolation by default (own kernel)', { s: 'n', t: 'container default' }, MITOS.isolation),
@@ -172,15 +172,15 @@ export const competitors: Competitor[] = [
     sections: [
       {
         h: 'microVM by default',
-        body: 'Every mitos fork is a Firecracker microVM with its own kernel. Daytona’s default sandbox is a container, with microVM only as an option. For running untrusted, model-written code, the default boundary is what most of your workloads run on.',
+        body: 'Every Mitos fork is a Firecracker microVM with its own kernel. Daytona’s default sandbox is a container, with microVM only as an option. For running untrusted, model-written code, the default boundary is what most of your workloads run on.',
       },
       {
         h: 'A fork you can use today',
-        body: 'mitos forks running memory by default, generally available and ungated. Daytona added a memory fork, but it is experimental and gated behind a request, and its other snapshots are prebuilt images, not a copy of your live running state.',
+        body: 'Mitos forks running memory by default, generally available and ungated. Daytona added a memory fork, but it is experimental and gated behind a request, and its other snapshots are prebuilt images, not a copy of your live running state.',
       },
       {
         h: 'Apache 2.0, not AGPL',
-        body: 'The mitos engine is Apache 2.0 across the board, so you can build on it and self-host with no copyleft terms. Daytona’s client SDKs are permissive, but its server is AGPL, a copyleft license that many companies are unable to adopt.',
+        body: 'The Mitos engine is Apache 2.0 across the board, so you can build on it and self-host with no copyleft terms. Daytona’s client SDKs are permissive, but its server is AGPL, a copyleft license that many companies are unable to adopt.',
       },
     ],
     mitosWins: [
@@ -189,9 +189,9 @@ export const competitors: Competitor[] = [
       'Apache-2.0 across the board, not an AGPL server you cannot freely run.',
     ],
     faqs: [
-      { q: 'Does Daytona fork running memory?', a: 'Daytona added a memory fork, but it is experimental and access-gated, and its default sandboxes are containers. mitos forks running memory by default, generally available and microVM-isolated.' },
-      { q: 'Is Daytona microVM-isolated?', a: 'By default Daytona uses containers, with microVM as an option. mitos runs every fork as a Firecracker microVM with its own kernel by default.' },
-      { q: 'What licenses do they use?', a: 'Daytona is AGPL on its server (its SDKs are permissive). The mitos engine is Apache 2.0 throughout, so there are no copyleft terms when you build on or self-host it.' },
+      { q: 'Does Daytona fork running memory?', a: 'Daytona added a memory fork, but it is experimental and access-gated, and its default sandboxes are containers. Mitos forks running memory by default, generally available and microVM-isolated.' },
+      { q: 'Is Daytona microVM-isolated?', a: 'By default Daytona uses containers, with microVM as an option. Mitos runs every fork as a Firecracker microVM with its own kernel by default.' },
+      { q: 'What licenses do they use?', a: 'Daytona is AGPL on its server (its SDKs are permissive). The Mitos engine is Apache 2.0 throughout, so there are no copyleft terms when you build on or self-host it.' },
     ],
   },
 
@@ -199,14 +199,14 @@ export const competitors: Competitor[] = [
     slug: 'morph',
     name: 'Morph',
     blurb: 'Closed runtime that branches running VMs, alongside code-edit models. Fewer published numbers.',
-    title: 'mitos vs Morph: open, reproducible VM forking',
+    title: 'Mitos vs Morph: open, reproducible VM forking',
     description:
-      'mitos vs Morph for forking running VMs: both fork live VMs, but mitos publishes reproducible numbers and is Apache-2.0 open source; Morph is a closed runtime.',
-    h1: 'mitos vs Morph',
+      'Mitos vs Morph for forking running VMs: both fork live VMs, but Mitos publishes reproducible numbers and is Apache-2.0 open source; Morph is a closed runtime.',
+    h1: 'Mitos vs Morph',
     lede:
-      'mitos forks running VMs into a fleet, publishes reproducible numbers, and ships an open engine you can run yourself. Morph branches VMs too, but it is closed, with vaguer public figures.',
+      'Mitos forks running VMs into a fleet, publishes reproducible numbers, and ships an open engine you can run yourself. Morph branches VMs too, but it is closed, with vaguer public figures.',
     verdict:
-      'mitos and Morph both fork running VMs. mitos publishes reproducible latency and memory numbers, runs every fork as a verifiable microVM, and is Apache-2.0 open source. Morph is a closed runtime alongside its code-edit models. If you want the fork in the open, mitos is built for it.',
+      'Mitos and Morph both fork running VMs. Mitos publishes reproducible latency and memory numbers, runs every fork as a verifiable microVM, and is Apache-2.0 open source. Morph is a closed runtime alongside its code-edit models. If you want the fork in the open, Mitos is built for it.',
     rows: [
       row('Fork / branch a running VM', { s: 'y', t: 'Infinibranch' }, MITOS.liveFork),
       row('Published fork latency', { s: 'p', t: 'sub-250 ms (their figure)' }, MITOS.latency),
@@ -218,15 +218,15 @@ export const competitors: Competitor[] = [
     sections: [
       {
         h: 'Both fork; one is open',
-        body: 'Morph’s Infinibranch branches a running VM into parallel copies, the same idea mitos is built on, so we will not pretend the fork is ours alone. The difference is openness: the mitos engine is Apache 2.0 and you can run it yourself.',
+        body: 'Morph’s Infinibranch branches a running VM into parallel copies, the same idea Mitos is built on, so we will not pretend the fork is ours alone. The difference is openness: the Mitos engine is Apache 2.0 and you can run it yourself.',
       },
       {
         h: 'Numbers you can reproduce',
-        body: 'mitos publishes its figures, about 27 ms to activate a warm fork and about 3 MiB marginal memory per daughter, with the benchmark scripts in the open repo. Morph’s public figure is sub-250 ms, with no per-fork memory density published.',
+        body: 'Mitos publishes its figures, about 27 ms to activate a warm fork and about 3 MiB marginal memory per daughter, with the benchmark scripts in the open repo. Morph’s public figure is sub-250 ms, with no per-fork memory density published.',
       },
       {
         h: 'Isolation you can verify',
-        body: 'Every mitos fork is a Firecracker microVM with its own kernel under KVM, in code you can read and audit. Morph does not disclose its isolation details, so you take the boundary on trust instead of verifying it for yourself.',
+        body: 'Every Mitos fork is a Firecracker microVM with its own kernel under KVM, in code you can read and audit. Morph does not disclose its isolation details, so you take the boundary on trust instead of verifying it for yourself.',
       },
     ],
     mitosWins: [
@@ -235,9 +235,9 @@ export const competitors: Competitor[] = [
       'microVM isolation you can verify in the code, not undisclosed.',
     ],
     faqs: [
-      { q: 'Is mitos the only platform that forks a running VM?', a: 'No. Morph branches running VMs too. mitos competes on reproducible numbers, verifiable microVM isolation, and being Apache-2.0 open source.' },
-      { q: 'How does mitos differ from Morph Infinibranch?', a: 'mitos publishes reproducible latency and per-fork memory figures and ships an open engine you can self-host. Morph is closed, with fewer public numbers, alongside its code-edit models.' },
-      { q: 'Which is faster?', a: 'mitos publishes about 27 ms to activate a warm fork, reproducible from the repo. Morph cites sub-250 ms for branch and restore. They measure differently, so treat it as context.' },
+      { q: 'Is Mitos the only platform that forks a running VM?', a: 'No. Morph branches running VMs too. Mitos competes on reproducible numbers, verifiable microVM isolation, and being Apache-2.0 open source.' },
+      { q: 'How does Mitos differ from Morph Infinibranch?', a: 'Mitos publishes reproducible latency and per-fork memory figures and ships an open engine you can self-host. Morph is closed, with fewer public numbers, alongside its code-edit models.' },
+      { q: 'Which is faster?', a: 'Mitos publishes about 27 ms to activate a warm fork, reproducible from the repo. Morph cites sub-250 ms for branch and restore. They measure differently, so treat it as context.' },
     ],
   },
 
@@ -245,14 +245,14 @@ export const competitors: Competitor[] = [
     slug: 'codesandbox',
     name: 'CodeSandbox',
     blurb: 'Closed, hosted SDK that also forks running microVMs, but slower and not self-hostable.',
-    title: 'mitos vs CodeSandbox: open microVM fork vs hosted SDK',
+    title: 'Mitos vs CodeSandbox: open microVM fork vs hosted SDK',
     description:
-      'mitos vs the CodeSandbox SDK for AI agents: both fork a running Firecracker microVM, but mitos activates in about 27 ms, is Apache-2.0, and self-hosts on your cluster.',
-    h1: 'mitos vs CodeSandbox',
+      'Mitos vs the CodeSandbox SDK for AI agents: both fork a running Firecracker microVM, but Mitos activates in about 27 ms, is Apache-2.0, and self-hosts on your cluster.',
+    h1: 'Mitos vs CodeSandbox',
     lede:
-      'mitos and the CodeSandbox SDK both fork a running microVM into copies. mitos lands a warm fork in about 27 ms, ships under Apache 2.0, and runs on your own Kubernetes cluster; CodeSandbox is closed and hosted only.',
+      'Mitos and the CodeSandbox SDK both fork a running microVM into copies. Mitos lands a warm fork in about 27 ms, ships under Apache 2.0, and runs on your own Kubernetes cluster; CodeSandbox is closed and hosted only.',
     verdict:
-      'CodeSandbox is one of the few runtimes that also forks a running VM, so the fork itself is a tie. The difference is speed, openness, and ownership: mitos activates a warm fork in about 27 ms against the hundreds of milliseconds CodeSandbox publishes, ships under Apache 2.0, and self-hosts on any KVM Kubernetes cluster, while CodeSandbox stays a closed, hosted SDK.',
+      'CodeSandbox is one of the few runtimes that also forks a running VM, so the fork itself is a tie. The difference is speed, openness, and ownership: Mitos activates a warm fork in about 27 ms against the hundreds of milliseconds CodeSandbox publishes, ships under Apache 2.0, and self-hosts on any KVM Kubernetes cluster, while CodeSandbox stays a closed, hosted SDK.',
     rows: [
       row('Fork a running VM (memory + processes)', { s: 'y', t: '~863 ms fork' }, MITOS.liveFork),
       row('Warm activate latency', { s: 'p', t: '~495 ms resume' }, MITOS.latency),
@@ -264,15 +264,15 @@ export const competitors: Competitor[] = [
     sections: [
       {
         h: 'The same fork, far faster',
-        body: 'mitos and CodeSandbox both fork a running microVM rather than rebuild each from scratch, so the fork is not ours alone. The difference is speed: mitos lands a warm fork in about 27 ms, while CodeSandbox publishes hundreds of milliseconds.',
+        body: 'Mitos and CodeSandbox both fork a running microVM rather than rebuild each from scratch, so the fork is not ours alone. The difference is speed: Mitos lands a warm fork in about 27 ms, while CodeSandbox publishes hundreds of milliseconds.',
       },
       {
         h: 'Open and self-hostable',
-        body: 'mitos ships under Apache 2.0 and runs on any Kubernetes cluster with KVM nodes, so the same engine runs in your account or ours and your data never leaves your infrastructure. The CodeSandbox SDK is closed and hosted, so it stays on their cloud.',
+        body: 'Mitos ships under Apache 2.0 and runs on any Kubernetes cluster with KVM nodes, so the same engine runs in your account or ours and your data never leaves your infrastructure. The CodeSandbox SDK is closed and hosted, so it stays on their cloud.',
       },
       {
         h: 'A primitive, not a silo',
-        body: 'mitos exposes the fork as a declarative Kubernetes primitive, with CRDs and a published per-fork memory cost of about 3 MiB, so you build your own agent platform on top. CodeSandbox wraps the same fork inside its own closed hosted SDK.',
+        body: 'Mitos exposes the fork as a declarative Kubernetes primitive, with CRDs and a published per-fork memory cost of about 3 MiB, so you build your own agent platform on top. CodeSandbox wraps the same fork inside its own closed hosted SDK.',
       },
     ],
     mitosWins: [
@@ -281,9 +281,9 @@ export const competitors: Competitor[] = [
       'A declarative microVM primitive with a published per-fork memory cost, built for your own platform.',
     ],
     faqs: [
-      { q: 'Does CodeSandbox fork a running sandbox?', a: 'Yes. CodeSandbox is one of the few runtimes that forks a running microVM from a memory snapshot. mitos does the same, but activates a warm fork in about 27 ms and publishes the per-fork memory cost.' },
-      { q: 'Can I self-host CodeSandbox?', a: 'No. The CodeSandbox SDK is closed and hosted only. mitos is Apache 2.0 and runs on any Kubernetes cluster with KVM nodes, or fully hosted on the same engine.' },
-      { q: 'Which is faster?', a: 'mitos publishes about 27 ms to activate a warm fork, against the hundreds of milliseconds CodeSandbox publishes for live fork and memory resume. Both are self-reported on different hardware, so treat it as context, not a head-to-head benchmark.' },
+      { q: 'Does CodeSandbox fork a running sandbox?', a: 'Yes. CodeSandbox is one of the few runtimes that forks a running microVM from a memory snapshot. Mitos does the same, but activates a warm fork in about 27 ms and publishes the per-fork memory cost.' },
+      { q: 'Can I self-host CodeSandbox?', a: 'No. The CodeSandbox SDK is closed and hosted only. Mitos is Apache 2.0 and runs on any Kubernetes cluster with KVM nodes, or fully hosted on the same engine.' },
+      { q: 'Which is faster?', a: 'Mitos publishes about 27 ms to activate a warm fork, against the hundreds of milliseconds CodeSandbox publishes for live fork and memory resume. Both are self-reported on different hardware, so treat it as context, not a head-to-head benchmark.' },
     ],
   },
 ];

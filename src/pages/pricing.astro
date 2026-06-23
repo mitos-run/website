@@ -39,7 +39,7 @@ const faqs = [
   { q: 'Will I get a surprise bill?', a: 'No. Hard spend caps are on by default: a runaway loop suspends the org at your limit instead of becoming a five-figure invoice. A soft cap alerts you before that.' },
   { q: 'Does forking actually make a swarm cheaper?', a: 'A fork is a live copy-on-write clone of a running microVM, so you skip the cold-boot tax (it resumes in ~27 ms) and don’t re-build the base image for every subagent. The parent’s pages are shared; each fork adds the pages it writes (about 3 MiB right after a fork, more as it diverges). vCPU still scales with how many subagents run, so a swarm’s bill is mostly compute-time, not duplicated memory. The estimator bills each fork its full RAM, so your real memory cost is usually lower.' },
   { q: 'Do I pay for idle sandboxes?', a: 'No. Compute is per-second while running and scales to zero between forks. You are billed for active work, not for waiting.' },
-  { q: 'Can I run it myself instead?', a: 'Yes. The engine is open source under Apache 2.0 and free to run on your own Kubernetes cluster. Hosted mitos is for teams who want the fork speed without operating the cluster.' },
+  { q: 'Can I run it myself instead?', a: 'Yes. The engine is open source under Apache 2.0 and free to run on your own Kubernetes cluster. Hosted Mitos is for teams who want the fork speed without operating the cluster.' },
 ];
 
 const schema = [
@@ -56,7 +56,7 @@ const schema = [
 ---
 
 <Site
-  title="mitos pricing: pay-as-you-go for agent swarms"
+  title="Mitos pricing: pay-as-you-go for agent swarms"
   description="Pay-as-you-go, per-second microVM compute: vCPU and RAM metered separately, forks share memory copy-on-write. $100 credit, hard spend caps, no platform fee."
   schema={schema}
 >
@@ -73,7 +73,7 @@ const schema = [
         <a class="btn btn-primary btn-lg" href={SIGNUP}>Get started</a>
         <a class="btn btn-ghost btn-lg" href={DOCS}>Read the docs</a>
       </div>
-      <p class="early mono">Hosted mitos is in early access. Rates here are illustrative; final rates land at general availability.</p>
+      <p class="early mono">Hosted Mitos is in early access. Rates here are illustrative; final rates land at general availability.</p>
     </div>
 
     <!-- LIVE COST ESTIMATOR -->
@@ -149,7 +149,7 @@ const schema = [
         <thead>
           <tr>
             <th>Per hour</th>
-            <th class="cmp-own-h">mitos<span>*</span></th>
+            <th class="cmp-own-h">Mitos<span>*</span></th>
             {compareCols.map((c) => <th>{c}</th>)}
           </tr>
         </thead>
@@ -164,8 +164,8 @@ const schema = [
         </tbody>
       </table>
     </div>
-    <p class="cmp-extra reveal">Rates are only half of it. Competitors don’t live-fork, so 100 parallel agents run as 100 separate sandboxes, each paying for its own full copy of the base. A mitos swarm forks one warm parent and shares its memory, so fan-out can cost less than the rates alone suggest, depending on how far each fork diverges.</p>
-    <p class="rate-note mono reveal">*Illustrative. Competitor rates published Jun 2026, compute only. E2B ($150/mo) and Modal ($250/mo) also charge a platform fee; mitos has none.</p>
+    <p class="cmp-extra reveal">Rates are only half of it. Competitors don’t live-fork, so 100 parallel agents run as 100 separate sandboxes, each paying for its own full copy of the base. A Mitos swarm forks one warm parent and shares its memory, so fan-out can cost less than the rates alone suggest, depending on how far each fork diverges.</p>
+    <p class="rate-note mono reveal">*Illustrative. Competitor rates published Jun 2026, compute only. E2B ($150/mo) and Modal ($250/mo) also charge a platform fee; Mitos has none.</p>
   </section>
 
   <section class="trust-sec container">

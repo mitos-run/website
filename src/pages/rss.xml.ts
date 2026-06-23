@@ -27,9 +27,9 @@ export async function GET(context: APIContext) {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>mitos blog</title>
+    <title>Mitos blog</title>
     <link>${site}blog</link>
-    <description>Engineering notes from mitos: forkable microVM sandboxes for agent swarms.</description>
+    <description>Engineering notes from Mitos: forkable microVM sandboxes for agent swarms.</description>
     <language>en</language>
 ${items}
   </channel>

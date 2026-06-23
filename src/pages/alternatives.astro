@@ -10,24 +10,24 @@ import { competitors } from '../data/competitors';
 
 const ENGINE = '/quickstart';
 
-const TITLE = 'mitos: AI agent sandbox alternatives, compared';
+const TITLE = 'Mitos: AI agent sandbox alternatives, compared';
 const DESC =
-  'An honest map of the AI agent sandbox landscape: compare E2B, Modal, Daytona, Morph and mitos on live forking, isolation, speed, cost, and license.';
+  'An honest map of the AI agent sandbox landscape: compare E2B, Modal, Daytona, Morph and Mitos on live forking, isolation, speed, cost, and license.';
 
 // The five questions that decide an agent-sandbox choice, ordered to lead with
 // the fan-out converter, with isolation (the gate) right behind it.
 const criteria = [
   {
     q: 'Can it fork a running machine into a swarm?',
-    why: 'When you need many agents from one warm, mid-task state (best-of-N, RL rollouts, tree search), the question is whether the platform copies the running machine or rebuilds it N times. Most create fresh sandboxes. mitos forks the running VM: memory and processes copy-on-write into daughters that resume warm, so you pay for what diverges, not for N cold boots.',
+    why: 'When you need many agents from one warm, mid-task state (best-of-N, RL rollouts, tree search), the question is whether the platform copies the running machine or rebuilds it N times. Most create fresh sandboxes. Mitos forks the running VM: memory and processes copy-on-write into daughters that resume warm, so you pay for what diverges, not for N cold boots.',
   },
   {
     q: 'What isolates the code, and is each copy unique?',
-    why: 'You are running model-written code you do not fully trust, so the default boundary matters: an own-kernel microVM (mitos, E2B) is a stronger default than a shared-kernel container or gVisor (Modal, Daytona default). Forking adds a second question most tools punt on: re-restoring one snapshot many times duplicates entropy, IDs, and keys, which is unsafe. Every mitos daughter gets fresh uniqueness, not a cloned one.',
+    why: 'You are running model-written code you do not fully trust, so the default boundary matters: an own-kernel microVM (Mitos, E2B) is a stronger default than a shared-kernel container or gVisor (Modal, Daytona default). Forking adds a second question most tools punt on: re-restoring one snapshot many times duplicates entropy, IDs, and keys, which is unsafe. Every Mitos daughter gets fresh uniqueness, not a cloned one.',
   },
   {
     q: 'How fast does a new agent start?',
-    why: 'A warm fork resumes an already-running machine; a cold create boots a fresh one. mitos activates a warm fork in about 27 ms, with the benchmark scripts in the open-source repo so you can reproduce it instead of taking our word.',
+    why: 'A warm fork resumes an already-running machine; a cold create boots a fresh one. Mitos activates a warm fork in about 27 ms, with the benchmark scripts in the open-source repo so you can reproduce it instead of taking our word.',
   },
   {
     q: 'Will the bill surprise you?',
@@ -35,13 +35,13 @@ const criteria = [
   },
   {
     q: 'Can you run it yourself?',
-    why: 'A guaranteed exit is what lets a lock-in-allergic team commit. The mitos engine is Apache 2.0, the same code the managed service runs, so you can self-host. E2B is also Apache 2.0; Daytona is AGPL on its server; Modal and Morph are closed. The license is the difference between renting and owning.',
+    why: 'A guaranteed exit is what lets a lock-in-allergic team commit. The Mitos engine is Apache 2.0, the same code the managed service runs, so you can self-host. E2B is also Apache 2.0; Daytona is AGPL on its server; Modal and Morph are closed. The license is the difference between renting and owning.',
   },
 ];
 
 // Landscape table on the axes that decide it. Honest, public-docs as of June 2026.
 const landscape = [
-  { name: 'mitos', fork: 'Live VM fork', iso: 'Firecracker microVM', speed: '~27 ms warm fork', oss: 'Apache 2.0', own: true, href: '/' },
+  { name: 'Mitos', fork: 'Live VM fork', iso: 'Firecracker microVM', speed: '~27 ms warm fork', oss: 'Apache 2.0', own: true, href: '/' },
   { name: 'E2B', fork: 'Fresh sandbox', iso: 'Firecracker microVM', speed: 'Fresh create', oss: 'Apache 2.0', href: '/compare/e2b' },
   { name: 'Modal', fork: 'Snapshot', iso: 'gVisor', speed: 'Sub-second (their figure)', oss: 'Closed', href: '/compare/modal' },
   { name: 'Daytona', fork: 'Live fork (experimental, gated)', iso: 'Container (microVM opt-in)', speed: 'Sub-90 ms create (their figure)', oss: 'AGPL (server)', href: '/compare/daytona' },
@@ -72,27 +72,27 @@ const framing: Record<string, { win: string; context: string }> = {
 const faqs = [
   {
     q: 'What is the best alternative to E2B for agent swarms?',
-    a: 'mitos. It forks a running VM into many warm daughters copy-on-write, so you fan out from live state instead of rebuilding it. Both are Apache-2.0 Firecracker microVMs, so the live fork is the difference, and it is the request E2B closed as out of scope.',
+    a: 'Mitos. It forks a running VM into many warm daughters copy-on-write, so you fan out from live state instead of rebuilding it. Both are Apache-2.0 Firecracker microVMs, so the live fork is the difference, and it is the request E2B closed as out of scope.',
   },
   {
     q: 'Which AI agent sandboxes can fork a running VM?',
-    a: 'mitos forks running memory by default, generally available and ungated. Morph branches running VMs too; Daytona added a memory fork but it is experimental and gated; E2B and Modal do not.',
+    a: 'Mitos forks running memory by default, generally available and ungated. Morph branches running VMs too; Daytona added a memory fork but it is experimental and gated; E2B and Modal do not.',
   },
   {
     q: 'Which agent sandboxes are open source?',
-    a: 'mitos is Apache 2.0, and the managed service runs the same engine you can self-host, so it is a real exit, not just a published SDK. E2B is also Apache 2.0; Daytona is AGPL on its server; Modal and Morph are closed.',
+    a: 'Mitos is Apache 2.0, and the managed service runs the same engine you can self-host, so it is a real exit, not just a published SDK. E2B is also Apache 2.0; Daytona is AGPL on its server; Modal and Morph are closed.',
   },
   {
     q: 'What is the most secure agent sandbox for untrusted code?',
-    a: 'mitos runs every fork as a Firecracker microVM with its own kernel, and gives each daughter fresh uniqueness, so a fork is never a duplicated, unsafe clone. An own-kernel microVM is a stronger default than the shared-kernel containers or gVisor some tools use.',
+    a: 'Mitos runs every fork as a Firecracker microVM with its own kernel, and gives each daughter fresh uniqueness, so a fork is never a duplicated, unsafe clone. An own-kernel microVM is a stronger default than the shared-kernel containers or gVisor some tools use.',
   },
   {
     q: 'Which is fastest?',
-    a: 'Treat speed as context, since these measure different operations. mitos activates a warm fork in about 27 ms, reproducible from the open repo. A warm fork resumes a running machine; creating a fresh sandbox boots a new one.',
+    a: 'Treat speed as context, since these measure different operations. Mitos activates a warm fork in about 27 ms, reproducible from the open repo. A warm fork resumes a running machine; creating a fresh sandbox boots a new one.',
   },
   {
     q: 'How do I choose between them?',
-    a: 'If you need many agents at once instead of one at a time, mitos is built for it: it forks a running machine into a fleet that all run in parallel from the same warm state. The others focus on a single sandbox per agent.',
+    a: 'If you need many agents at once instead of one at a time, Mitos is built for it: it forks a running machine into a fleet that all run in parallel from the same warm state. The others focus on a single sandbox per agent.',
   },
 ];
 
@@ -101,7 +101,7 @@ const schema = [
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'mitos', item: 'https://mitos.run' },
+      { '@type': 'ListItem', position: 1, name: 'Mitos', item: 'https://mitos.run' },
       { '@type': 'ListItem', position: 2, name: 'Alternatives', item: 'https://mitos.run/alternatives' },
     ],
   },
@@ -134,7 +134,7 @@ const schema = [
     <div class="hero-in reveal">
       <h1>AI agent sandbox alternatives</h1>
       <p class="lede">
-        Fork one warm agent into a thousand. mitos copies a <strong>running</strong> microVM into a
+        Fork one warm agent into a thousand. Mitos copies a <strong>running</strong> microVM into a
         fleet of isolated daughters in <strong>~27 ms</strong>, so they all run in parallel from the
         same state, not rebuilt each time. Honest comparison below.
       </p>
@@ -200,14 +200,14 @@ const schema = [
 
   <!-- PER-COMPETITOR: lead with our edge, contain their fit -->
   <section class="container compare-cards">
-    <h2 class="section-title reveal">Compare mitos head to head</h2>
-    <p class="section-lede reveal">Each comparison leads with where mitos wins, with the honest context underneath.</p>
+    <h2 class="section-title reveal">Compare Mitos head to head</h2>
+    <p class="section-lede reveal">Each comparison leads with where Mitos wins, with the honest context underneath.</p>
     <div class="cards-grid reveal">
       {competitors.map((c) => (
         <a class="cmp-card" href={`/compare/${c.slug}`}>
-          <span class="cmp-card-h">mitos vs {c.name}</span>
+          <span class="cmp-card-h">Mitos vs {c.name}</span>
           {framing[c.slug] && (
-            <span class="cmp-card-win"><span class="win-k mono">Why mitos wins</span> {framing[c.slug].win}</span>
+            <span class="cmp-card-win"><span class="win-k mono">Why Mitos wins</span> {framing[c.slug].win}</span>
           )}
           <span class="cmp-card-context">{framing[c.slug]?.context ?? c.blurb}</span>
           <span class="cmp-card-cta mono">Read the comparison &rarr;</span>
@@ -219,7 +219,7 @@ const schema = [
   <!-- HONEST NOTE -->
   <section class="container honest">
     <div class="honest-inner reveal">
-      <h2 class="section-title">What mitos bets on</h2>
+      <h2 class="section-title">What Mitos bets on</h2>
       <p>
         The combination no one else offers managed and open: a <strong>live fork of running
         memory</strong>, microVM-isolated, with honest copy-on-write economics and a real Apache-2.0

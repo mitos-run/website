@@ -18,12 +18,12 @@ export default defineConfig({
       filter: (page) => !page.includes('/og-template'),
     }),
     starlight({
-      title: 'mitos',
+      title: 'Mitos',
       tagline: 'Millisecond microVM sandbox forking for AI agents.',
       logo: {
         light: './src/assets/mitos-mark-on-light.svg',
         dark: './src/assets/mitos-mark-on-dark.svg',
-        alt: 'mitos',
+        alt: 'Mitos',
       },
       favicon: '/favicon.svg',
       // Expressive Code highlights ALL markdown code site-wide, including the
@@ -52,7 +52,7 @@ export default defineConfig({
         { tag: 'meta', attrs: { property: 'og:image:type', content: 'image/png' } },
         { tag: 'meta', attrs: { property: 'og:image:width', content: '1200' } },
         { tag: 'meta', attrs: { property: 'og:image:height', content: '630' } },
-        { tag: 'meta', attrs: { property: 'og:image:alt', content: 'mitos: fork a running microVM into an agent swarm' } },
+        { tag: 'meta', attrs: { property: 'og:image:alt', content: 'Mitos: fork a running microVM into an agent swarm' } },
         { tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' } },
         { tag: 'meta', attrs: { name: 'twitter:image', content: 'https://mitos.run/og.png' } },
       ],

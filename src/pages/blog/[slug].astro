@@ -33,15 +33,15 @@ const schema = [
     description: post.data.description,
     datePublished: post.data.date.toISOString(),
     keywords: post.data.tags.join(', '),
-    author: { '@type': 'Organization', name: 'mitos', url: 'https://mitos.run' },
-    publisher: { '@type': 'Organization', name: 'mitos' },
+    author: { '@type': 'Organization', name: 'Mitos', url: 'https://mitos.run' },
+    publisher: { '@type': 'Organization', name: 'Mitos' },
     mainEntityOfPage: url,
   },
   {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'mitos', item: 'https://mitos.run' },
+      { '@type': 'ListItem', position: 1, name: 'Mitos', item: 'https://mitos.run' },
       { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://mitos.run/blog' },
       { '@type': 'ListItem', position: 3, name: post.data.title, item: url },
     ],
@@ -62,7 +62,7 @@ const schema = [
 ];
 ---
 
-<Site title={`${post.data.title} · mitos`} description={post.data.description} schema={schema}>
+<Site title={`${post.data.title} · Mitos`} description={post.data.description} schema={schema}>
   <section class="page-hero container">
     <a class="back mono" href="/blog">&larr; All notes</a>
     <span class="art-cat mono">[{post.data.category}]</span>

@@ -1,9 +1,9 @@
 ---
-title: "Quickstart: run your first mitos sandbox"
-description: "Install the mitos SDK, launch a Firecracker microVM sandbox, then fork it into a swarm of isolated subagents in a few lines of Python, TypeScript, or Go."
+title: "Quickstart: run your first Mitos sandbox"
+description: "Install the Mitos SDK, launch a Firecracker microVM sandbox, then fork it into a swarm of isolated subagents in a few lines of Python, TypeScript, or Go."
 ---
 
-mitos gives your agents isolated, forkable computers. You ask for a warm
+Mitos gives your agents isolated, forkable computers. You ask for a warm
 microVM, run code in it, and when you need many agents from the same state you
 **fork the running VM** into a swarm of daughters that each start warm and share
 the parent's memory copy-on-write. This page takes you from install to your
@@ -77,5 +77,5 @@ so the hosting location can change without breaking imports.
 ## Next steps
 
 - Read the [Architecture](/architecture) to see how the fork and isolation work.
-- Compare mitos to other sandboxes on the [alternatives](/alternatives) page.
+- Compare Mitos to other sandboxes on the [alternatives](/alternatives) page.
 - Run the numbers yourself from the [benchmarks](/benchmarks).

@@ -4,7 +4,7 @@ description: "Why forking a running Firecracker microVM beats rebuilding a sandb
 date: 2026-06-23
 category: engineering
 tags: ["fork", "microVM", "agent swarms", "best-of-N", "isolation"]
-author: "mitos team"
+author: "Mitos team"
 faqs:
   - q: "What does it mean to fork a running microVM?"
     a: "Forking copies a warm, running microVM, its memory and processes, into one or more isolated copies in place, instead of booting a fresh machine. Each copy resumes already warm and then diverges on its own. It is closer to the fork() system call than to starting a new VM."
@@ -13,14 +13,14 @@ faqs:
   - q: "Is it secure to run untrusted agent code this way?"
     a: "Each fork is a Firecracker microVM with its own kernel under KVM, not a shared-kernel container. Model-written code you do not fully trust stays inside one disposable machine, forks do not silently inherit secrets, and egress is default-deny."
   - q: "How fast is a fork, and how much memory does it use?"
-    a: "On the reference node, mitos activates a warm fork in about 27 ms and adds about 3 MiB of memory per fork through copy-on-write page sharing. Those are reproducible engine measurements from the repository's benchmark scripts, not end-to-end wall-clock numbers."
+    a: "On the reference node, Mitos activates a warm fork in about 27 ms and adds about 3 MiB of memory per fork through copy-on-write page sharing. Those are reproducible engine measurements from the repository's benchmark scripts, not end-to-end wall-clock numbers."
   - q: "Can I use it with Claude, LangChain, or the OpenAI Agents SDK?"
-    a: "Yes. mitos ships adapters for the Claude Agent SDK, the OpenAI Agents SDK, and LangChain, plus an MCP server that exposes create, exec, fork, and file tools. Teams on E2B can switch with a one-import migration shim."
-  - q: "Is mitos open source?"
+    a: "Yes. Mitos ships adapters for the Claude Agent SDK, the OpenAI Agents SDK, and LangChain, plus an MCP server that exposes create, exec, fork, and file tools. Teams on E2B can switch with a one-import migration shim."
+  - q: "Is Mitos open source?"
     a: "Yes. The engine is Apache-2.0 and self-hostable on any KVM Kubernetes cluster, and the benchmark scripts are in the repository so you can reproduce the numbers. A managed cloud is coming."
 ---
 
-Forking a running microVM copies a warm, mid-task machine into many isolated copies in place, instead of booting a fresh one for each. For AI agents, that turns one prepared environment into a fleet that all start from the same live state. mitos is built around this fork.
+Forking a running microVM copies a warm, mid-task machine into many isolated copies in place, instead of booting a fresh one for each. For AI agents, that turns one prepared environment into a fleet that all start from the same live state. Mitos is built around this fork.
 
 ## Why a fresh sandbox per agent is the bottleneck
 
@@ -30,7 +30,7 @@ Boot each from scratch and you re-pay for the whole environment every time, the 
 
 ## What it means to fork a running microVM
 
-mitos forks the running machine instead. The live memory and processes of a warm [Firecracker](https://github.com/firecracker-microvm/firecracker) microVM are copied on write into N daughters, each its own microVM with its own kernel under [KVM](https://www.linux-kvm.org). A daughter resumes already warm and only pays for the pages it changes, so the marginal cost of one more agent stays small.
+Mitos forks the running machine instead. The live memory and processes of a warm [Firecracker](https://github.com/firecracker-microvm/firecracker) microVM are copied on write into N daughters, each its own microVM with its own kernel under [KVM](https://www.linux-kvm.org). A daughter resumes already warm and only pays for the pages it changes, so the marginal cost of one more agent stays small.
 
 The mental model is the [`fork()` system call](https://man7.org/linux/man-pages/man2/fork.2.html), applied to a whole machine: one warm base becomes a thousand independent copies, not a thousand cold boots.
 
@@ -40,7 +40,7 @@ The mental model is the [`fork()` system call](https://man7.org/linux/man-pages/
 |---|---|---|
 | Rebuild a fresh sandbox | Boots a clean machine per agent | You re-pay for image, dependencies, and warm-up every time |
 | Snapshot and restore | Saves one machine's state, reloads it later | Restores one lineage, not N divergent live copies |
-| Live fork (mitos) | Copies a running machine into N copy-on-write daughters | Each daughter starts warm; you pay about 3 MiB per fork |
+| Live fork (Mitos) | Copies a running machine into N copy-on-write daughters | Each daughter starts warm; you pay about 3 MiB per fork |
 
 Snapshots and fresh sandboxes are useful, and several tools do them well. The gap they leave is branching a *running* machine into many copies at once, which is the operation fan-out workloads actually need.
 
@@ -71,7 +71,7 @@ Each fork is independent: a write in one is invisible to the others. The same `f
 
 ## Works with your agent stack
 
-mitos ships adapters for the tools agent teams already use. The [**Claude Agent SDK**](https://docs.anthropic.com), the [**OpenAI Agents SDK**](https://github.com/openai/openai-agents-python), and [**LangChain**](https://www.langchain.com) can drive sandboxes directly, and the built-in [**MCP server**](https://modelcontextprotocol.io) exposes create, exec, fork, and file operations as tools any MCP-aware agent can call. Already on E2B? A migration shim lets you switch with a one-line import change.
+Mitos ships adapters for the tools agent teams already use. The [**Claude Agent SDK**](https://docs.anthropic.com), the [**OpenAI Agents SDK**](https://github.com/openai/openai-agents-python), and [**LangChain**](https://www.langchain.com) can drive sandboxes directly, and the built-in [**MCP server**](https://modelcontextprotocol.io) exposes create, exec, fork, and file operations as tools any MCP-aware agent can call. Already on E2B? A migration shim lets you switch with a one-line import change.
 
 ## Open source, with numbers you can run
 
