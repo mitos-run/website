@@ -7,20 +7,20 @@ import Site from '../layouts/Site.astro';
 
 const GITHUB = 'https://github.com/mitos-run/mitos';
 const UPDATED = 'June 22, 2026';
-const TITLE = 'Privacy Policy: what mitos.run collects';
+const TITLE = 'mitos privacy policy: what mitos.run collects';
 const DESC =
   'How mitos.run handles data: consent-based, EU-hosted analytics (PostHog), no accounts, and nothing tracked until you opt in.';
 ---
 
 <Site title={TITLE} description={DESC}>
   <section class="page-hero container">
-    <p class="eyebrow mono">Legal</p>
     <h1>Privacy Policy</h1>
     <p class="lede">What this site collects, and the consent-based analytics you can turn off.</p>
     <p class="updated mono">Last updated: {UPDATED}</p>
   </section>
 
-  <section class="container prose">
+  <section class="container">
+    <div class="prose">
     <p>
       This policy covers <strong>mitos.run</strong>, the marketing and documentation site for the
       mitos project. It is a static website with no user accounts and no sign-up. It uses one
@@ -98,6 +98,7 @@ const DESC =
       <a href="/contact">contact page</a> or the project
       <a href={GITHUB} target="_blank" rel="noopener">repository</a>.
     </p>
+    </div>
   </section>
 </Site>
 

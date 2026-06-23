@@ -14,20 +14,20 @@ const GITHUB = 'https://github.com/mitos-run/mitos';
 const ENTITY = 'Paperclip.inc OÜ';
 const LEGAL_EMAIL = 'legal@mitos.run';
 const UPDATED = 'June 23, 2026';
-const TITLE = 'Terms of Service for mitos';
+const TITLE = 'mitos terms of service: plain language, EU law';
 const DESC =
   'The terms for using mitos: forkable microVM sandboxes for agent swarms. Plain language, EU governing law, pay-as-you-go, and we never train on your content.';
 ---
 
 <Site title={TITLE} description={DESC}>
   <section class="page-hero container">
-    <p class="eyebrow mono">Legal</p>
     <h1>Terms of Service</h1>
     <p class="lede">The agreement for using the hosted mitos service. Plain language, no surprises.</p>
     <p class="updated mono">Last updated: {UPDATED}</p>
   </section>
 
-  <section class="container prose">
+  <section class="container">
+    <div class="prose">
     <p>
       These terms are a binding agreement for using <strong>mitos</strong>, the hosted service for
       forking running microVM sandboxes into agent swarms, together with the website at
@@ -41,7 +41,7 @@ const DESC =
     <p>
       The Service is provided by <strong>{ENTITY}</strong>, registry code 17517227, Sepapaja tn 6,
       15551 Tallinn, Harju Maakond, Estonia ("we", "us", "mitos"). You can reach us at
-      <a href={`mailto:${LEGAL_EMAIL}`}>{LEGAL_EMAIL}</a>.
+      {LEGAL_EMAIL}.
     </p>
 
     <h2>2. The open-source engine is separate</h2>
@@ -67,7 +67,7 @@ const DESC =
       Once you have an account you may create, run, fork, and manage microVM sandboxes and related
       resources, subject to these terms and any plan limits. You are responsible for your account
       credentials and API keys, for activity under your account, and for keeping your contact and
-      billing details accurate. Tell us promptly at <a href={`mailto:${LEGAL_EMAIL}`}>{LEGAL_EMAIL}</a>
+      billing details accurate. Tell us promptly at {LEGAL_EMAIL}
       if you suspect unauthorised use.
     </p>
 
@@ -262,14 +262,15 @@ const DESC =
       enforcing a term is not a waiver. You may not assign these terms without our consent; we may
       assign them to an affiliate or in connection with a merger or sale of assets. We are not liable
       for delays or failures caused by events beyond our reasonable control. Notices to you may be sent
-      to your account or email; notices to us go to <a href={`mailto:${LEGAL_EMAIL}`}>{LEGAL_EMAIL}</a>.
+      to your account or email; notices to us go to {LEGAL_EMAIL}.
     </p>
 
     <h2>Contact</h2>
     <p>
-      Questions about these terms can be sent to <a href={`mailto:${LEGAL_EMAIL}`}>{LEGAL_EMAIL}</a> or
+      Questions about these terms can be sent to {LEGAL_EMAIL} or
       raised through the channels on our <a href="/contact">contact page</a>.
     </p>
+    </div>
   </section>
 </Site>
 
