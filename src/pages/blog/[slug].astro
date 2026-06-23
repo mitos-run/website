@@ -5,6 +5,7 @@
 // Never use em or en dashes in copy.
 import Site from '../../layouts/Site.astro';
 import { getCollection, render } from 'astro:content';
+import '../../styles/prose.css';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -154,37 +155,6 @@ const schema = [
   .art-cat { display: block; color: var(--magenta); font-size: var(--text-micro); letter-spacing: .02em; margin-bottom: 12px; }
   .byline { color: var(--ink-3); font-size: var(--text-caption); margin-top: 12px; }
 
-  /* article body: prose + a sticky, minimal ToC rail (Paperclip-style) */
-  .article { padding-top: 26px; padding-bottom: 8px; }
-  .article.has-toc { display: grid; grid-template-columns: minmax(0, 52em) minmax(0, 200px); gap: 56px; align-items: start; }
-  .article-main { min-width: 0; }
-
-  .toc-rail { position: sticky; top: 96px; }
-  .toc-h { color: var(--ink-3); font-size: var(--text-micro); margin: 0 0 12px; }
-  .toc ol { margin: 0; padding: 0; list-style: none; counter-reset: toc; display: grid; gap: 9px; }
-  .toc li { counter-increment: toc; display: flex; gap: 11px; align-items: baseline; }
-  .toc li::before { content: counter(toc, decimal-leading-zero); color: var(--ink-3); font-family: var(--mono); font-size: var(--text-nano); flex: none; }
-  .toc a { color: var(--ink-2); font-size: var(--text-dense); line-height: 1.4; transition: color .14s var(--ease); }
-  .toc a:hover { color: var(--magenta); }
-  .toc a.active { color: var(--magenta); }
-  .toc li:has(a.active)::before { color: var(--magenta); }
-
-  .prose { max-width: 52em; }
-  .prose :global(p) { color: var(--ink-2); font-size: var(--text-body); line-height: 1.7; margin: 0 0 22px; }
-  .prose :global(strong) { color: var(--ink); font-weight: 500; }
-  .prose :global(a) { color: var(--cyan); border-bottom: 1px solid color-mix(in srgb, var(--cyan) 30%, transparent); }
-  .prose :global(a:hover) { border-bottom-color: var(--cyan); }
-  .prose :global(h2) { font-size: var(--text-h3); font-weight: 400; letter-spacing: var(--track-display); margin: 40px 0 14px; color: var(--ink); }
-  .prose :global(ul), .prose :global(ol) { color: var(--ink-2); font-size: var(--text-body); line-height: 1.7; margin: 0 0 22px; padding-left: 22px; }
-  .prose :global(li) { margin: 0 0 8px; }
-  /* fenced code blocks are rendered + themed by Expressive Code (see astro.config) */
-  .prose :global(.expressive-code) { margin: 0 0 22px; }
-  .prose :global(:not(pre) > code) { font-family: var(--mono); font-size: var(--text-code); color: var(--ink); background: var(--field-2); padding: 2px 6px; border-radius: var(--r-sm); }
-  .prose :global(table) { width: 100%; border-collapse: collapse; font-size: var(--text-dense); margin: 0 0 24px; display: block; overflow-x: auto; }
-  .prose :global(th), .prose :global(td) { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--hairline); vertical-align: top; }
-  .prose :global(thead th) { color: var(--ink-3); font-weight: 500; font-size: var(--text-micro); text-transform: uppercase; letter-spacing: .04em; background: var(--field-1); }
-  .prose :global(tbody tr:last-child td) { border-bottom: none; }
-
   .post-faq { max-width: 52em; margin-top: 8px; padding-top: 24px; border-top: 1px solid var(--hairline); }
   .post-faq-h { font-size: var(--text-h3); font-weight: 400; letter-spacing: var(--track-display); margin: 0 0 8px; }
   .faq-item summary { list-style: none; cursor: pointer; padding: 16px 0; font-size: var(--text-body); color: var(--ink); display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--hairline); transition: color .14s var(--ease); }
@@ -207,9 +177,5 @@ const schema = [
   .rel-desc { color: var(--ink-2); font-size: var(--text-dense); line-height: 1.55; }
   .rel-meta { color: var(--ink-3); font-size: var(--text-micro); margin-top: 2px; }
 
-  @media (max-width: 1000px) {
-    .article.has-toc { grid-template-columns: 1fr; gap: 0; }
-    .toc-rail { position: static; order: -1; margin-bottom: 28px; }
-  }
   @media (max-width: 700px) { .rel-grid { grid-template-columns: 1fr; } }
 </style>
