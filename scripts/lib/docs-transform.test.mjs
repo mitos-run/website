@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { rewriteLinks } from './docs-transform.mjs';
+import { rewriteLinks, deriveFrontmatter } from './docs-transform.mjs';
 
 const OPTS = {
   allowSlugs: new Set(['threat-model', 'cli', 'quickstart']),
@@ -41,8 +41,6 @@ test('in-page anchors are left untouched', () => {
   assert.equal(rewriteLinks('[top](#intro)', OPTS), '[top](#intro)');
 });
 
-import { deriveFrontmatter } from './docs-transform.mjs';
-
 test('title comes from the first H1, description from the first paragraph', () => {
   const md = '# mitos CLI\n\n`mitos` is the command-line interface for sandboxes. It drives the lifecycle.\n\n## More\n';
   const fm = deriveFrontmatter(md, { slug: 'cli' });
@@ -54,4 +52,20 @@ test('description strips markdown emphasis and trailing whitespace', () => {
   const md = '# Title\n\nA **bold** intro line.\n';
   const fm = deriveFrontmatter(md, { slug: 'x' });
   assert.equal(fm.description, 'A bold intro line.');
+});
+
+test('fenced code block after H1 is skipped; description is the first prose paragraph', () => {
+  const md = [
+    '# Architecture',
+    '',
+    '```mermaid',
+    'flowchart TB',
+    'subgraph SDKs["SDKs and surfaces"]',
+    'end',
+    '```',
+    '',
+    'Sandboxes are not pods — they are lightweight gVisor micro-VMs.',
+  ].join('\n');
+  const fm = deriveFrontmatter(md);
+  assert.equal(fm.description, 'Sandboxes are not pods — they are lightweight gVisor micro-VMs.');
 });

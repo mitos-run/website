@@ -11,7 +11,7 @@ export default defineConfig({
   build: { format: 'file' },
   integrations: [
     // Brand-themed code blocks for ALL markdown (docs + blog). Must be listed
-    // before any markdown is processed. Carried over from the old Starlight EC config.
+    // before any markdown is processed.
     expressiveCode({
       themes: ['github-dark-default'],
       styleOverrides: {

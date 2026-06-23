@@ -38,11 +38,18 @@ export function deriveFrontmatter(markdown, _opts = {}) {
   // first paragraph after the H1 that is not a heading/fence/blank
   let desc = '';
   let seenH1 = false;
+  let inFence = false;
   for (const l of lines) {
     if (/^#\s+/.test(l)) { seenH1 = true; continue; }
     if (!seenH1) continue;
     const t = l.trim();
-    if (!t || t.startsWith('#') || t.startsWith('```') || t.startsWith('<')) {
+    // track fenced code blocks (``` or ~~~)
+    if (t.startsWith('```') || t.startsWith('~~~')) {
+      inFence = !inFence;
+      if (desc) break; else continue;
+    }
+    if (inFence) continue;
+    if (!t || t.startsWith('#') || t.startsWith('<')) {
       if (desc) break; else continue;
     }
     desc += (desc ? ' ' : '') + t;
