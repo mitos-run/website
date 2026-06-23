@@ -113,11 +113,18 @@ const schema = [
        EC renders: div.expressive-code > figure.frame > pre[data-language="mermaid"] > code
        We replace the outer div.expressive-code with a .mermaid host div. -->
   <script>
-    // EC structure: div.expressive-code wraps a figure > pre[data-language="mermaid"] > code
+    // EC structure: div.expressive-code wraps a figure > pre[data-language="mermaid"] > code,
+    // and every source line is its own <div class="ec-line">. textContent concatenates those
+    // block divs WITHOUT newlines, which collapses the diagram onto one line and makes mermaid
+    // throw "Syntax error". Rebuild the source by joining each .ec-line with a real newline.
     const ecBlocks = Array.from(document.querySelectorAll('pre[data-language="mermaid"]'))
       .map((pre) => {
         const wrapper = pre.closest('.expressive-code') || pre;
-        return { el: wrapper, source: (pre.querySelector('code') || pre).textContent || '' };
+        const lines = Array.from(pre.querySelectorAll('.ec-line'));
+        const source = lines.length
+          ? lines.map((l) => l.textContent).join('\n')
+          : (pre.querySelector('code') || pre).textContent || '';
+        return { el: wrapper, source };
       });
     // Fallback: plain pre > code.language-mermaid (no EC)
     const plainBlocks = Array.from(document.querySelectorAll('pre > code.language-mermaid, code.language-mermaid'))

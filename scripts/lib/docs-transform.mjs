@@ -67,10 +67,24 @@ export function deriveFrontmatter(markdown, _opts = {}) {
 
 function yamlEscape(s) { return String(s).replace(/"/g, '\\"'); }
 
+/**
+ * Remove the first level-1 heading line (and one immediately following blank
+ * line). The docs layout renders the page title from frontmatter, so leaving
+ * the source H1 in the body would render the title twice.
+ */
+export function stripLeadingH1(markdown) {
+  const lines = markdown.split('\n');
+  const i = lines.findIndex((l) => /^#\s+/.test(l));
+  if (i === -1) return markdown;
+  const drop = lines[i + 1] !== undefined && lines[i + 1].trim() === '' ? 2 : 1;
+  lines.splice(i, drop);
+  return lines.join('\n');
+}
+
 /** Full content-collection file: YAML frontmatter + transformed body. */
 export function toContentFile({ markdown, slug, group, order, sourceUrl, allowSlugs, repoBlobBase }) {
   const { title, description } = deriveFrontmatter(markdown);
-  const body = rewriteLinks(markdown, { allowSlugs, repoBlobBase });
+  const body = rewriteLinks(stripLeadingH1(markdown), { allowSlugs, repoBlobBase });
   const fm = [
     '---',
     `title: "${yamlEscape(title)}"`,

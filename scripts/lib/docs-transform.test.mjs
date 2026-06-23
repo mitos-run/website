@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { rewriteLinks, deriveFrontmatter } from './docs-transform.mjs';
+import { rewriteLinks, deriveFrontmatter, stripLeadingH1, toContentFile } from './docs-transform.mjs';
 
 const OPTS = {
   allowSlugs: new Set(['threat-model', 'cli', 'quickstart']),
@@ -68,4 +68,22 @@ test('fenced code block after H1 is skipped; description is the first prose para
   ].join('\n');
   const fm = deriveFrontmatter(md);
   assert.equal(fm.description, 'Sandboxes are not pods — they are lightweight gVisor micro-VMs.');
+});
+
+test('stripLeadingH1 removes only the first level-1 heading', () => {
+  assert.equal(stripLeadingH1('# Title\n\nbody text'), 'body text');
+  assert.equal(stripLeadingH1('## Sub\n\nbody text'), '## Sub\n\nbody text');
+  assert.equal(stripLeadingH1('no heading here'), 'no heading here');
+});
+
+test('toContentFile keeps title in frontmatter but strips the leading H1 from the body', () => {
+  const md = '# Quickstart\n\nInstall the SDK.\n\n## Run\n';
+  const out = toContentFile({
+    md: undefined, markdown: md, slug: 'quickstart', group: 'start', order: 0,
+    sourceUrl: 'https://example/quickstart.md', allowSlugs: new Set(), repoBlobBase: 'https://r',
+  });
+  assert.match(out, /title: "Quickstart"/);     // title preserved in frontmatter
+  assert.doesNotMatch(out, /\n# Quickstart\b/);  // no duplicate H1 in the rendered body
+  assert.match(out, /Install the SDK\./);        // body prose retained
+  assert.match(out, /## Run/);                   // h2 retained (feeds the ToC)
 });
