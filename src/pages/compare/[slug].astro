@@ -170,31 +170,31 @@ const others = competitors.filter((o) => o.slug !== c.slug);
     background: radial-gradient(closest-side, color-mix(in srgb, var(--magenta) 11%, transparent), transparent 72%);
     opacity: .5; filter: blur(8px); }
   .hero-in { position: relative; z-index: 1; max-width: 760px; }
-  .hero h1 { font-size: clamp(46px, 6vw, 76px); line-height: 1.0; letter-spacing: -.035em; font-weight: 400; margin: 0 0 20px; }
-  .lede { font-size: 19px; color: var(--ink-2); max-width: 36em; margin: 0 0 28px; line-height: 1.5; }
+  .hero h1 { font-size: var(--text-display); line-height: 1.0; letter-spacing: -.035em; font-weight: 400; margin: 0 0 20px; }
+  .lede { font-size: var(--text-lede); color: var(--ink-2); max-width: 36em; margin: 0 0 28px; line-height: 1.5; }
   .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
   .hero-actions.center { justify-content: center; }
 
   .verdict-wrap { padding-top: 44px; }
   .verdict { display: flex; gap: 18px; align-items: flex-start; border: 1px solid var(--hairline); border-left: 2px solid var(--magenta); border-radius: var(--r-md); background: var(--field-1); padding: 22px 24px; max-width: 60em; }
-  .verdict-tag { color: var(--magenta); font-size: 12px; padding-top: 3px; white-space: nowrap; letter-spacing: .04em; text-transform: uppercase; }
-  .verdict p { margin: 0; color: var(--ink); font-size: 16px; line-height: 1.6; }
+  .verdict-tag { color: var(--magenta); font-size: var(--text-micro); padding-top: 3px; white-space: nowrap; letter-spacing: .04em; text-transform: uppercase; }
+  .verdict p { margin: 0; color: var(--ink); font-size: var(--text-body); line-height: 1.6; }
 
   .cmp-section { padding-top: 88px; }
 
   /* comparison table (matches the homepage comp-table) */
   .table-wrap { overflow-x: auto; border: 1px solid var(--hairline); border-radius: var(--r-lg); }
-  .comp-table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 560px; }
+  .comp-table { width: 100%; border-collapse: collapse; font-size: var(--text-dense); min-width: 560px; }
   .comp-table th, .comp-table td { text-align: left; padding: 16px 18px; border-bottom: 1px solid var(--hairline); vertical-align: top; }
-  .comp-table thead th { background: var(--field-1); color: var(--ink-3); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+  .comp-table thead th { background: var(--field-1); color: var(--ink-3); font-weight: 500; font-size: var(--text-micro); text-transform: uppercase; letter-spacing: .04em; }
   .comp-table tbody tr:last-child td { border-bottom: none; }
   .comp-table tbody tr:hover td { background: rgba(255,255,255,.02); }
   .comp-table .feat { color: var(--ink-2); }
   .comp-table th:first-child, .comp-table td:first-child { position: sticky; left: 0; background: var(--field); }
   .comp-table thead th:first-child { background: var(--field-1); }
-  .comp-table .mk { font-size: 15px; display: block; line-height: 1.15; }
+  .comp-table .mk { font-size: var(--text-ui); display: block; line-height: 1.15; }
   .mk-y { color: var(--magenta); } .mk-n { color: var(--ink-3); } .mk-p { color: var(--ink-2); }
-  .comp-table .ct { color: var(--ink-3); font-size: 11px; margin-top: 3px; font-family: var(--mono); display: block; line-height: 1.25; }
+  .comp-table .ct { color: var(--ink-3); font-size: var(--text-nano); margin-top: 3px; font-family: var(--mono); display: block; line-height: 1.25; }
   .comp-table .own { color: var(--ink); }
   .comp-table thead th.own { color: var(--magenta); text-align: center; }
   .comp-table thead th:not(:first-child), .comp-table td:not(.feat) { text-align: center; }
@@ -205,37 +205,37 @@ const others = competitors.filter((o) => o.slug !== c.slug);
   .diffs-sec { padding-top: 88px; }
   .diffs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 40px; }
   .diff { border-top: 1px solid var(--hairline); padding-top: 22px; }
-  .diff h3 { font-size: 18px; font-weight: 500; color: var(--ink); letter-spacing: -.01em; margin: 0 0 12px; }
-  .diff p { color: var(--ink-2); font-size: 14.5px; line-height: 1.65; margin: 0; }
+  .diff h3 { font-size: var(--text-title); font-weight: 500; color: var(--ink); letter-spacing: -.01em; margin: 0 0 12px; }
+  .diff p { color: var(--ink-2); font-size: var(--text-ui); line-height: 1.65; margin: 0; }
 
   /* why mitos wins */
   .winwrap { padding-top: 88px; }
   .winwrap-inner { border: 1px solid var(--hairline); border-left: 2px solid var(--magenta); border-radius: var(--r-lg); background: var(--field-1); padding: 40px 40px 36px; max-width: 60em; }
   .winwrap-inner .section-title { margin-bottom: 22px; }
   .win-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; }
-  .win-list li { color: var(--ink); font-size: 15.5px; line-height: 1.55; padding-left: 28px; position: relative; }
+  .win-list li { color: var(--ink); font-size: var(--text-ui); line-height: 1.55; padding-left: 28px; position: relative; }
   .win-list li::before { content: '\2713'; position: absolute; left: 0; top: 0; color: var(--magenta); font-family: var(--mono); }
 
   /* faq */
   .faq { padding-top: 88px; }
   .faq-list { max-width: 760px; margin-top: 44px; }
-  .faq-item summary { list-style: none; cursor: pointer; padding: 16px 0; font-size: 16px; color: var(--ink); display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--hairline); transition: color .14s var(--ease); }
+  .faq-item summary { list-style: none; cursor: pointer; padding: 16px 0; font-size: var(--text-body); color: var(--ink); display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--hairline); transition: color .14s var(--ease); }
   .faq-item summary:hover { color: var(--magenta); }
   .faq-item summary::-webkit-details-marker { display: none; }
-  .faq-item summary::after { content: '+'; color: var(--magenta); font-family: var(--mono); font-size: 18px; }
+  .faq-item summary::after { content: '+'; color: var(--magenta); font-family: var(--mono); font-size: var(--text-title); }
   .faq-item[open] summary::after { content: '\2212'; }
-  .faq-item p { margin: 16px 0 22px; color: var(--ink-2); font-size: 14.5px; line-height: 1.6; }
+  .faq-item p { margin: 16px 0 22px; color: var(--ink-2); font-size: var(--text-ui); line-height: 1.6; }
 
   /* other comparisons */
   .more-compare { padding-top: 88px; }
   .more-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
   .more-card { display: flex; flex-direction: column; gap: 6px; border: 1px solid var(--hairline); border-radius: var(--r-md); padding: 20px; transition: border-color .14s var(--ease), transform .14s var(--ease); }
   .more-card:hover { border-color: var(--magenta); transform: translateY(-2px); }
-  .more-name { color: var(--ink); font-size: 15px; font-weight: 500; }
-  .more-blurb { color: var(--ink-2); font-size: 13px; line-height: 1.5; }
+  .more-name { color: var(--ink); font-size: var(--text-ui); font-weight: 500; }
+  .more-blurb { color: var(--ink-2); font-size: var(--text-caption); line-height: 1.5; }
 
   .final-cta { text-align: center; padding-top: 104px; }
-  .final-cta h2 { font-size: clamp(30px, 5vw, 52px); letter-spacing: var(--track-display); margin: 0 0 28px; font-weight: 400; }
+  .final-cta h2 { font-size: var(--text-cta); letter-spacing: var(--track-display); margin: 0 0 28px; font-weight: 400; }
 
   @media (max-width: 900px) {
     .diffs, .more-grid { grid-template-columns: 1fr; }
@@ -244,6 +244,6 @@ const others = competitors.filter((o) => o.slug !== c.slug);
   }
   @media (max-width: 760px) {
     .hero { padding-block: 104px 0; }
-    .hero h1 { font-size: clamp(30px, 8.4vw, 48px); line-height: 1.06; }
+    .hero h1 { font-size: var(--text-display-sm); line-height: 1.06; }
   }
 </style>
