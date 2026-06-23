@@ -1,0 +1,188 @@
+---
+// /blog/<slug> — a single post on the marketing Site shell. Header carries the
+// category + byline (author, date, reading time); the article ends with topic
+// tags and related posts (Paperclip-style). Prose left-aligns with the header.
+// Never use em or en dashes in copy.
+import Site from '../../layouts/Site.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const toc = headings.filter((h) => h.depth === 2);
+const fmt = (d: Date) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+const words = (post.body ?? '').split(/\s+/).filter(Boolean).length;
+const readingTime = Math.max(1, Math.round(words / 200));
+
+const related = (await getCollection('blog'))
+  .filter((p) => !p.data.draft && p.id !== post.id)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 2);
+
+const url = `https://mitos.run/blog/${post.id}`;
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.data.title,
+    description: post.data.description,
+    datePublished: post.data.date.toISOString(),
+    keywords: post.data.tags.join(', '),
+    author: { '@type': 'Organization', name: 'mitos', url: 'https://mitos.run' },
+    publisher: { '@type': 'Organization', name: 'mitos' },
+    mainEntityOfPage: url,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'mitos', item: 'https://mitos.run' },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://mitos.run/blog' },
+      { '@type': 'ListItem', position: 3, name: post.data.title, item: url },
+    ],
+  },
+  ...(post.data.faqs.length
+    ? [
+        {
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: post.data.faqs.map((f) => ({
+            '@type': 'Question',
+            name: f.q,
+            acceptedAnswer: { '@type': 'Answer', text: f.a },
+          })),
+        },
+      ]
+    : []),
+];
+---
+
+<Site title={`${post.data.title} · mitos`} description={post.data.description} schema={schema}>
+  <section class="page-hero container">
+    <a class="back mono" href="/blog">&larr; All notes</a>
+    <span class="art-cat mono">[{post.data.category}]</span>
+    <h1>{post.data.title}</h1>
+    <p class="byline mono">By {post.data.author} · <time datetime={post.data.date.toISOString()}>{fmt(post.data.date)}</time> · {readingTime} min read</p>
+  </section>
+
+  <section class:list={['container', 'article', toc.length > 0 && 'has-toc']}>
+    <div class="article-main">
+      <article class="prose">
+        <Content />
+      </article>
+      {post.data.faqs.length > 0 && (
+        <section class="post-faq">
+          <h2 class="post-faq-h">Frequently asked</h2>
+          <div class="faq-list">
+            {post.data.faqs.map((f) => (
+              <details class="faq-item">
+                <summary>{f.q}</summary>
+                <p>{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+      )}
+      {post.data.tags.length > 0 && (
+        <ul class="tags">
+          {post.data.tags.map((t) => <li class="tag mono">{t}</li>)}
+        </ul>
+      )}
+    </div>
+    {toc.length > 0 && (
+      <aside class="toc-rail">
+        <nav class="toc" aria-label="On this page">
+          <p class="toc-h">On this page</p>
+          <ol>
+            {toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}
+          </ol>
+        </nav>
+      </aside>
+    )}
+  </section>
+
+  {related.length > 0 && (
+    <section class="container related">
+      <h2 class="rel-h">Related</h2>
+      <div class="rel-grid">
+        {related.map((r) => (
+          <a class="rel-card" href={`/blog/${r.id}`}>
+            <span class="rel-cat mono">[{r.data.category}]</span>
+            <span class="rel-title">{r.data.title}</span>
+            <span class="rel-desc">{r.data.description}</span>
+            <span class="rel-meta mono">{r.data.author} · {fmt(r.data.date)}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+</Site>
+
+<style>
+  .page-hero { position: relative; }
+  .back { color: var(--ink-3); font-size: 13px; display: inline-block; margin-bottom: 18px; }
+  .back:hover { color: var(--magenta); }
+  .art-cat { display: block; color: var(--magenta); font-size: 12px; letter-spacing: .02em; margin-bottom: 12px; }
+  .byline { color: var(--ink-3); font-size: 13px; margin-top: 12px; }
+
+  /* article body: prose + a sticky, minimal ToC rail (Paperclip-style) */
+  .article { padding-top: 26px; padding-bottom: 8px; }
+  .article.has-toc { display: grid; grid-template-columns: minmax(0, 52em) minmax(0, 200px); gap: 56px; align-items: start; }
+  .article-main { min-width: 0; }
+
+  .toc-rail { position: sticky; top: 96px; }
+  .toc-h { color: var(--ink-3); font-size: 12px; margin: 0 0 12px; }
+  .toc ol { margin: 0; padding: 0; list-style: none; counter-reset: toc; display: grid; gap: 9px; }
+  .toc li { counter-increment: toc; display: flex; gap: 11px; align-items: baseline; }
+  .toc li::before { content: counter(toc, decimal-leading-zero); color: var(--ink-3); font-family: var(--mono); font-size: 11px; flex: none; }
+  .toc a { color: var(--ink-2); font-size: 14px; line-height: 1.4; }
+  .toc a:hover { color: var(--magenta); }
+
+  .prose { max-width: 52em; }
+  .prose :global(p) { color: var(--ink-2); font-size: 17px; line-height: 1.7; margin: 0 0 22px; }
+  .prose :global(strong) { color: var(--ink); font-weight: 500; }
+  .prose :global(a) { color: var(--cyan); border-bottom: 1px solid color-mix(in srgb, var(--cyan) 30%, transparent); }
+  .prose :global(a:hover) { border-bottom-color: var(--cyan); }
+  .prose :global(h2) { font-size: clamp(22px, 2.6vw, 28px); font-weight: 400; letter-spacing: var(--track-display); margin: 40px 0 14px; color: var(--ink); }
+  .prose :global(ul), .prose :global(ol) { color: var(--ink-2); font-size: 17px; line-height: 1.7; margin: 0 0 22px; padding-left: 22px; }
+  .prose :global(li) { margin: 0 0 8px; }
+  .prose :global(pre) { background: var(--field-1); border: 1px solid var(--hairline); border-radius: var(--r-md); padding: 16px 18px; overflow-x: auto; font-size: 13px; line-height: 1.7; margin: 0 0 22px; }
+  .prose :global(:not(pre) > code) { font-family: var(--mono); font-size: 13.5px; color: var(--ink); background: var(--field-2); padding: 2px 6px; border-radius: var(--r-sm); }
+  .prose :global(table) { width: 100%; border-collapse: collapse; font-size: 14px; margin: 0 0 24px; display: block; overflow-x: auto; }
+  .prose :global(th), .prose :global(td) { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+  .prose :global(thead th) { color: var(--ink-3); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; background: var(--field-1); }
+  .prose :global(tbody tr:last-child td) { border-bottom: none; }
+
+  .post-faq { max-width: 52em; margin-top: 8px; padding-top: 24px; border-top: 1px solid var(--hairline); }
+  .post-faq-h { font-size: clamp(20px, 2.6vw, 26px); font-weight: 400; letter-spacing: var(--track-display); margin: 0 0 8px; }
+  .faq-item summary { list-style: none; cursor: pointer; padding: 16px 0; font-size: 16px; color: var(--ink); display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--hairline); transition: color .14s var(--ease); }
+  .faq-item summary:hover { color: var(--magenta); }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::after { content: '+'; color: var(--magenta); font-family: var(--mono); font-size: 18px; }
+  .faq-item[open] summary::after { content: '\2212'; }
+  .faq-item p { margin: 16px 0 22px; color: var(--ink-2); font-size: 14.5px; line-height: 1.6; }
+
+  .tags { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 0; padding: 24px 0 0; max-width: 52em; border-top: 1px solid var(--hairline); }
+  .tag { color: var(--ink-3); font-size: 12px; border: 1px solid var(--hairline); border-radius: 999px; padding: 5px 11px; }
+
+  .related { padding-top: 72px; padding-bottom: 96px; }
+  .rel-h { font-size: clamp(20px, 2.6vw, 26px); font-weight: 400; letter-spacing: var(--track-display); margin: 0 0 22px; }
+  .rel-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; max-width: 60em; }
+  .rel-card { display: flex; flex-direction: column; gap: 6px; border: 1px solid var(--hairline); border-radius: var(--r-md); padding: 22px; transition: border-color .14s var(--ease), transform .14s var(--ease); }
+  .rel-card:hover { border-color: var(--magenta); transform: translateY(-2px); }
+  .rel-cat { color: var(--magenta); font-size: 11px; }
+  .rel-title { color: var(--ink); font-size: 16px; font-weight: 500; letter-spacing: -.01em; }
+  .rel-desc { color: var(--ink-2); font-size: 14px; line-height: 1.55; }
+  .rel-meta { color: var(--ink-3); font-size: 12px; margin-top: 2px; }
+
+  @media (max-width: 1000px) {
+    .article.has-toc { grid-template-columns: 1fr; gap: 0; }
+    .toc-rail { position: static; order: -1; margin-bottom: 28px; }
+  }
+  @media (max-width: 700px) { .rel-grid { grid-template-columns: 1fr; } }
+</style>
