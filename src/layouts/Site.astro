@@ -39,7 +39,7 @@ const baseSchema: Record<string, unknown>[] = [
     '@context': 'https://schema.org',
     '@type': 'Organization',
     '@id': orgId,
-    name: 'mitos',
+    name: 'Mitos',
     url: 'https://mitos.run',
     logo: 'https://mitos.run/icon-512.png',
     description: 'Managed, forkable Firecracker microVM sandboxes for AI agent swarms. Open source under Apache 2.0.',
@@ -49,7 +49,7 @@ const baseSchema: Record<string, unknown>[] = [
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     '@id': 'https://mitos.run/#website',
-    name: 'mitos',
+    name: 'Mitos',
     url: 'https://mitos.run',
     publisher: { '@id': orgId },
   },
@@ -79,14 +79,14 @@ const navLinks = [
     <link rel="icon" href="/favicon-16.png" type="image/png" sizes="16x16" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <link rel="alternate" type="application/rss+xml" title="mitos blog" href="/rss.xml" />
+    <link rel="alternate" type="application/rss+xml" title="Mitos blog" href="/rss.xml" />
     <meta name="theme-color" content="#04050A" />
     <title>{title}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="canonical" href={canonical} />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="mitos" />
+    <meta property="og:site_name" content="Mitos" />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -95,7 +95,7 @@ const navLinks = [
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="mitos: fork a running microVM into an agent swarm" />
+    <meta property="og:image:alt" content="Mitos: fork a running microVM into an agent swarm" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
@@ -111,7 +111,7 @@ const navLinks = [
 
     <header class="nav" id="nav">
       <div class="container nav-inner">
-        <a class="brand" href="/"><Mark class="brand-mark" /> mitos</a>
+        <a class="brand" href="/"><Mark class="brand-mark" /> Mitos</a>
         <nav class="nav-links">
           {navLinks.map((l) => <a href={l.href}>{l.label}</a>)}
         </nav>

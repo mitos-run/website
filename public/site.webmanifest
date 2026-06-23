@@ -1,6 +1,6 @@
 {
-  "name": "mitos",
-  "short_name": "mitos",
+  "name": "Mitos",
+  "short_name": "Mitos",
   "description": "Millisecond microVM sandbox forking for agent swarms.",
   "start_url": "/",
   "display": "standalone",

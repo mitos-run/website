@@ -1,6 +1,6 @@
 # mitos-website
 
-The open-source marketing site and documentation for **mitos** (https://mitos.run),
+The open-source marketing site and documentation for **Mitos** (https://mitos.run),
 built with [Astro](https://astro.build) + [Starlight](https://starlight.astro.build).
 
 This repo also serves the **Go vanity import metadata** for the module

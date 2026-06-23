@@ -13,7 +13,7 @@ export const collections = {
       date: z.coerce.date(),
       category: z.string().default('engineering'),
       tags: z.array(z.string()).default([]),
-      author: z.string().default('mitos team'),
+      author: z.string().default('Mitos team'),
       faqs: z.array(z.object({ q: z.string(), a: z.string() })).default([]),
       draft: z.boolean().default(false),
     }),

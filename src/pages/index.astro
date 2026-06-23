@@ -20,7 +20,7 @@ const SIGNUP = '/quickstart'; // hosted console not live yet; OSS run-now path
 // Title carries the search keywords (fork / microVM / agent swarm) using the
 // brand's own locked vocabulary; the poetic line lives in the OG card + body.
 // Colon separator, never an em/en dash (brand style rule).
-const TITLE = 'mitos: Fork a running microVM into an agent swarm';
+const TITLE = 'Mitos: Fork a running microVM into an agent swarm';
 const DESC =
   'Fork a running microVM into hundreds of isolated subagents in ~27ms, ~3 MiB each. Live state, not a snapshot. Managed, Apache-2.0, no lock-in.';
 
@@ -116,7 +116,7 @@ const hostedItems = [
 // Honest, capability-based comparison from public docs (not a head-to-head
 // benchmark). s = 'y' yes | 'n' no | 'p' partial; t = short note. Only mitos is
 // 'y' on live-fork AND microVM AND Apache-2.0 AND managed at once.
-const compCols = ['mitos', 'E2B', 'Modal', 'Daytona', 'Morph'];
+const compCols = ['Mitos', 'E2B', 'Modal', 'Daytona', 'Morph'];
 const compRows = [
   { feat: 'Live fork of a running VM (memory + processes)', cells: [{ s: 'y' }, { s: 'n', t: 'snapshot' }, { s: 'n', t: 'snapshot' }, { s: 'p', t: 'filesystem' }, { s: 'p', t: 'snapshot' }] },
   { feat: 'Published marginal cost per fork', cells: [{ s: 'y', t: '~3 MiB' }, { s: 'n' }, { s: 'n' }, { s: 'n' }, { s: 'n' }] },
@@ -146,7 +146,7 @@ const schema = [
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
     '@id': 'https://mitos.run/#software',
-    name: 'mitos',
+    name: 'Mitos',
     applicationCategory: 'DeveloperApplication',
     operatingSystem: 'Linux',
     description: DESC,
@@ -214,7 +214,7 @@ const schema = [
   <!-- THE DIVISION -->
   <section class="division-section" id="swarm">
     <div class="container division-head reveal">
-      <h2 class="division-h">Most sandboxes cold-boot or restore a snapshot.<br class="dh-br" /> <span class="division-h-hl">mitos forks the running machine.</span></h2>
+      <h2 class="division-h">Most sandboxes cold-boot or restore a snapshot.<br class="dh-br" /> <span class="division-h-hl">Mitos forks the running machine.</span></h2>
       <p class="division-lede">
         A fork copies the <em>live</em> VM, memory and all, not just the disk. Daughters share
         the parent's pages and pay only for what they change: about 3&nbsp;MiB each, not eight
@@ -320,7 +320,7 @@ const schema = [
   <section class="compare container" id="compare">
     <h2 class="section-title reveal">Live fork, microVM isolation, and actually open</h2>
     <p class="section-lede reveal">
-      Plenty of runtimes do one of these. mitos does all of them.
+      Plenty of runtimes do one of these. Mitos does all of them.
       <span class="muted">Capabilities from each project's public docs, not a head-to-head benchmark.</span>
     </p>
     <div class="table-wrap reveal">

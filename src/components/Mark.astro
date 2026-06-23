@@ -10,7 +10,7 @@ interface Props {
   decorative?: boolean;
   label?: string;
 }
-const { class: className, decorative = true, label = 'mitos' } = Astro.props;
+const { class: className, decorative = true, label = 'Mitos' } = Astro.props;
 // Unique clip id per instance so multiple marks on one page stay valid HTML.
 const uid = 'mitos-mark-' + crypto.randomUUID().slice(0, 8);
 ---

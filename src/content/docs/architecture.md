@@ -1,9 +1,9 @@
 ---
-title: "Architecture: how mitos forks running microVMs"
-description: "How mitos boots, live-forks, and isolates Firecracker microVM sandboxes: the controller, forkd, the guest agent, and the mitos.run CRDs that drive them."
+title: "Architecture: how Mitos forks running microVMs"
+description: "How Mitos boots, live-forks, and isolates Firecracker microVM sandboxes: the controller, forkd, the guest agent, and the mitos.run CRDs that drive them."
 ---
 
-mitos runs every sandbox as a Firecracker microVM with its own kernel, and its
+Mitos runs every sandbox as a Firecracker microVM with its own kernel, and its
 signature operation is a **live fork** of a running VM: the parent's memory and
 processes are copied-on-write into N daughters that resume warm. This page
 describes the moving parts that make that possible. Keep it in sync with the
@@ -13,7 +13,7 @@ drifts from the code.
 ## The fork primitive
 
 A traditional sandbox either cold-boots or restores a snapshot for every new
-environment. mitos instead snapshots a *running* microVM once and then forks it:
+environment. Mitos instead snapshots a *running* microVM once and then forks it:
 daughters share the parent's memory pages until they write, so a fork lands in
 about 27 ms and adds roughly 3 MiB of marginal memory rather than a whole VM.
 Because each daughter is a full microVM, the swarm is isolated agent-from-agent,
