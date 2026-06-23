@@ -177,7 +177,8 @@ const schema = [
   .prose :global(h2) { font-size: clamp(22px, 2.6vw, 28px); font-weight: 400; letter-spacing: var(--track-display); margin: 40px 0 14px; color: var(--ink); }
   .prose :global(ul), .prose :global(ol) { color: var(--ink-2); font-size: 17px; line-height: 1.7; margin: 0 0 22px; padding-left: 22px; }
   .prose :global(li) { margin: 0 0 8px; }
-  .prose :global(pre) { background: var(--field-1); border: 1px solid var(--hairline); border-radius: var(--r-md); padding: 16px 18px; overflow-x: auto; font-size: 13px; line-height: 1.7; margin: 0 0 22px; }
+  /* fenced code blocks are rendered + themed by Expressive Code (see astro.config) */
+  .prose :global(.expressive-code) { margin: 0 0 22px; }
   .prose :global(:not(pre) > code) { font-family: var(--mono); font-size: 13.5px; color: var(--ink); background: var(--field-2); padding: 2px 6px; border-radius: var(--r-sm); }
   .prose :global(table) { width: 100%; border-collapse: collapse; font-size: 14px; margin: 0 0 24px; display: block; overflow-x: auto; }
   .prose :global(th), .prose :global(td) { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--hairline); vertical-align: top; }
