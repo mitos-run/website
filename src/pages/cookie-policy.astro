@@ -1,0 +1,195 @@
+---
+// /cookie-policy — Cookie Policy for mitos.run. Describes the ACTUAL storage this
+// site uses: an essential consent flag + GitHub star cache (localStorage), and
+// consent-gated, EU-hosted PostHog (cookie + localStorage), loaded only after the
+// visitor clicks "Accept". GDPR + ePrivacy Directive (2002/58/EC) framing.
+//
+// KEEP IN SYNC with src/components/Analytics.astro (the source of truth for cookie
+// names + PostHog config) and src/pages/privacy.astro. Review with counsel before
+// relying on it. Never use em or en dashes in copy.
+import Site from '../layouts/Site.astro';
+
+const LEGAL_EMAIL = 'legal@mitos.run';
+const UPDATED = 'June 23, 2026';
+const TITLE = 'Cookie Policy: what mitos.run stores';
+const DESC =
+  'The cookies and local storage mitos.run uses: an essential consent flag, and EU-hosted PostHog analytics loaded only after you opt in. No marketing or cross-site tracking.';
+
+const rows = [
+  {
+    name: 'mitos-analytics-consent',
+    provider: 'mitos.run (first-party)',
+    purpose: 'Remembers whether you accepted or declined analytics, so we honour your choice.',
+    duration: 'Until you clear it',
+    type: 'Local storage',
+    category: 'Strictly necessary',
+    when: 'Always',
+  },
+  {
+    name: 'GitHub star-count cache',
+    provider: 'mitos.run (first-party)',
+    purpose: 'Caches the public GitHub star number so we do not re-request it on every page. Not personal data; never leaves your device.',
+    duration: 'Until you clear it',
+    type: 'Local storage',
+    category: 'Strictly necessary',
+    when: 'Always',
+  },
+  {
+    name: 'ph_…_posthog',
+    provider: 'PostHog (EU, eu.i.posthog.com)',
+    purpose: 'Anonymous product analytics: a device and session identifier used to understand how the site is used.',
+    duration: '365 days',
+    type: 'Cookie',
+    category: 'Analytics',
+    when: 'Only after you Accept',
+  },
+  {
+    name: 'ph_…_posthog (and related ph_* keys)',
+    provider: 'PostHog (EU)',
+    purpose: 'Stores analytics state such as feature-flag and session-recording configuration.',
+    duration: 'Until you clear it',
+    type: 'Local storage',
+    category: 'Analytics',
+    when: 'Only after you Accept',
+  },
+  {
+    name: '__ph_opt_in_out_…',
+    provider: 'PostHog (EU)',
+    purpose: 'Records that you opted out, so analytics stay off.',
+    duration: 'Until you clear it',
+    type: 'Cookie / local storage',
+    category: 'Strictly necessary',
+    when: 'If you Decline within a loaded session',
+  },
+];
+---
+
+<Site title={TITLE} description={DESC}>
+  <section class="page-hero container">
+    <p class="eyebrow mono">Legal</p>
+    <h1>Cookie Policy</h1>
+    <p class="lede">What we store in your browser, and the analytics you can turn off in one click.</p>
+    <p class="updated mono">Last updated: {UPDATED}</p>
+  </section>
+
+  <section class="container prose">
+    <p>
+      This policy explains the cookies and similar storage used on <strong>mitos.run</strong>, our
+      marketing and documentation site. Read it alongside our <a href="/privacy">Privacy Policy</a>.
+      The short version: until you opt in to analytics we set <strong>no cookies</strong>, and we use
+      <strong>no marketing, advertising, or cross-site tracking</strong> of any kind.
+    </p>
+
+    <h2>What cookies and local storage are</h2>
+    <p>
+      A <strong>cookie</strong> is a small file a site stores in your browser. <strong>Local
+      storage</strong> is similar browser storage that stays on your device until cleared. Both let a
+      site remember things between visits. Under EU rules (the ePrivacy Directive 2002/58/EC, read with
+      the GDPR), these technologies are treated the same way: anything that is not strictly necessary
+      needs your consent before it is set. We treat them the same here.
+    </p>
+
+    <h2>How we use them</h2>
+    <p>We use two categories only:</p>
+    <ul>
+      <li><strong>Strictly necessary.</strong> A small amount of storage that makes the site work and
+        records your privacy choice. This is always present and does not need consent.</li>
+      <li><strong>Analytics.</strong> Privacy-friendly, EU-hosted product analytics (PostHog),
+        including session replays with every form input masked, loaded <strong>only after you
+        accept</strong>. IP addresses are discarded and the data is not linked to your identity.</li>
+    </ul>
+    <p>We do <strong>not</strong> use marketing, advertising, social-media, or cross-site tracking cookies.</p>
+
+    <h2>The cookies and storage we use</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Name</th><th>Provider</th><th>Purpose</th><th>Duration</th><th>Type</th><th>Category</th><th>Set when</th></tr>
+        </thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr>
+              <td><code>{r.name}</code></td>
+              <td>{r.provider}</td>
+              <td>{r.purpose}</td>
+              <td>{r.duration}</td>
+              <td>{r.type}</td>
+              <td>{r.category}</td>
+              <td>{r.when}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="note">
+      The PostHog names above include our PostHog project key in place of the "…". Names are set by
+      PostHog and can change between versions; this table is kept in line with our analytics
+      configuration.
+    </p>
+
+    <h2>Legal basis</h2>
+    <p>
+      For <strong>analytics</strong>, our legal basis is your <strong>consent</strong> (GDPR Article
+      6(1)(a), together with Article 5(3) of the ePrivacy Directive). We do not rely on legitimate
+      interest for analytics. For <strong>strictly necessary</strong> storage, no consent is required
+      because it is necessary to provide the site you asked for and to honour your privacy choice.
+    </p>
+
+    <h2>Giving, changing, or withdrawing consent</h2>
+    <p>
+      Analytics are off until you choose "Accept" on the consent banner, and declining is exactly as
+      easy as accepting. You can change your mind at any time:
+    </p>
+    <ul>
+      <li>open <button class="as-link prose-link" type="button" onclick="window.openCookieSettings && window.openCookieSettings()">Cookie settings</button>
+        (also linked in the footer) to accept or decline again;</li>
+      <li>clear cookies and local storage in your browser at any time;</li>
+      <li>we also honour your browser's <strong>Do Not Track</strong> signal.</li>
+    </ul>
+
+    <h2>Third parties and sub-processors</h2>
+    <p>The storage and processing above involve:</p>
+    <ul>
+      <li><strong>PostHog</strong> product analytics and masked session replay, processed in the
+        European Union, <strong>only if you opt in</strong>; IP addresses are discarded.</li>
+      <li><strong>GitHub, Inc.</strong> hosting (GitHub Pages) and the public GitHub API used for the
+        star count. These are server-side and do not set the cookies above.</li>
+      <li><strong>Cloudflare, Inc.</strong> CDN and edge security in front of the site.</li>
+    </ul>
+    <p>See our <a href="/privacy">Privacy Policy</a> for more on how these providers handle data.</p>
+
+    <h2>Changes to this policy</h2>
+    <p>We will update this page if our use of cookies changes, and revise the date above.</p>
+
+    <h2>Contact</h2>
+    <p>
+      Questions about cookies can be sent to <a href={`mailto:${LEGAL_EMAIL}`}>{LEGAL_EMAIL}</a> or
+      raised through our <a href="/contact">contact page</a>.
+    </p>
+  </section>
+</Site>
+
+<style>
+  .page-hero { position: relative; }
+  .updated { color: var(--ink-3); font-size: 13px; margin-top: 8px; }
+  .prose { max-width: 60em; padding-bottom: 96px; }
+  .prose p { color: var(--ink-2); font-size: 16px; line-height: 1.7; margin: 0 0 18px; }
+  .prose ul { color: var(--ink-2); font-size: 16px; line-height: 1.7; margin: 0 0 18px; padding-left: 22px; }
+  .prose li { margin: 0 0 8px; }
+  .prose strong { color: var(--ink); font-weight: 500; }
+  .prose a { color: var(--cyan); border-bottom: 1px solid color-mix(in srgb, var(--cyan) 30%, transparent); }
+  .prose a:hover { border-bottom-color: var(--cyan); }
+  .prose h2 { font-size: clamp(20px, 2.4vw, 26px); font-weight: 400; letter-spacing: var(--track-display); margin: 36px 0 12px; }
+  .prose .note { font-size: 13px; color: var(--ink-3); }
+
+  .as-link { background: none; border: none; padding: 0; font: inherit; cursor: pointer; }
+  .prose-link { color: var(--cyan); border-bottom: 1px solid color-mix(in srgb, var(--cyan) 30%, transparent); }
+  .prose-link:hover { border-bottom-color: var(--cyan); }
+
+  .table-wrap { overflow-x: auto; margin: 0 0 18px; border: 1px solid var(--hairline); border-radius: var(--r-md); }
+  table { border-collapse: collapse; width: 100%; min-width: 720px; font-size: 13.5px; }
+  thead th { text-align: left; font-weight: 500; color: var(--ink); background: var(--field-1); padding: 11px 14px; border-bottom: 1px solid var(--hairline); white-space: nowrap; }
+  tbody td { color: var(--ink-2); padding: 11px 14px; border-bottom: 1px solid var(--hairline); vertical-align: top; line-height: 1.5; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody code { font-family: var(--mono); font-size: 12px; color: var(--ink); background: var(--field-2); padding: 2px 6px; border-radius: var(--r-sm); white-space: nowrap; }
+</style>
