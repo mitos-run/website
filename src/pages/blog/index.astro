@@ -1,0 +1,86 @@
+---
+// /blog — engineering notes index on the marketing Site shell. Lists posts from
+// the `blog` content collection (newest first) and points to the changelog for
+// release-by-release shipping notes. Never use em or en dashes in copy.
+import Site from '../../layouts/Site.astro';
+import { getCollection } from 'astro:content';
+
+const GITHUB = 'https://github.com/mitos-run/mitos';
+const TITLE = 'mitos blog: engineering notes';
+const DESC =
+  'Engineering notes from mitos: how forking a running microVM into an agent swarm works, with reproducible numbers and no hype.';
+
+const posts = (await getCollection('blog'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const fmt = (d: Date) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<Site title={TITLE} description={DESC}>
+  <section class="hero container">
+    <div class="hero-aura" aria-hidden="true"></div>
+    <div class="hero-in reveal">
+      <h1>Engineering notes</h1>
+      <p class="lede">How mitos works and what we ship, with reproducible numbers and no hype.</p>
+      <a class="rss-link mono" href="/rss.xml">RSS feed</a>
+    </div>
+  </section>
+
+  <section class="container posts-sec">
+    <ol class="posts">
+      {posts.map((p) => (
+        <li class="post reveal">
+          <a class="post-link" href={`/blog/${p.id}`}>
+            <span class="post-cat mono">[{p.data.category}]</span>
+            <h2 class="post-title">{p.data.title}</h2>
+            <p class="post-desc">{p.data.description}</p>
+            <span class="post-foot">
+              <span class="post-meta mono">{p.data.author} · {fmt(p.data.date)}</span>
+              <span class="post-cta mono">Read &rarr;</span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ol>
+
+    <div class="changelog reveal">
+      <p>Looking for release-by-release shipping notes?</p>
+      <a class="btn btn-ghost" href={`${GITHUB}/releases`} target="_blank" rel="noopener">See the changelog</a>
+    </div>
+  </section>
+</Site>
+
+<style>
+  .hero { padding-block: 184px 0; position: relative; }
+  .hero-aura { position: absolute; top: -60px; left: 4%; width: 680px; max-width: 90vw; height: 520px; z-index: 0; pointer-events: none;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--magenta) 11%, transparent), transparent 72%);
+    opacity: .5; filter: blur(8px); }
+  .hero-in { position: relative; z-index: 1; max-width: 720px; }
+  .hero h1 { font-size: clamp(46px, 6vw, 76px); line-height: 1.0; letter-spacing: -.035em; font-weight: 400; margin: 0 0 20px; text-wrap: balance; }
+  .lede { font-size: 19px; color: var(--ink-2); max-width: 34em; margin: 0; line-height: 1.5; text-wrap: balance; }
+  .rss-link { display: inline-block; margin-top: 22px; color: var(--ink-3); font-size: 13px; }
+  .rss-link:hover { color: var(--magenta); }
+
+  .posts-sec { padding-top: 64px; padding-bottom: 96px; max-width: 52em; }
+  .posts { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--hairline); }
+  .post { border-bottom: 1px solid var(--hairline); }
+  .post-link { display: block; padding: 28px 0; transition: opacity .14s var(--ease); }
+  .post-link:hover { opacity: .85; }
+  .post-link:hover .post-title { color: var(--magenta); }
+  .post-cat { color: var(--magenta); font-size: 12px; letter-spacing: .02em; }
+  .post-title { font-size: clamp(20px, 2.6vw, 26px); font-weight: 500; color: var(--ink); letter-spacing: -.01em; margin: 8px 0 8px; transition: color .14s var(--ease); }
+  .post-desc { color: var(--ink-2); font-size: 15.5px; line-height: 1.6; margin: 0 0 12px; max-width: 46em; }
+  .post-foot { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+  .post-meta { color: var(--ink-3); font-size: 12.5px; }
+  .post-cta { color: var(--magenta); font-size: 12.5px; }
+
+  .changelog { margin-top: 48px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    border: 1px solid var(--hairline); border-left: 2px solid var(--cyan); border-radius: var(--r-md); background: var(--field-1); padding: 22px 24px; }
+  .changelog p { margin: 0; color: var(--ink-2); font-size: 15px; }
+
+  @media (max-width: 760px) {
+    .hero { padding-block: 104px 0; }
+    .hero h1 { font-size: clamp(30px, 8.4vw, 48px); line-height: 1.06; }
+  }
+</style>

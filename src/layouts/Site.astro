@@ -79,6 +79,7 @@ const navLinks = [
     <link rel="icon" href="/favicon-16.png" type="image/png" sizes="16x16" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
+    <link rel="alternate" type="application/rss+xml" title="mitos blog" href="/rss.xml" />
     <meta name="theme-color" content="#04050A" />
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -298,7 +299,7 @@ const navLinks = [
       .cmp tbody tr:hover { background: rgba(255,255,255,.02); }
 
       /* page hero (shared by sub-pages) */
-      .page-hero { padding: 88px 0 8px; }
+      .page-hero { padding-block: 88px 8px; }
       .page-hero .eyebrow { color: var(--ink-2); font-size: 12.5px; margin: 0 0 18px; }
       .page-hero h1 { font-size: clamp(38px, 5vw, 60px); line-height: 1.02; letter-spacing: -.04em; font-weight: 400; margin: 0 0 20px; }
       .page-hero .lede { font-size: 19px; color: var(--ink-2); max-width: 32em; margin: 0 0 28px; }
