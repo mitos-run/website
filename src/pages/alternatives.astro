@@ -282,8 +282,8 @@ const schema = [
   .comp-table thead th { background: var(--field-1); color: var(--ink-3); font-weight: 500; font-size: var(--text-micro); text-transform: uppercase; letter-spacing: .04em; }
   .comp-table tbody tr:last-child td { border-bottom: none; }
   .comp-table tbody tr:hover td { background: rgba(255,255,255,.02); }
-  .comp-table th:first-child, .comp-table td:first-child { position: sticky; left: 0; background: var(--field); }
-  .comp-table thead th:first-child { background: var(--field-1); }
+  .comp-table th:first-child, .comp-table td:first-child { position: sticky; left: 0; z-index: 1; background: var(--field); }
+  .comp-table thead th:first-child { z-index: 2; background: var(--field-1); }
   .comp-table .pname a { color: var(--ink); font-weight: 500; }
   .comp-table .pname a:hover { color: var(--magenta); }
   .comp-table .own-row td:first-child { background: color-mix(in srgb, var(--magenta) 7%, var(--field)); }
