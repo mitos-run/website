@@ -240,6 +240,52 @@ export const competitors: Competitor[] = [
       { q: 'Which is faster?', a: 'mitos publishes about 27 ms to activate a warm fork, reproducible from the repo. Morph cites sub-250 ms for branch and restore. They measure differently, so treat it as context.' },
     ],
   },
+
+  {
+    slug: 'codesandbox',
+    name: 'CodeSandbox',
+    blurb: 'Closed, hosted SDK that also forks running microVMs, but slower and not self-hostable.',
+    title: 'mitos vs CodeSandbox: open microVM fork vs hosted SDK',
+    description:
+      'mitos vs the CodeSandbox SDK for AI agents: both fork a running Firecracker microVM, but mitos activates in about 27 ms, is Apache-2.0, and self-hosts on your cluster.',
+    h1: 'mitos vs CodeSandbox',
+    lede:
+      'mitos and the CodeSandbox SDK both fork a running microVM into copies. mitos lands a warm fork in about 27 ms, ships under Apache 2.0, and runs on your own Kubernetes cluster; CodeSandbox is closed and hosted only.',
+    verdict:
+      'CodeSandbox is one of the few runtimes that also forks a running VM, so the fork itself is a tie. The difference is speed, openness, and ownership: mitos activates a warm fork in about 27 ms against the hundreds of milliseconds CodeSandbox publishes, ships under Apache 2.0, and self-hosts on any KVM Kubernetes cluster, while CodeSandbox stays a closed, hosted SDK.',
+    rows: [
+      row('Fork a running VM (memory + processes)', { s: 'y', t: '~863 ms fork' }, MITOS.liveFork),
+      row('Warm activate latency', { s: 'p', t: '~495 ms resume' }, MITOS.latency),
+      row('Published marginal cost per fork', { s: 'n' }, MITOS.marginal),
+      row('microVM isolation (own kernel)', { s: 'y', t: 'Firecracker' }, MITOS.isolation),
+      row('Open source license', { s: 'n', t: 'closed, hosted' }, MITOS.license),
+      row('Self-host on your cluster', { s: 'n', t: 'hosted only' }, { s: 'y', t: 'any KVM K8s' }),
+    ],
+    sections: [
+      {
+        h: 'The same fork, far faster',
+        body: 'mitos and CodeSandbox both fork a running microVM instead of building each sandbox from scratch, so we will not pretend the fork is ours alone. mitos lands a warm fork in about 27 ms on the bare-metal reference node, while CodeSandbox publishes hundreds of milliseconds for a live fork or a memory resume. When one agent fans into many attempts, that gap compounds across every branch.',
+      },
+      {
+        h: 'Open and self-hostable',
+        body: 'mitos ships under Apache 2.0 and runs on any Kubernetes cluster with KVM nodes, so the same engine runs in your account or ours and your data never leaves your infrastructure. The CodeSandbox SDK is closed and hosted, so the runtime stays on their cloud and you cannot run it on your own hardware.',
+      },
+      {
+        h: 'A primitive, not a silo',
+        body: 'mitos exposes the fork as a declarative Kubernetes primitive, with CRDs and a published per-fork memory cost of about 3 MiB, so you build your own agent platform on top. CodeSandbox wraps the fork inside its own hosted SDK, with fewer knobs for running it as infrastructure you control.',
+      },
+    ],
+    mitosWins: [
+      'The same live fork, but a warm activate in about 27 ms instead of hundreds.',
+      'Apache 2.0 and self-hostable on any KVM Kubernetes cluster, not a closed hosted SDK.',
+      'A declarative microVM primitive with a published per-fork memory cost, built for your own platform.',
+    ],
+    faqs: [
+      { q: 'Does CodeSandbox fork a running sandbox?', a: 'Yes. CodeSandbox is one of the few runtimes that forks a running microVM from a memory snapshot. mitos does the same, but activates a warm fork in about 27 ms and publishes the per-fork memory cost.' },
+      { q: 'Can I self-host CodeSandbox?', a: 'No. The CodeSandbox SDK is closed and hosted only. mitos is Apache 2.0 and runs on any Kubernetes cluster with KVM nodes, or fully hosted on the same engine.' },
+      { q: 'Which is faster?', a: 'mitos publishes about 27 ms to activate a warm fork, against the hundreds of milliseconds CodeSandbox publishes for live fork and memory resume. Both are self-reported on different hardware, so treat it as context, not a head-to-head benchmark.' },
+    ],
+  },
 ];
 
 export const getCompetitor = (slug: string) => competitors.find((c) => c.slug === slug);
