@@ -34,7 +34,6 @@ const columns = [
       { label: 'Docs', href: '/quickstart' },
       { label: 'Quickstart', href: '/quickstart' },
       { label: 'Architecture', href: '/architecture' },
-      { label: 'GitHub', href: GITHUB, external: true },
       { label: 'Security', href: `${GITHUB}/blob/main/SECURITY.md`, external: true },
     ],
   },
@@ -89,7 +88,6 @@ const legalLinks = [
               ? <a href={link.href} target="_blank" rel="noopener">{link.label}</a>
               : <a href={link.href}>{link.label}</a>
           ))}
-          <button class="as-link" type="button" onclick="window.openCookieSettings && window.openCookieSettings()">Cookie settings</button>
         </nav>
       </details>
     </div>
@@ -123,11 +121,8 @@ const legalLinks = [
   .footer-h::-webkit-details-marker { display: none; }
   .footer-h::marker { content: ''; }
   .footer-h h2 { margin: 0; font-size: 13px; font-weight: 500; color: var(--ink-2); }
-  .footer-col nav a,
-  .footer-col nav .as-link { display: block; color: var(--ink-2); font-size: 14px; padding: 4px 0; text-align: left; }
-  .footer-col nav a:hover,
-  .footer-col nav .as-link:hover { color: var(--ink); }
-  .as-link { background: none; border: none; font: inherit; cursor: pointer; }
+  .footer-col nav a { display: block; color: var(--ink-2); font-size: 14px; padding: 4px 0; }
+  .footer-col nav a:hover { color: var(--ink); }
 
   /* Bottom row */
   .footer-bottom { padding-top: 24px; border-top: 1px solid var(--hairline); font-size: 13px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
@@ -148,7 +143,6 @@ const legalLinks = [
     .footer-h::after { content: '+'; color: var(--ink-3); font-size: 18px; line-height: 1; }
     .footer-col[open] .footer-h::after { content: '\2212'; } /* minus */
     .footer-col > nav { padding-bottom: 12px; }
-    .footer-col nav a,
-    .footer-col nav .as-link { padding: 8px 0; min-height: 44px; }
+    .footer-col nav a { padding: 8px 0; min-height: 44px; }
   }
 </style>
