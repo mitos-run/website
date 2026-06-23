@@ -264,15 +264,15 @@ export const competitors: Competitor[] = [
     sections: [
       {
         h: 'The same fork, far faster',
-        body: 'mitos and CodeSandbox both fork a running microVM instead of building each sandbox from scratch, so we will not pretend the fork is ours alone. mitos lands a warm fork in about 27 ms on the bare-metal reference node, while CodeSandbox publishes hundreds of milliseconds for a live fork or a memory resume. When one agent fans into many attempts, that gap compounds across every branch.',
+        body: 'mitos and CodeSandbox both fork a running microVM rather than rebuild each from scratch, so the fork is not ours alone. The difference is speed: mitos lands a warm fork in about 27 ms, while CodeSandbox publishes hundreds of milliseconds.',
       },
       {
         h: 'Open and self-hostable',
-        body: 'mitos ships under Apache 2.0 and runs on any Kubernetes cluster with KVM nodes, so the same engine runs in your account or ours and your data never leaves your infrastructure. The CodeSandbox SDK is closed and hosted, so the runtime stays on their cloud and you cannot run it on your own hardware.',
+        body: 'mitos ships under Apache 2.0 and runs on any Kubernetes cluster with KVM nodes, so the same engine runs in your account or ours and your data never leaves your infrastructure. The CodeSandbox SDK is closed and hosted, so it stays on their cloud.',
       },
       {
         h: 'A primitive, not a silo',
-        body: 'mitos exposes the fork as a declarative Kubernetes primitive, with CRDs and a published per-fork memory cost of about 3 MiB, so you build your own agent platform on top. CodeSandbox wraps the fork inside its own hosted SDK, with fewer knobs for running it as infrastructure you control.',
+        body: 'mitos exposes the fork as a declarative Kubernetes primitive, with CRDs and a published per-fork memory cost of about 3 MiB, so you build your own agent platform on top. CodeSandbox wraps the same fork inside its own closed hosted SDK.',
       },
     ],
     mitosWins: [
