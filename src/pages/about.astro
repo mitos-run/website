@@ -65,14 +65,14 @@ const DESC =
     background: radial-gradient(closest-side, color-mix(in srgb, var(--magenta) 11%, transparent), transparent 72%);
     opacity: .5; filter: blur(8px); }
   .hero-in { position: relative; z-index: 1; max-width: 720px; }
-  .hero h1 { font-size: clamp(46px, 6vw, 76px); line-height: 1.0; letter-spacing: -.035em; font-weight: 400; margin: 0 0 20px; }
-  .lede { font-size: 19px; color: var(--ink-2); max-width: 34em; margin: 0 0 28px; line-height: 1.5; }
+  .hero h1 { font-size: var(--text-display); line-height: 1.0; letter-spacing: -.035em; font-weight: 400; margin: 0 0 20px; }
+  .lede { font-size: var(--text-lede); color: var(--ink-2); max-width: 34em; margin: 0 0 28px; line-height: 1.5; }
   .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
   .prose { max-width: 52em; padding-top: 56px; padding-bottom: 96px; }
-  .prose p { color: var(--ink-2); font-size: 17px; line-height: 1.7; margin: 0 0 22px; }
+  .prose p { color: var(--ink-2); font-size: var(--text-body); line-height: 1.7; margin: 0 0 22px; }
   .prose strong { color: var(--ink); font-weight: 500; }
   .prose a { color: var(--cyan); border-bottom: 1px solid color-mix(in srgb, var(--cyan) 30%, transparent); }
   .prose a:hover { border-bottom-color: var(--cyan); }
-  .prose h2 { font-size: clamp(22px, 2.6vw, 28px); font-weight: 400; letter-spacing: var(--track-display); margin: 40px 0 14px; }
-  @media (max-width: 760px) { .hero { padding-block: 104px 0; } .hero h1 { font-size: clamp(30px, 8.4vw, 48px); line-height: 1.06; } }
+  .prose h2 { font-size: var(--text-h3); font-weight: 400; letter-spacing: var(--track-display); margin: 40px 0 14px; }
+  @media (max-width: 760px) { .hero { padding-block: 104px 0; } .hero h1 { font-size: var(--text-display-sm); line-height: 1.06; } }
 </style>

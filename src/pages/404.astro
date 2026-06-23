@@ -46,14 +46,14 @@ const links = [
     background: radial-gradient(closest-side, color-mix(in srgb, var(--magenta) 13%, transparent), transparent 72%);
     opacity: .55; filter: blur(10px); }
   .nf-in { position: relative; z-index: 1; max-width: 40em; }
-  .nf-code { font-size: clamp(64px, 12vw, 132px); line-height: 1; font-weight: 400; letter-spacing: -.04em;
+  .nf-code { font-size: clamp(64px, 12vw, 132px); /* unique glyph */ line-height: 1; font-weight: 400; letter-spacing: -.04em;
     color: transparent; -webkit-text-stroke: 1px var(--hairline-strong);
     text-shadow: 0 0 40px color-mix(in srgb, var(--magenta) 22%, transparent); margin: 0; }
-  .nf h1 { font-size: clamp(28px, 4.4vw, 46px); line-height: 1.05; letter-spacing: -.03em; font-weight: 400; margin: 18px 0 14px; text-wrap: balance; }
-  .nf .lede { font-size: 18px; color: var(--ink-2); line-height: 1.55; margin: 0 auto 28px; max-width: 34em; text-wrap: balance; }
+  .nf h1 { font-size: var(--text-h2); line-height: 1.05; letter-spacing: -.03em; font-weight: 400; margin: 18px 0 14px; text-wrap: balance; }
+  .nf .lede { font-size: var(--text-lede); color: var(--ink-2); line-height: 1.55; margin: 0 auto 28px; max-width: 34em; text-wrap: balance; }
   .nf-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
   .nf-links { display: flex; flex-wrap: wrap; gap: 8px 22px; justify-content: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--hairline); }
-  .nf-links a { color: var(--ink-2); font-size: 14px; }
+  .nf-links a { color: var(--ink-2); font-size: var(--text-dense); }
   .nf-links a:hover { color: var(--magenta); }
 
   @media (max-width: 760px) {

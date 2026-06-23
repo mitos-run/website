@@ -233,8 +233,8 @@ const navLinks = [
       @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
 
       /* buttons */
-      .btn { display: inline-flex; align-items: center; gap: 8px; font-weight: 500; font-size: 14px; border-radius: 8px; padding: 9px 17px; border: 1px solid transparent; cursor: pointer; transition: background .14s ease, border-color .14s ease, transform .14s ease, box-shadow .14s ease; white-space: nowrap; }
-      .btn-lg { padding: 12px 22px; font-size: 15px; }
+      .btn { display: inline-flex; align-items: center; gap: 8px; font-weight: 500; font-size: var(--text-dense); border-radius: 8px; padding: 9px 17px; border: 1px solid transparent; cursor: pointer; transition: background .14s ease, border-color .14s ease, transform .14s ease, box-shadow .14s ease; white-space: nowrap; }
+      .btn-lg { padding: 12px 22px; font-size: var(--text-ui); }
       .btn-primary { background: var(--magenta); color: var(--field); border-color: var(--magenta); font-weight: 600; }
       .btn-primary:hover { transform: translateY(-1px);
         box-shadow: 0 0 4px color-mix(in srgb, var(--magenta) 90%, transparent),
@@ -243,7 +243,7 @@ const navLinks = [
       .btn-ghost { background: transparent; color: var(--ink); border-color: var(--hairline-strong); }
       .btn-ghost:hover { border-color: var(--magenta); color: var(--magenta); background: transparent; transform: translateY(-1px); }
       .btn:active { transform: translateY(0); }
-      .copy-btn { border: 1px solid var(--hairline-strong); border-radius: 6px; padding: 5px 10px; font-size: 11px; color: var(--ink-2); background: transparent; cursor: pointer; transition: all .12s ease; white-space: nowrap; font-family: var(--mono); }
+      .copy-btn { border: 1px solid var(--hairline-strong); border-radius: 6px; padding: 5px 10px; font-size: var(--text-nano); color: var(--ink-2); background: transparent; cursor: pointer; transition: all .12s ease; white-space: nowrap; font-family: var(--mono); }
       .copy-btn:hover { color: var(--ink); border-color: var(--hairline-strong); }
       .copy-btn.copied { color: var(--green); border-color: var(--green); }
 
@@ -251,13 +251,13 @@ const navLinks = [
       .nav { position: sticky; top: 0; z-index: 100; backdrop-filter: blur(12px); background: rgba(4,5,10,.55); border-bottom: 1px solid transparent; transition: border-color .2s ease; }
       .nav.scrolled { border-bottom-color: var(--hairline); }
       .nav-inner { display: flex; align-items: center; gap: 32px; height: 64px; }
-      .brand { font-weight: 600; font-size: 17px; letter-spacing: -.02em; display: inline-flex; align-items: center; gap: 8px; }
+      .brand { font-weight: 600; font-size: var(--text-title); letter-spacing: -.02em; display: inline-flex; align-items: center; gap: 8px; }
       .brand-mark { height: 18px; width: auto; filter: drop-shadow(0 0 6px color-mix(in srgb, var(--magenta) 60%, transparent)); }
       .nav-links { display: flex; gap: 26px; margin-right: auto; }
-      .nav-links a { color: var(--ink-2); font-size: 14px; }
+      .nav-links a { color: var(--ink-2); font-size: var(--text-dense); }
       .nav-links a:hover { color: var(--ink); }
       .nav-cta { display: flex; align-items: center; gap: 16px; }
-      .ghost-link { color: var(--ink-2); font-size: 14px; }
+      .ghost-link { color: var(--ink-2); font-size: var(--text-dense); }
       .ghost-link:hover { color: var(--ink); }
 
       /* GitHub star button styles live in GhStars.astro; positional tweaks here. */
@@ -271,28 +271,28 @@ const navLinks = [
       .nav-menu { position: fixed; inset: 0; z-index: 90; background: var(--field); padding: 88px 28px 40px; display: none; }
       .nav-menu.open { display: flex; flex-direction: column; }
       .nav-menu-links { display: flex; flex-direction: column; }
-      .nav-menu-links a { font-size: 23px; color: var(--ink); padding: 19px 2px; border-bottom: 1px solid var(--hairline); letter-spacing: -.01em; transition: color .14s var(--ease); }
+      .nav-menu-links a { font-size: 23px; /* mobile-menu tap target */ color: var(--ink); padding: 19px 2px; border-bottom: 1px solid var(--hairline); letter-spacing: -.01em; transition: color .14s var(--ease); }
       .nav-menu-links a:hover { color: var(--magenta); }
       body.nav-open { overflow: hidden; }
 
       /* generic sections */
       section { padding: 100px 0; }
-      .section-title { font-size: clamp(28px, 4vw, 40px); letter-spacing: -.03em; font-weight: 600; margin: 0 0 18px; }
-      .section-lede { color: var(--ink-2); font-size: 17px; max-width: 46em; margin: 0 0 48px; }
+      .section-title { font-size: var(--text-h2); letter-spacing: var(--track-display); font-weight: 400; margin: 0 0 18px; }
+      .section-lede { color: var(--ink-2); font-size: var(--text-body); max-width: 46em; margin: 0 0 48px; }
 
       /* generic code block + terminal */
-      .code-block { background: var(--field-2); border: 1px solid var(--hairline); border-radius: var(--r-md); padding: 16px 18px; font-family: var(--mono); font-size: 12.5px; line-height: 1.7; color: var(--ink); overflow-x: auto; margin: 0; }
+      .code-block { background: var(--field-2); border: 1px solid var(--hairline); border-radius: var(--r-md); padding: 16px 18px; font-family: var(--mono); font-size: var(--text-code-block); line-height: 1.7; color: var(--ink); overflow-x: auto; margin: 0; }
       .terminal { background: var(--field-1); border: 1px solid var(--hairline); border-radius: var(--r-lg); overflow: hidden; }
       .terminal-bar { display: flex; align-items: center; gap: 6px; padding: 10px 14px; border-bottom: 1px solid var(--hairline); }
       .terminal-bar i { width: 10px; height: 10px; border-radius: 50%; background: var(--hairline-strong); }
-      .terminal-body { padding: 16px 18px; font-family: var(--mono); font-size: 12.5px; line-height: 1.8; color: var(--ink-2); overflow-x: auto; white-space: pre; }
+      .terminal-body { padding: 16px 18px; font-family: var(--mono); font-size: var(--text-code-block); line-height: 1.8; color: var(--ink-2); overflow-x: auto; white-space: pre; }
       .terminal-body .t-ok { color: var(--green); }
       .terminal-body .t-fork { color: var(--magenta); }
       .terminal-body .t-dim { color: var(--ink-3); }
       /* comparison table */
-      .cmp { width: 100%; border-collapse: collapse; font-size: 14px; }
+      .cmp { width: 100%; border-collapse: collapse; font-size: var(--text-dense); }
       .cmp th, .cmp td { text-align: left; padding: 14px 16px; border-bottom: 1px solid var(--hairline); }
-      .cmp thead th { color: var(--ink-3); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+      .cmp thead th { color: var(--ink-3); font-weight: 500; font-size: var(--text-micro); text-transform: uppercase; letter-spacing: .04em; }
       .cmp th[scope="row"] { color: var(--ink-2); font-weight: 400; }
       .cmp .col-mitos { color: var(--ink); }
       .cmp .col-mitos .win { color: var(--magenta); }
@@ -300,9 +300,9 @@ const navLinks = [
 
       /* page hero (shared by sub-pages) */
       .page-hero { padding-block: 88px 8px; }
-      .page-hero .eyebrow { color: var(--ink-2); font-size: 12.5px; margin: 0 0 18px; }
-      .page-hero h1 { font-size: clamp(38px, 5vw, 60px); line-height: 1.02; letter-spacing: -.04em; font-weight: 400; margin: 0 0 20px; }
-      .page-hero .lede { font-size: 19px; color: var(--ink-2); max-width: 32em; margin: 0 0 28px; }
+      .page-hero .eyebrow { color: var(--ink-2); font-size: var(--text-micro); margin: 0 0 18px; }
+      .page-hero h1 { font-size: var(--text-display-compact); line-height: 1.02; letter-spacing: -.04em; font-weight: 400; margin: 0 0 20px; }
+      .page-hero .lede { font-size: var(--text-lede); color: var(--ink-2); max-width: 32em; margin: 0 0 28px; }
       .page-hero .lede strong { color: var(--ink); font-weight: 600; }
       .page-actions { display: flex; gap: 12px; flex-wrap: wrap; }
 

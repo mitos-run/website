@@ -25,17 +25,28 @@
   /* ---- Typography ---- */
   --sans: 'Satoshi', system-ui, -apple-system, sans-serif;
   --mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-  /* modular scale ~1.25, light display weights live in base.css */
-  --step--1: 0.8rem;
-  --step-0: 1rem;
-  --step-1: 1.25rem;
-  --step-2: 1.563rem;
-  --step-3: 1.953rem;
-  --step-4: 2.441rem;
-  --step-5: clamp(2.6rem, 5vw, 3.815rem);
-  --step-6: clamp(3.2rem, 7vw, 5.96rem);
+  /* modular type roles; light display weights live in base.css */
+  --text-display:         clamp(46px, 6vw, 76px);
+  --text-display-sm:      clamp(30px, 8.4vw, 48px);
+  --text-display-compact: clamp(40px, 4.6vw, 60px);
+  --text-h2:              clamp(28px, 3.6vw, 42px);
+  --text-h2-sm:           clamp(24px, 7vw, 32px);
+  --text-h3:              clamp(22px, 2.6vw, 28px);
+  --text-cta:             clamp(30px, 5vw, 52px);
+  --text-lede:       19px;
+  --text-title:      18px;
+  --text-body:       17px;
+  --text-ui:         15px;
+  --text-dense:      14px;
+  --text-caption:    13px;
+  --text-micro:      12px;
+  --text-nano:       11px;
+  --text-code:       13px;
+  --text-code-block: 12.5px;
   --lh-tight: 1.02;
-  --lh-body: 1.5;
+  --lh-snug:  1.55;
+  --lh-body:  1.5;
+  --lh-prose: 1.7;
   --track-display: -0.03em;
 
   /* ---- Spacing (8px base) ---- */

@@ -36,9 +36,9 @@ h1, h2, h3 {
   text-wrap: balance;
   margin: 0 0 var(--space-4);
 }
-h1 { font-size: var(--step-6); }
-h2 { font-size: var(--step-4); }
-h3 { font-size: var(--step-2); }
+h1 { font-size: var(--text-display); }
+h2 { font-size: var(--text-h2); }
+h3 { font-size: var(--text-h3); }
 p { text-wrap: pretty; }
 a { color: inherit; text-decoration: none; }
 .mono {
@@ -53,8 +53,8 @@ a { color: inherit; text-decoration: none; }
 
 /* Canonical section type, matching the home page. Pages may still override
    locally (scoped styles win), but these keep subpages from drifting. */
-.section-title { font-size: clamp(28px, 3.6vw, 42px); letter-spacing: var(--track-display); font-weight: 400; margin: 0 0 18px; }
-.section-lede { color: var(--ink-2); font-size: 17px; max-width: 42em; margin: 0 0 48px; line-height: 1.55; }
+.section-title { font-size: var(--text-h2); letter-spacing: var(--track-display); font-weight: 400; margin: 0 0 18px; }
+.section-lede { color: var(--ink-2); font-size: var(--text-body); max-width: 42em; margin: 0 0 48px; line-height: 1.55; }
 .section-lede a:not(.btn) { color: var(--cyan); border-bottom: 1px solid color-mix(in srgb, var(--cyan) 30%, transparent); }
 .section-lede a:not(.btn):hover { border-bottom-color: var(--cyan); }
 
