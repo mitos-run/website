@@ -4,7 +4,7 @@
 
 **Goal:** Replace the off-brand, hand-maintained Starlight docs with a fluorescence-branded `/docs` system whose content is fetched live from the engine repo (`mitos-run/mitos@main`) at build time, so the engine repo is the single source of truth.
 
-**Architecture:** A prebuild script shallow-fetches the engine repo's `docs/` + `README.md`, applies a curated manifest (allowlist + order + groups), transforms each doc (frontmatter, link/asset rewrite), extracts the README `## Architecture` section, and writes the result to a **gitignored** `src/content/engine-docs/`. Astro renders that as a `docs` content collection through a brand `DocsLayout` (Site shell + sidebar + reused blog prose/TOC). Old `/quickstart` and `/architecture` 301-redirect into `/docs/...`.
+**Architecture:** A prebuild script shallow-fetches the engine repo's `docs/` + `README.md`, applies a curated manifest (allowlist + order + groups), transforms each doc (frontmatter, link/asset rewrite), extracts the README `## Architecture` section, and writes the result to a **gitignored** `src/content/engine-docs/`. Astro renders that as a `docs` content collection through a brand `DocsLayout` (Site shell + sidebar + reused blog prose/TOC). The old `/quickstart` and `/architecture` pages are deleted and every internal link is repointed at `/docs/...`; no redirects are needed because no external links point at the old URLs yet.
 
 **Tech Stack:** Astro 6, Astro content collections (glob loader), `astro-expressive-code` (standalone, replaces Starlight's bundled Expressive Code), `mermaid` (client-side, brand-themed, one diagram), Node `node:test` for unit tests, `git` CLI for the sparse fetch. No Starlight.
 
@@ -16,7 +16,8 @@
 - **Copy rule:** never use em or en dashes in any prose/UI copy (matches existing page headers).
 - **Clean URLs:** `trailingSlash: 'never'`, `build.format: 'file'`; canonical paths have no `.html` and no trailing slash.
 - **Engine repo + branch:** `https://github.com/mitos-run/mitos`, branch `main`. Public.
-- **Redirects are 301** (permanent) to preserve SEO link equity.
+- **Deploy host is GitHub Pages** (static; CNAME `mitos.run`, `.github/workflows/deploy.yml`). No server redirect engine. `postbuild-clean-urls.mjs` rewrites `.html`→clean URLs for every page and must keep running.
+- **No redirects:** the old `/quickstart` and `/architecture` pages are deleted; all references are repointed to `/docs/...`. No external links target the old URLs yet, so no redirect stubs are introduced.
 
 ---
 
@@ -912,37 +913,21 @@ Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>"
 
 ---
 
-### Task 4: Redirects and internal links
+### Task 4: Repoint internal links to /docs
 
-Repoint old URLs and in-site references to `/docs/...`. Reviewable on its own (no rendering change beyond link targets).
+The old `/quickstart` and `/architecture` pages no longer exist (deleted in Task 3). Update every in-site reference to point under `/docs`. No redirects (no external links target the old URLs yet). Reviewable on its own (link-target edits only).
 
 **Files:**
-- Modify: `vercel.json` (add 301 redirects)
 - Modify: `src/layouts/Site.astro` (`DOCS`, `SIGNUP` consts; nav already uses `DOCS`)
 - Modify: `src/components/SiteFooter.astro` (Developers links)
 - Modify: `src/pages/index.astro` (`DOCS`, `SIGNUP`, the "Read the architecture" button, `softwareHelp`)
 - Modify: `src/pages/compare/[slug].astro` (`ENGINE`, "Read the architecture" button)
-- Modify: `src/pages/pricing.astro`, `src/pages/alternatives.astro`, `src/pages/about.astro`, `src/pages/benchmarks.astro`, `src/pages/contact.astro`, `src/pages/404.astro` (`/quickstart` references)
+- Modify: `src/pages/pricing.astro`, `src/pages/alternatives.astro`, `src/pages/about.astro`, `src/pages/benchmarks.astro`, `src/pages/contact.astro`, `src/pages/404.astro` (`/quickstart` references — both `href="..."` and `href: '...'` object-property forms)
+- Modify: `src/content/blog/fork-dont-rebuild.md` (the `[quickstart](/quickstart)` body link)
 
 **Interfaces:** none (link target edits only).
 
-- [ ] **Step 1: Add redirects to `vercel.json`**
-
-```json
-{
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "redirects": [
-    { "source": "/quickstart", "destination": "/docs/quickstart", "permanent": true },
-    { "source": "/architecture", "destination": "/docs/architecture", "permanent": true }
-  ],
-  "rewrites": [
-    { "source": "/mitos", "destination": "/mitos/index.html" },
-    { "source": "/mitos/:path*", "destination": "/mitos/index.html" }
-  ]
-}
-```
-
-- [ ] **Step 2: Update `src/layouts/Site.astro` consts**
+- [ ] **Step 1: Update `src/layouts/Site.astro` consts**
 
 Change:
 ```js
@@ -955,7 +940,7 @@ const DOCS = '/docs';
 const SIGNUP = '/docs/quickstart'; // TODO: hosted console signup when live
 ```
 
-- [ ] **Step 3: Update `src/components/SiteFooter.astro` Developers links**
+- [ ] **Step 2: Update `src/components/SiteFooter.astro` Developers links**
 
 Change the three doc links to:
 ```js
@@ -964,29 +949,32 @@ Change the three doc links to:
       { label: 'Architecture', href: '/docs/architecture' },
 ```
 
-- [ ] **Step 4: Update remaining `/quickstart` and `/architecture` references**
+- [ ] **Step 3: Update remaining `/quickstart` and `/architecture` references**
 
-In each file below, replace the literal target:
+Replace the targets. The rule: a bare docs-landing reference (`DOCS` const, nav) goes to `/docs`; everything that pointed at the quickstart page goes to `/docs/quickstart`; everything that pointed at the architecture page goes to `/docs/architecture`.
+
 - `src/pages/index.astro`: `const DOCS = '/quickstart'` → `'/docs'`; `const SIGNUP = '/quickstart'` → `'/docs/quickstart'`; `softwareHelp: 'https://mitos.run/quickstart'` → `'https://mitos.run/docs/quickstart'`; `href="/architecture"` → `href="/docs/architecture"`.
 - `src/pages/compare/[slug].astro`: `const ENGINE = '/quickstart'` → `'/docs/quickstart'`; `href="/architecture"` → `href="/docs/architecture"`.
 - `src/pages/pricing.astro`: `const SIGNUP = '/quickstart'` → `'/docs/quickstart'`; `const DOCS = '/quickstart'` → `'/docs'`.
 - `src/pages/alternatives.astro`: `const ENGINE = '/quickstart'` → `'/docs/quickstart'`.
-- `src/pages/about.astro`, `src/pages/benchmarks.astro`, `src/pages/contact.astro`, `src/pages/404.astro`: each `href="/quickstart"` → `href="/docs/quickstart"`.
+- `src/pages/about.astro`, `src/pages/benchmarks.astro`, `src/pages/contact.astro`: each `href="/quickstart"` → `href="/docs/quickstart"`.
+- `src/pages/404.astro`: the links-array entry `{ label: 'Quickstart', href: '/quickstart' }` → `href: '/docs/quickstart'`, AND the button `href="/quickstart"` → `href="/docs/quickstart"`.
+- `src/content/blog/fork-dont-rebuild.md`: the body link `[quickstart](/quickstart)` → `[quickstart](/docs/quickstart)`.
 
-Verify none remain:
-Run: `grep -rn '"/quickstart"\|=.*/quickstart\|href="/architecture"\|/quickstart'"'"'' src --include='*.astro' --include='*.ts'`
+Verify none remain (whole repo, excluding the planning docs and the gitignored fetch dir):
+Run: `grep -rn "/quickstart\|/architecture" . --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=.git --exclude-dir=.astro --exclude-dir=engine-docs | grep -v "docs/superpowers/"`
 Expected: no matches (every reference now points under `/docs`).
 
-- [ ] **Step 5: Build and verify**
+- [ ] **Step 4: Build and verify**
 
 Run: `npm run build`
-Expected: build succeeds. Spot-check `dist/index.html` "Read the architecture" links to `/docs/architecture`, nav "Docs" → `/docs`.
+Expected: build succeeds; no `dist/quickstart.html` or `dist/architecture.html` exist (old pages gone). Spot-check `dist/index.html` "Read the architecture" links to `/docs/architecture`, nav "Docs" → `/docs`.
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 5: Commit**
 
 ```bash
 git add -A
-git commit -m "feat(docs): redirect /quickstart + /architecture into /docs, repoint links
+git commit -m "feat(docs): repoint all internal links to /docs
 
 Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>"
 ```
@@ -1089,7 +1077,7 @@ Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>"
 - Expressive Code preserved for docs + blog → Task 3 Step 3 (standalone integration). ✓
 - Reuse blog prose/TOC → Task 2 (`prose.css`) + Task 3 DocsLayout. ✓
 - `/docs` hub + `/docs/<slug>` → Task 3 Steps 6–7. ✓
-- 301 redirects + internal link repoint → Task 4. ✓
+- Internal link repoint (old pages deleted, no redirects — no external inbound links yet) → Task 4. ✓
 - Testing: unit (Task 1), smoke (Task 5), brand pass (Task 3 Step 9 screenshots). ✓
 - Out of scope (search, versioning) → not built. ✓
 
