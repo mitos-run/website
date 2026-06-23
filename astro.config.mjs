@@ -11,11 +11,6 @@ export default defineConfig({
   // Clean URLs without a trailing slash (e.g. /pricing, not /pricing/).
   trailingSlash: 'never',
   build: { format: 'file' },
-  // Code highlighting for markdown (the blog). High-contrast dark theme so
-  // strings and their quotes read clearly on the near-black code panel.
-  markdown: {
-    shikiConfig: { theme: 'github-dark-default' },
-  },
   integrations: [
     // Starlight detects @astrojs/sitemap and uses this config. Drop the OG
     // render target (/og-template) so it never enters the index.
@@ -31,6 +26,17 @@ export default defineConfig({
         alt: 'mitos',
       },
       favicon: '/favicon.svg',
+      // Expressive Code highlights ALL markdown code site-wide, including the
+      // blog. Use a high-contrast theme on the brand near-black panel so strings
+      // and their quotes read clearly.
+      expressiveCode: {
+        themes: ['github-dark-default'],
+        styleOverrides: {
+          codeBackground: 'var(--field-1)',
+          borderColor: 'var(--hairline)',
+          borderRadius: 'var(--r-md)',
+        },
+      },
       // Mount the consent-gated PostHog analytics on docs pages too (they use
       // Starlight's layout, not Site.astro). See src/components/starlight/Footer.astro.
       components: {
