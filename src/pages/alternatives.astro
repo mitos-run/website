@@ -1,24 +1,99 @@
 ---
-// /alternatives — the agent-sandbox landscape hub. Targets "AI agent sandbox
-// alternatives" / "E2B alternatives" style queries and links out to each
-// /compare/<slug> page. Honest, public-docs framing; no fabricated claims.
-// Never use em or en dashes in copy.
+// /alternatives — the agent-sandbox landscape hub (Format 2: plural-alternatives).
+// Positioning per .agents/product-marketing.md: lead with the fan-out OUTCOME in
+// the buyer's words, name isolation in the same breath (the security gate), fork
+// is the proof. Frame-controlled honesty: concede table-stakes fast, "only if"
+// disqualifiers route the fan-out buyer to us, always pivot to our win, never
+// fabricate. No eyebrow. Honest, public-docs framing. Never use em or en dashes.
 import Site from '../layouts/Site.astro';
 import { competitors } from '../data/competitors';
 
-const SIGNUP = '/quickstart';
+const ENGINE = '/quickstart';
 
-const TITLE = 'AI agent sandbox alternatives: mitos vs E2B, Modal, Daytona, Morph';
+const TITLE = 'AI agent sandbox alternatives: E2B, Modal, Daytona, Morph & mitos';
 const DESC =
-  'An honest map of the AI agent sandbox landscape: E2B, Modal, Daytona, Morph and mitos, compared on live forking, isolation, license, and cost.';
+  'An honest map of the AI agent sandbox landscape. Compare E2B, Modal, Daytona, Morph and mitos on live forking, isolation, speed, cost, and license, and find the right fit.';
 
-// Landscape table: one row per platform, the few axes that actually decide it.
+// The five questions that decide an agent-sandbox choice, ordered to lead with
+// the fan-out converter, with isolation (the gate) right behind it.
+const criteria = [
+  {
+    q: 'Can it fork a running machine into a swarm?',
+    why: 'When you need many agents from one warm, mid-task state (best-of-N, RL rollouts, tree search), the question is whether the platform copies the running machine or rebuilds it N times. Most create fresh sandboxes. mitos forks the running VM: memory and processes copy-on-write into daughters that resume warm, so you pay for what diverges, not for N cold boots.',
+  },
+  {
+    q: 'What isolates the code, and is each copy unique?',
+    why: 'You are running model-written code you do not fully trust, so the default boundary matters: an own-kernel microVM (mitos, E2B) is a stronger default than a shared-kernel container or gVisor (Modal, Daytona default). Forking adds a second question most tools punt on: re-restoring one snapshot many times duplicates entropy, IDs, and keys, which is unsafe. Every mitos daughter gets fresh uniqueness, not a cloned one.',
+  },
+  {
+    q: 'How fast does a new agent start?',
+    why: 'A warm fork resumes an already-running machine; a cold create boots a fresh one. mitos activates a warm fork in about 27 ms, with the benchmark scripts in the open-source repo so you can reproduce it instead of taking our word.',
+  },
+  {
+    q: 'Will the bill surprise you?',
+    why: 'Bill anxiety is the universal complaint in this category. Copy-on-write metering bills the dirtied pages per fork, not N whole VMs, with per-second billing, no idle charge, and hard spend caps on by default. Check whether an alternative meters whole VMs or opaque credit units.',
+  },
+  {
+    q: 'Can you run it yourself?',
+    why: 'A guaranteed exit is what lets a lock-in-allergic team commit. The mitos engine is Apache 2.0, the same code the managed service runs, so you can self-host. E2B is also Apache 2.0; Daytona is AGPL on its server; Modal and Morph are closed. The license is the difference between renting and owning.',
+  },
+];
+
+// Landscape table on the axes that decide it. Honest, public-docs as of June 2026.
 const landscape = [
-  { name: 'mitos', fork: 'Live VM fork', iso: 'Firecracker microVM', oss: 'Apache 2.0', note: 'Fork running memory into a swarm; ~27 ms, ~3 MiB/fork', own: true, href: '/' },
-  { name: 'E2B', fork: 'Fresh sandbox', iso: 'Firecracker microVM', oss: 'Apache 2.0', note: 'Mature, widely adopted; no live fork', href: '/compare/e2b' },
-  { name: 'Modal', fork: 'Snapshot', iso: 'gVisor', oss: 'Closed', note: 'Full Python/ML platform with native GPU', href: '/compare/modal' },
-  { name: 'Daytona', fork: 'Filesystem / snapshot', iso: 'Container (microVM opt-in)', oss: 'AGPL', note: 'Very fast create; Computer Use', href: '/compare/daytona' },
-  { name: 'Morph', fork: 'Live VM branch', iso: 'Undisclosed', oss: 'Closed', note: 'Closest twin (Infinibranch); fewer public numbers', href: '/compare/morph' },
+  { name: 'mitos', fork: 'Live VM fork', iso: 'Firecracker microVM', speed: '~27 ms warm fork', oss: 'Apache 2.0', own: true, href: '/' },
+  { name: 'E2B', fork: 'Fresh sandbox', iso: 'Firecracker microVM', speed: 'Fresh create', oss: 'Apache 2.0', href: '/compare/e2b' },
+  { name: 'Modal', fork: 'Snapshot', iso: 'gVisor', speed: 'Sub-second (their figure)', oss: 'Closed', href: '/compare/modal' },
+  { name: 'Daytona', fork: 'Live fork (experimental, gated)', iso: 'Container (microVM opt-in)', speed: 'Sub-90 ms create (their figure)', oss: 'AGPL (server)', href: '/compare/daytona' },
+  { name: 'Morph', fork: 'Live VM branch', iso: 'Undisclosed', speed: 'Sub-250 ms branch (their figure)', oss: 'Closed', href: '/compare/morph' },
+];
+
+// Per-competitor framing: lead with our edge, contain their fit as a narrow
+// "only if". Honest, but it routes the fan-out buyer back to us.
+const framing: Record<string, { win: string; context: string }> = {
+  e2b: {
+    win: 'A live fork of a running agent into a swarm, each daughter warm and isolated.',
+    context: 'Both are Apache-2.0 Firecracker microVMs; E2B creates fresh sandboxes and closed the live-fork request as out of scope.',
+  },
+  modal: {
+    win: 'Own-kernel microVM isolation and a live fork of running memory, open source.',
+    context: 'Modal runs on gVisor with snapshots, not a live fork, and is closed source.',
+  },
+  daytona: {
+    win: 'A memory fork by default: generally available, ungated, microVM-isolated, Apache-2.0.',
+    context: 'Daytona forks too, but it is experimental, access-gated, container-based, and AGPL on the server.',
+  },
+  morph: {
+    win: 'Reproducible fork numbers and an open Apache-2.0 engine you can run yourself.',
+    context: 'Morph branches running VMs too, but it is closed, with vaguer public numbers.',
+  },
+};
+
+const faqs = [
+  {
+    q: 'What is the best alternative to E2B for agent swarms?',
+    a: 'mitos. It forks a running VM into many warm daughters copy-on-write, so you fan out from live state instead of rebuilding it. Both are Apache-2.0 Firecracker microVMs, so the live fork is the difference, and it is the request E2B closed as out of scope.',
+  },
+  {
+    q: 'Which AI agent sandboxes can fork a running VM?',
+    a: 'mitos forks running memory by default, generally available and ungated. Morph branches running VMs too; Daytona added a memory fork but it is experimental and gated; E2B and Modal do not.',
+  },
+  {
+    q: 'Which agent sandboxes are open source?',
+    a: 'mitos is Apache 2.0, and the managed service runs the same engine you can self-host, so it is a real exit, not just a published SDK. E2B is also Apache 2.0; Daytona is AGPL on its server; Modal and Morph are closed.',
+  },
+  {
+    q: 'What is the most secure agent sandbox for untrusted code?',
+    a: 'mitos runs every fork as a Firecracker microVM with its own kernel, and gives each daughter fresh uniqueness, so a fork is never a duplicated, unsafe clone. An own-kernel microVM is a stronger default than the shared-kernel containers or gVisor some tools use.',
+  },
+  {
+    q: 'Which is fastest?',
+    a: 'Treat speed as context, since these measure different operations. mitos activates a warm fork in about 27 ms, reproducible from the open repo. A warm fork resumes a running machine; creating a fresh sandbox boots a new one.',
+  },
+  {
+    q: 'How do I choose between them?',
+    a: 'If you need many agents at once instead of one at a time, mitos is built for it: it forks a running machine into a fleet that all run in parallel from the same warm state. The others focus on a single sandbox per agent.',
+  },
 ];
 
 const schema = [
@@ -38,31 +113,64 @@ const schema = [
       '@type': 'ListItem',
       position: i + 1,
       name: p.name,
+      url: `https://mitos.run${p.href}`,
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
     })),
   },
 ];
 ---
 
 <Site title={TITLE} description={DESC} schema={schema}>
-  <section class="page-hero container">
+  <section class="hero container">
     <div class="hero-aura" aria-hidden="true"></div>
-    <p class="eyebrow mono">Alternatives</p>
-    <h1>The AI agent sandbox landscape</h1>
-    <p class="lede">
-      Everyone in this category runs agent code in an isolated environment. The real
-      questions are narrower: can it <strong>fork a running machine</strong> into a swarm, what
-      isolates it, and can you run it yourself. Here is the honest map.
-    </p>
-    <div class="page-actions">
-      <a class="btn btn-primary btn-lg" href={SIGNUP}>Get started</a>
-      <a class="btn btn-ghost btn-lg" href="/benchmarks">See the benchmark</a>
+    <div class="hero-in reveal">
+      <h1>AI agent sandbox alternatives</h1>
+      <p class="lede">
+        Fork one warm agent into a thousand. mitos copies a <strong>running</strong> microVM into a
+        fleet of isolated daughters in <strong>~27 ms</strong>, so they all run in parallel from the
+        same state, not rebuilt each time. Honest comparison below.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary btn-lg" href={ENGINE}>Start with the open engine</a>
+        <a class="btn btn-ghost btn-lg" href="#landscape">Jump to the comparison</a>
+      </div>
     </div>
   </section>
 
+  <!-- DECISION CRITERIA (intent-led) -->
+  <section class="container criteria-section">
+    <h2 class="section-title reveal">Five questions that decide it</h2>
+    <p class="section-lede reveal">
+      Skip the feature checklist. These are the axes that actually decide an agent sandbox, starting
+      with the one most tools cannot do.
+    </p>
+    <ol class="criteria">
+      {criteria.map((c, i) => (
+        <li class="crit reveal">
+          <span class="crit-n mono">{String(i + 1).padStart(2, '0')}</span>
+          <div class="crit-body">
+            <h3>{c.q}</h3>
+            <p>{c.why}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </section>
+
   <!-- LANDSCAPE TABLE -->
-  <section class="container land-section">
+  <section class="container land-section" id="landscape">
+    <h2 class="section-title reveal">The landscape at a glance</h2>
     <p class="section-lede reveal">
       Capabilities from each project's public docs as of June 2026, not a head-to-head benchmark.
+      Speed figures measure different operations (warm fork vs fresh create), so read them as context.
     </p>
     <div class="table-wrap reveal">
       <table class="comp-table">
@@ -71,8 +179,8 @@ const schema = [
             <th>Platform</th>
             <th>Fork model</th>
             <th>Isolation</th>
+            <th>Speed</th>
             <th>License</th>
-            <th>In a sentence</th>
           </tr>
         </thead>
         <tbody>
@@ -81,8 +189,8 @@ const schema = [
               <td class="pname"><a href={p.href}>{p.name}</a></td>
               <td>{p.fork}</td>
               <td>{p.iso}</td>
+              <td>{p.speed}</td>
               <td>{p.oss}</td>
-              <td class="note">{p.note}</td>
             </tr>
           ))}
         </tbody>
@@ -90,14 +198,18 @@ const schema = [
     </div>
   </section>
 
-  <!-- PER-COMPETITOR CARDS -->
+  <!-- PER-COMPETITOR: lead with our edge, contain their fit -->
   <section class="container compare-cards">
     <h2 class="section-title reveal">Compare mitos head to head</h2>
+    <p class="section-lede reveal">Each comparison leads with where mitos wins, with the honest context underneath.</p>
     <div class="cards-grid reveal">
       {competitors.map((c) => (
         <a class="cmp-card" href={`/compare/${c.slug}`}>
           <span class="cmp-card-h">mitos vs {c.name}</span>
-          <span class="cmp-card-b">{c.blurb}</span>
+          {framing[c.slug] && (
+            <span class="cmp-card-win"><span class="win-k mono">Why mitos wins</span> {framing[c.slug].win}</span>
+          )}
+          <span class="cmp-card-context">{framing[c.slug]?.context ?? c.blurb}</span>
           <span class="cmp-card-cta mono">Read the comparison &rarr;</span>
         </a>
       ))}
@@ -107,24 +219,34 @@ const schema = [
   <!-- HONEST NOTE -->
   <section class="container honest">
     <div class="honest-inner reveal">
-      <h2 class="section-title">Why we publish this</h2>
+      <h2 class="section-title">What mitos bets on</h2>
       <p>
-        Most comparison pages exist to make the host look like the only sane choice. This one does not.
-        Several of these tools fork or branch VMs, and a few are excellent at it. We will not claim the
-        fork primitive is ours alone. What mitos bets on is the combination: the fastest, densest
-        <strong> live fork of running memory</strong>, with honest copy-on-write economics, a real
-        Apache-2.0 exit, all <strong>managed</strong> so you never run the cluster. If another tool fits
-        your constraints better, the comparisons above will tell you so.
+        The combination no one else offers managed and open: a <strong>live fork of running
+        memory</strong>, microVM-isolated, with honest copy-on-write economics and a real Apache-2.0
+        exit, all <strong>managed</strong> so you never have to run the cluster.
       </p>
+    </div>
+  </section>
+
+  <!-- FAQ (matches the home accordion) -->
+  <section class="container faq-section">
+    <h2 class="section-title reveal">Questions buyers actually ask</h2>
+    <div class="faq-list reveal">
+      {faqs.map((f) => (
+        <details class="faq-item">
+          <summary>{f.q}</summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
     </div>
   </section>
 
   <!-- CTA -->
   <section class="final-cta">
     <div class="container reveal">
-      <h2>See the fork for yourself.</h2>
+      <h2>Fork a running agent into a swarm.</h2>
       <div class="hero-actions center">
-        <a class="btn btn-primary btn-lg" href={SIGNUP}>Get started</a>
+        <a class="btn btn-primary btn-lg" href={ENGINE}>Start with the open engine</a>
         <a class="btn btn-ghost btn-lg" href="/benchmarks">Run the benchmark</a>
       </div>
     </div>
@@ -132,16 +254,28 @@ const schema = [
 </Site>
 
 <style>
-  .page-hero { position: relative; }
-  .hero-aura { position: absolute; top: -40px; left: 4%; width: 640px; height: 480px; z-index: 0; pointer-events: none;
+  /* Hero matches /, /pricing, /benchmarks (the big .hero pattern). */
+  .hero { padding-block: 184px 0; position: relative; }
+  .hero-aura { position: absolute; top: -60px; left: 4%; width: 680px; max-width: 90vw; height: 520px; z-index: 0; pointer-events: none;
     background: radial-gradient(closest-side, color-mix(in srgb, var(--magenta) 11%, transparent), transparent 72%);
     opacity: .5; filter: blur(8px); }
-  .page-hero h1, .page-hero .lede, .page-hero .page-actions { position: relative; z-index: 1; }
-  .page-hero .lede strong { color: var(--ink); font-weight: 500; }
+  .hero-in { position: relative; z-index: 1; max-width: 720px; }
+  .hero h1 { font-size: clamp(46px, 6vw, 76px); line-height: 1.0; letter-spacing: -.035em; font-weight: 400; margin: 0 0 20px; }
+  .lede { font-size: 19px; color: var(--ink-2); max-width: 34em; margin: 0 0 28px; line-height: 1.5; }
+  .lede strong { color: var(--ink); font-weight: 600; }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .hero-actions.center { justify-content: center; }
 
-  .land-section { padding-top: 24px; }
-  .section-lede { color: var(--ink-2); font-size: 16px; max-width: 44em; margin: 0 0 28px; line-height: 1.55; }
+  /* Decision criteria */
+  .criteria-section { padding-top: 80px; }
+  .criteria { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--hairline); }
+  .crit { display: flex; gap: 24px; padding: 26px 0; border-bottom: 1px solid var(--hairline); }
+  .crit-n { color: var(--magenta); font-size: 13px; padding-top: 5px; flex: none; width: 2em; }
+  .crit-body h3 { font-size: 19px; font-weight: 500; color: var(--ink); margin: 0 0 8px; letter-spacing: -.01em; }
+  .crit-body p { color: var(--ink-2); font-size: 15.5px; line-height: 1.65; margin: 0; max-width: 56em; }
 
+  /* Landscape table */
+  .land-section { padding-top: 96px; scroll-margin-top: 88px; }
   .table-wrap { overflow-x: auto; border: 1px solid var(--hairline); border-radius: var(--r-lg); }
   .comp-table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 760px; }
   .comp-table th, .comp-table td { text-align: left; padding: 16px 18px; border-bottom: 1px solid var(--hairline); vertical-align: top; }
@@ -152,30 +286,48 @@ const schema = [
   .comp-table thead th:first-child { background: var(--field-1); }
   .comp-table .pname a { color: var(--ink); font-weight: 500; }
   .comp-table .pname a:hover { color: var(--magenta); }
-  .comp-table .note { color: var(--ink-2); }
   .comp-table .own-row td:first-child { background: color-mix(in srgb, var(--magenta) 7%, var(--field)); }
   .comp-table .own-row .pname a { color: var(--magenta); }
 
-  .compare-cards { padding-top: 88px; }
-  .section-title { font-size: clamp(26px, 3.4vw, 38px); letter-spacing: var(--track-display); font-weight: 400; margin: 0 0 28px; }
+  /* Per-competitor cards */
+  .compare-cards { padding-top: 96px; }
   .cards-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-  .cmp-card { display: flex; flex-direction: column; gap: 8px; border: 1px solid var(--hairline); border-radius: var(--r-md); padding: 24px; transition: border-color .14s var(--ease), transform .14s var(--ease); }
+  .cmp-card { display: flex; flex-direction: column; gap: 10px; border: 1px solid var(--hairline); border-radius: var(--r-md); padding: 24px; transition: border-color .14s var(--ease), transform .14s var(--ease); }
   .cmp-card:hover { border-color: var(--magenta); transform: translateY(-2px); }
   .cmp-card-h { color: var(--ink); font-size: 17px; font-weight: 500; }
-  .cmp-card-b { color: var(--ink-2); font-size: 14px; line-height: 1.55; }
-  .cmp-card-cta { color: var(--magenta); font-size: 12.5px; margin-top: 4px; }
+  .cmp-card-win { color: var(--ink); font-size: 14.5px; line-height: 1.55; }
+  .cmp-card-win .win-k { color: var(--magenta); text-transform: uppercase; letter-spacing: .04em; font-size: 11px; display: block; margin-bottom: 3px; }
+  .cmp-card-context { color: var(--ink-3); font-size: 13px; line-height: 1.5; }
+  .cmp-card-cta { color: var(--magenta); font-size: 12.5px; margin-top: auto; padding-top: 6px; }
 
-  .honest { padding-top: 24px; }
+  /* Honest note */
+  .honest { padding-top: 96px; }
   .honest-inner { border: 1px solid var(--hairline); border-left: 2px solid var(--cyan); border-radius: var(--r-md); background: var(--field-1); padding: 36px 40px; max-width: 60em; }
   .honest-inner .section-title { margin-bottom: 14px; }
   .honest-inner p { color: var(--ink-2); font-size: 16px; line-height: 1.65; margin: 0; }
   .honest-inner strong { color: var(--ink); font-weight: 500; }
 
-  .final-cta { text-align: center; }
-  .final-cta h2 { font-size: clamp(28px, 4.5vw, 46px); letter-spacing: var(--track-display); margin: 0 0 28px; font-weight: 400; }
+  /* FAQ — matches the home page accordion (details/summary, +/- marker) */
+  .faq-section { padding-top: 96px; }
+  .faq-list { max-width: 760px; margin-top: 44px; }
+  .faq-item { border-bottom: 1px solid var(--hairline); }
+  .faq-item summary { list-style: none; cursor: pointer; padding: 16px 0; font-size: 16px; color: var(--ink); display: flex; align-items: center; justify-content: space-between; gap: 16px; transition: color .14s var(--ease); }
+  .faq-item summary:hover { color: var(--magenta); }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::after { content: '+'; color: var(--magenta); font-family: var(--mono); font-size: 18px; }
+  .faq-item[open] summary::after { content: '\2212'; }
+  .faq-item p { margin: 0 0 22px; color: var(--ink-2); font-size: 14.5px; line-height: 1.6; max-width: 60em; }
+
+  .final-cta { text-align: center; padding-top: 104px; }
+  .final-cta h2 { font-size: clamp(30px, 5vw, 52px); letter-spacing: var(--track-display); margin: 0 0 28px; font-weight: 400; }
 
   @media (max-width: 900px) {
     .cards-grid { grid-template-columns: 1fr; }
     .honest-inner { padding: 28px 24px; }
+    .crit { gap: 16px; }
+  }
+  @media (max-width: 760px) {
+    .hero { padding-block: 104px 0; }
+    .hero h1 { font-size: clamp(30px, 8.4vw, 48px); line-height: 1.06; }
   }
 </style>

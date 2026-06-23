@@ -1,8 +1,9 @@
 ---
-// /compare/<slug> — honest, public-docs comparison pages (Fluorescence).
-// Data + honesty rules live in src/data/competitors.ts. These target the
-// high-intent "mitos vs X" / "X alternative" queries that decide the category
-// SERPs and feed AI answer engines. Never use em or en dashes in copy.
+// /compare/<slug> — head-to-head comparison pages. Data + rules live in
+// src/data/competitors.ts. Positioning per .agents/product-marketing.md: lead
+// every beat with mitos, plain/broad language, never praise a rival; the page
+// ends on why teams pick mitos, not on "choose them." Targets "mitos vs X" /
+// "X alternative" queries. Never use em or en dashes in copy.
 import Site from '../../layouts/Site.astro';
 import { competitors, getCompetitor } from '../../data/competitors';
 
@@ -13,12 +14,10 @@ export function getStaticPaths() {
 const { slug } = Astro.params;
 const c = getCompetitor(slug!)!;
 
-const SIGNUP = '/quickstart';
-const DOCS = '/quickstart';
+const ENGINE = '/quickstart';
 
 const mark = (s: string) => (s === 'y' ? '✓' : s === 'n' ? '✗' : '◐');
 
-// FAQPage (citable answers) + BreadcrumbList (Home > Alternatives > vs X).
 const schema = [
   {
     '@context': 'https://schema.org',
@@ -44,14 +43,15 @@ const others = competitors.filter((o) => o.slug !== c.slug);
 ---
 
 <Site title={c.title} description={c.description} schema={schema}>
-  <section class="page-hero container">
+  <section class="hero container">
     <div class="hero-aura" aria-hidden="true"></div>
-    <p class="eyebrow mono"><a href="/alternatives">Alternatives</a> / mitos vs {c.name}</p>
-    <h1>{c.h1}</h1>
-    <p class="lede">{c.lede}</p>
-    <div class="page-actions">
-      <a class="btn btn-primary btn-lg" href={SIGNUP}>Get started</a>
-      <a class="btn btn-ghost btn-lg" href="/benchmarks">See the benchmark</a>
+    <div class="hero-in reveal">
+      <h1>{c.h1}</h1>
+      <p class="lede">{c.lede}</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary btn-lg" href={ENGINE}>Start with the open engine</a>
+        <a class="btn btn-ghost btn-lg" href="/benchmarks">Run the benchmark</a>
+      </div>
     </div>
   </section>
 
@@ -99,22 +99,24 @@ const others = competitors.filter((o) => o.slug !== c.slug);
   </section>
 
   <!-- DIFFERENCES -->
-  <section class="container diffs">
-    {c.sections.map((s) => (
-      <div class="diff reveal">
-        <h3>{s.h}</h3>
-        <p>{s.body}</p>
-      </div>
-    ))}
+  <section class="container diffs-sec">
+    <h2 class="section-title reveal">What sets mitos apart</h2>
+    <div class="diffs">
+      {c.sections.map((s) => (
+        <div class="diff reveal">
+          <h3>{s.h}</h3>
+          <p>{s.body}</p>
+        </div>
+      ))}
+    </div>
   </section>
 
-  <!-- FAIR: when to pick them -->
-  <section class="container fair">
-    <div class="fair-inner reveal">
-      <h2 class="section-title">When {c.name} is the better pick</h2>
-      <p class="section-lede">We would rather you choose well than choose us. {c.name} is the right call when:</p>
-      <ul class="fair-list">
-        {c.pickThemWhen.map((p) => <li>{p}</li>)}
+  <!-- WHY MITOS WINS -->
+  <section class="container winwrap">
+    <div class="winwrap-inner reveal">
+      <h2 class="section-title">Why teams pick mitos over {c.name}</h2>
+      <ul class="win-list">
+        {c.mitosWins.map((w) => <li>{w}</li>)}
       </ul>
     </div>
   </section>
@@ -154,30 +156,31 @@ const others = competitors.filter((o) => o.slug !== c.slug);
     <div class="container reveal">
       <h2>Fork one machine into a swarm.</h2>
       <div class="hero-actions center">
-        <a class="btn btn-primary btn-lg" href={SIGNUP}>Get started</a>
-        <a class="btn btn-ghost btn-lg" href={DOCS}>Read the docs</a>
+        <a class="btn btn-primary btn-lg" href={ENGINE}>Start with the open engine</a>
+        <a class="btn btn-ghost btn-lg" href={ENGINE}>Read the docs</a>
       </div>
     </div>
   </section>
 </Site>
 
 <style>
-  .page-hero { position: relative; }
-  .page-hero .eyebrow a { color: var(--ink-2); border-bottom: 1px solid var(--hairline-strong); }
-  .page-hero .eyebrow a:hover { color: var(--magenta); border-bottom-color: var(--magenta); }
-  .hero-aura { position: absolute; top: -40px; left: 4%; width: 640px; height: 480px; z-index: 0; pointer-events: none;
+  /* Hero matches /, /pricing, /benchmarks, /alternatives (the big .hero pattern). */
+  .hero { padding-block: 184px 0; position: relative; }
+  .hero-aura { position: absolute; top: -60px; left: 4%; width: 680px; max-width: 90vw; height: 520px; z-index: 0; pointer-events: none;
     background: radial-gradient(closest-side, color-mix(in srgb, var(--magenta) 11%, transparent), transparent 72%);
     opacity: .5; filter: blur(8px); }
-  .page-hero h1, .page-hero .lede, .page-hero .page-actions { position: relative; z-index: 1; }
+  .hero-in { position: relative; z-index: 1; max-width: 760px; }
+  .hero h1 { font-size: clamp(46px, 6vw, 76px); line-height: 1.0; letter-spacing: -.035em; font-weight: 400; margin: 0 0 20px; }
+  .lede { font-size: 19px; color: var(--ink-2); max-width: 36em; margin: 0 0 28px; line-height: 1.5; }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .hero-actions.center { justify-content: center; }
 
-  .verdict-wrap { padding-top: 8px; }
+  .verdict-wrap { padding-top: 44px; }
   .verdict { display: flex; gap: 18px; align-items: flex-start; border: 1px solid var(--hairline); border-left: 2px solid var(--magenta); border-radius: var(--r-md); background: var(--field-1); padding: 22px 24px; max-width: 60em; }
   .verdict-tag { color: var(--magenta); font-size: 12px; padding-top: 3px; white-space: nowrap; letter-spacing: .04em; text-transform: uppercase; }
   .verdict p { margin: 0; color: var(--ink); font-size: 16px; line-height: 1.6; }
 
-  .cmp-section { padding-top: 64px; }
-  .section-title { font-size: clamp(26px, 3.4vw, 38px); letter-spacing: var(--track-display); font-weight: 400; margin: 0 0 16px; }
-  .section-lede { color: var(--ink-2); font-size: 16px; max-width: 44em; margin: 0 0 36px; line-height: 1.55; }
+  .cmp-section { padding-top: 88px; }
 
   /* comparison table (matches the homepage comp-table) */
   .table-wrap { overflow-x: auto; border: 1px solid var(--hairline); border-radius: var(--r-lg); }
@@ -197,19 +200,25 @@ const others = competitors.filter((o) => o.slug !== c.slug);
   .comp-table thead th:not(:first-child), .comp-table td:not(.feat) { text-align: center; }
   .comp-table .own .mk-y { color: var(--magenta); }
 
-  /* difference prose */
-  .diffs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px 48px; padding-top: 8px; }
-  .diff h3 { font-size: 19px; font-weight: 500; color: var(--ink); letter-spacing: -.01em; margin: 0 0 12px; }
+  /* difference prose: rule-divided gallery (like the home use-cases). Each column
+     hangs from a shared top rule so they are anchored to one line, not floating. */
+  .diffs-sec { padding-top: 88px; }
+  .diffs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 40px; }
+  .diff { border-top: 1px solid var(--hairline); padding-top: 22px; }
+  .diff h3 { font-size: 18px; font-weight: 500; color: var(--ink); letter-spacing: -.01em; margin: 0 0 12px; }
   .diff p { color: var(--ink-2); font-size: 14.5px; line-height: 1.65; margin: 0; }
 
-  /* fair section */
-  .fair-inner { border: 1px solid var(--hairline); border-radius: var(--r-lg); background: var(--field-1); padding: 40px 40px 36px; max-width: 60em; }
-  .fair-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; }
-  .fair-list li { color: var(--ink); font-size: 15.5px; line-height: 1.55; padding-left: 28px; position: relative; }
-  .fair-list li::before { content: '\2713'; position: absolute; left: 0; top: 0; color: var(--cyan); font-family: var(--mono); }
+  /* why mitos wins */
+  .winwrap { padding-top: 88px; }
+  .winwrap-inner { border: 1px solid var(--hairline); border-left: 2px solid var(--magenta); border-radius: var(--r-lg); background: var(--field-1); padding: 40px 40px 36px; max-width: 60em; }
+  .winwrap-inner .section-title { margin-bottom: 22px; }
+  .win-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; }
+  .win-list li { color: var(--ink); font-size: 15.5px; line-height: 1.55; padding-left: 28px; position: relative; }
+  .win-list li::before { content: '\2713'; position: absolute; left: 0; top: 0; color: var(--magenta); font-family: var(--mono); }
 
   /* faq */
-  .faq-list { max-width: 760px; }
+  .faq { padding-top: 88px; }
+  .faq-list { max-width: 760px; margin-top: 44px; }
   .faq-item summary { list-style: none; cursor: pointer; padding: 16px 0; font-size: 16px; color: var(--ink); display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--hairline); transition: color .14s var(--ease); }
   .faq-item summary:hover { color: var(--magenta); }
   .faq-item summary::-webkit-details-marker { display: none; }
@@ -218,18 +227,23 @@ const others = competitors.filter((o) => o.slug !== c.slug);
   .faq-item p { margin: 16px 0 22px; color: var(--ink-2); font-size: 14.5px; line-height: 1.6; }
 
   /* other comparisons */
+  .more-compare { padding-top: 88px; }
   .more-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
   .more-card { display: flex; flex-direction: column; gap: 6px; border: 1px solid var(--hairline); border-radius: var(--r-md); padding: 20px; transition: border-color .14s var(--ease), transform .14s var(--ease); }
   .more-card:hover { border-color: var(--magenta); transform: translateY(-2px); }
   .more-name { color: var(--ink); font-size: 15px; font-weight: 500; }
   .more-blurb { color: var(--ink-2); font-size: 13px; line-height: 1.5; }
 
-  .final-cta { text-align: center; }
-  .final-cta h2 { font-size: clamp(28px, 4.5vw, 46px); letter-spacing: var(--track-display); margin: 0 0 28px; font-weight: 400; }
+  .final-cta { text-align: center; padding-top: 104px; }
+  .final-cta h2 { font-size: clamp(30px, 5vw, 52px); letter-spacing: var(--track-display); margin: 0 0 28px; font-weight: 400; }
 
   @media (max-width: 900px) {
     .diffs, .more-grid { grid-template-columns: 1fr; }
     .verdict { flex-direction: column; gap: 10px; }
-    .fair-inner { padding: 28px 24px; }
+    .winwrap-inner { padding: 28px 24px; }
+  }
+  @media (max-width: 760px) {
+    .hero { padding-block: 104px 0; }
+    .hero h1 { font-size: clamp(30px, 8.4vw, 48px); line-height: 1.06; }
   }
 </style>
