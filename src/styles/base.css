@@ -50,6 +50,14 @@ a { color: inherit; text-decoration: none; }
 /* horizontal-only: the `padding` shorthand would reset vertical padding to 0 on
    elements that are BOTH a section and a .container, collapsing section padding. */
 .container { max-width: var(--maxw); margin: 0 auto; padding-inline: var(--space-5); }
+
+/* Canonical section type, matching the home page. Pages may still override
+   locally (scoped styles win), but these keep subpages from drifting. */
+.section-title { font-size: clamp(28px, 3.6vw, 42px); letter-spacing: var(--track-display); font-weight: 400; margin: 0 0 18px; }
+.section-lede { color: var(--ink-2); font-size: 17px; max-width: 42em; margin: 0 0 48px; line-height: 1.55; }
+.section-lede a:not(.btn) { color: var(--cyan); border-bottom: 1px solid color-mix(in srgb, var(--cyan) 30%, transparent); }
+.section-lede a:not(.btn):hover { border-bottom-color: var(--cyan); }
+
 ::selection { background: var(--magenta); color: var(--field); }
 :focus-visible { outline: 2px solid var(--magenta); outline-offset: 3px; border-radius: var(--r-sm); }
 @media (prefers-reduced-motion: reduce) {
