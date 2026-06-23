@@ -16,8 +16,10 @@ interface Props {
   description: string;
   /** Page-specific JSON-LD nodes (FAQPage, SoftwareApplication, BreadcrumbList, ...). */
   schema?: Record<string, unknown>[];
+  /** Emit a noindex robots meta (e.g. the 404 page). */
+  noindex?: boolean;
 }
-const { title, description, schema = [] } = Astro.props;
+const { title, description, schema = [], noindex = false } = Astro.props;
 const stars = await getStars();
 
 // build.format:'file' makes Astro.url.pathname end in `.html` (e.g.
@@ -80,6 +82,7 @@ const navLinks = [
     <meta name="theme-color" content="#04050A" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="canonical" href={canonical} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="mitos" />

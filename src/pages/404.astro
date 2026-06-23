@@ -1,0 +1,62 @@
+---
+// 404 — on-brand (Fluorescence) not-found page on the marketing Site shell, so
+// it carries nav + footer + tokens. Built to dist/404.html, which GitHub Pages
+// serves for every unknown route. noindex; a stray-daughter / fork-that-did-not-
+// resolve metaphor, kept light. Never use em or en dashes in copy.
+import Site from '../layouts/Site.astro';
+
+const GITHUB = 'https://github.com/mitos-run/mitos';
+const TITLE = 'Page not found · mitos';
+const DESC = 'That page moved or never existed. Here is the way back into mitos.';
+
+const links = [
+  { label: 'Quickstart', href: '/quickstart' },
+  { label: 'Pricing', href: '/pricing' },
+  { label: 'Benchmarks', href: '/benchmarks' },
+  { label: 'Alternatives', href: '/alternatives' },
+  { label: 'GitHub', href: GITHUB, external: true },
+];
+---
+
+<Site title={TITLE} description={DESC} noindex={true}>
+  <section class="nf container">
+    <div class="nf-aura" aria-hidden="true"></div>
+    <div class="nf-in">
+      <p class="nf-code mono">404</p>
+      <h1>This fork didn't resolve.</h1>
+      <p class="lede">The page you wanted moved, or it was never spawned.</p>
+      <div class="nf-actions">
+        <a class="btn btn-primary btn-lg" href="/">Back to home</a>
+        <a class="btn btn-ghost btn-lg" href="/quickstart">Start with the open engine</a>
+      </div>
+      <nav class="nf-links" aria-label="Helpful links">
+        {links.map((l) => (
+          l.external
+            ? <a href={l.href} target="_blank" rel="noopener">{l.label}</a>
+            : <a href={l.href}>{l.label}</a>
+        ))}
+      </nav>
+    </div>
+  </section>
+</Site>
+
+<style>
+  .nf { position: relative; min-height: 62vh; display: grid; place-items: center; text-align: center; padding: 140px 0 96px; }
+  .nf-aura { position: absolute; top: 8%; left: 50%; transform: translateX(-50%); width: 680px; max-width: 92vw; height: 460px; z-index: 0; pointer-events: none;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--magenta) 13%, transparent), transparent 72%);
+    opacity: .55; filter: blur(10px); }
+  .nf-in { position: relative; z-index: 1; max-width: 40em; }
+  .nf-code { font-size: clamp(64px, 12vw, 132px); line-height: 1; font-weight: 400; letter-spacing: -.04em;
+    color: transparent; -webkit-text-stroke: 1px var(--hairline-strong);
+    text-shadow: 0 0 40px color-mix(in srgb, var(--magenta) 22%, transparent); margin: 0; }
+  .nf h1 { font-size: clamp(28px, 4.4vw, 46px); line-height: 1.05; letter-spacing: -.03em; font-weight: 400; margin: 18px 0 14px; text-wrap: balance; }
+  .nf .lede { font-size: 18px; color: var(--ink-2); line-height: 1.55; margin: 0 auto 28px; max-width: 34em; text-wrap: balance; }
+  .nf-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .nf-links { display: flex; flex-wrap: wrap; gap: 8px 22px; justify-content: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--hairline); }
+  .nf-links a { color: var(--ink-2); font-size: 14px; }
+  .nf-links a:hover { color: var(--magenta); }
+
+  @media (max-width: 760px) {
+    .nf { padding: 96px 0 72px; min-height: 56vh; }
+  }
+</style>
