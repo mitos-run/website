@@ -17,3 +17,8 @@ node_modules/
 squirrel.toml
 .squirrel/
 *.squirrel.db
+
+# Engine docs are fetched at build time from mitos-run/mitos@main (single
+# source of truth) and must never be committed here.
+src/content/engine-docs/
+public/docs-assets/

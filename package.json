@@ -5,10 +5,14 @@
   "private": true,
   "description": "Open-source marketing site and docs for mitos (mitos.run). Also serves the Go vanity import meta for mitos.run/mitos.",
   "scripts": {
+    "sync:docs": "node scripts/sync-engine-docs.mjs",
+    "predev": "node scripts/sync-engine-docs.mjs",
     "dev": "astro dev",
+    "prebuild": "node scripts/sync-engine-docs.mjs",
     "build": "astro build && node scripts/postbuild-clean-urls.mjs",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "node --test scripts/lib/*.test.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
