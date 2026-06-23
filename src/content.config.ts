@@ -1,10 +1,18 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
-import { docsLoader } from '@astrojs/starlight/loaders';
-import { docsSchema } from '@astrojs/starlight/schema';
 
 export const collections = {
-  docs: defineCollection({ loader: docsLoader(), schema: docsSchema() }),
+  docs: defineCollection({
+    loader: glob({ pattern: '**/*.md', base: './src/content/engine-docs' }),
+    schema: z.object({
+      title: z.string(),
+      description: z.string(),
+      slug: z.string(),
+      group: z.string(),
+      order: z.number(),
+      sourceUrl: z.string().url(),
+    }),
+  }),
   blog: defineCollection({
     loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
     schema: z.object({

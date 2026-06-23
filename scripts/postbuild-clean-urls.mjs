@@ -1,15 +1,10 @@
-// Post-build HTML fixups for things Astro/Starlight emit that hurt the audit:
+// Post-build HTML fixup for Astro build.format:'file' output.
 //
-// 1. Clean URLs in Starlight-generated pages. With build.format:'file',
-//    Starlight links and canonicals point at `/foo.html`, but the site serves
-//    clean, slash-free URLs (and the sitemap uses them). That creates duplicate
-//    /foo vs /foo.html pages, split canonicals, and "same text -> 2 URLs" link
-//    warnings. We rewrite internal `.html` hrefs/canonicals to the clean form.
-//
-// 2. Mark the Starlight search button's <kbd> shortcut hints aria-hidden. The
-//    shortcut is already exposed via aria-keyshortcuts, and at narrow widths the
-//    visible "Search" label is hidden, leaving only "Ctrl K" as the accessible
-//    name (mismatching aria-label="Search"). Hiding the kbd hints fixes it.
+// With build.format:'file', Astro emits internal hrefs and canonicals as
+// `/foo.html`, but the site serves clean, slash-free URLs (and the sitemap
+// uses them). That creates duplicate /foo vs /foo.html pages, split
+// canonicals, and "same text -> 2 URLs" link warnings. We rewrite internal
+// `.html` hrefs/canonicals to the clean form.
 //
 // Runs as part of `npm run build` (astro build && node scripts/...). Skips the
 // Go vanity-import meta (public/mitos) and the OG render target.
@@ -38,12 +33,10 @@ const cleanUrls = (html) =>
     // internal /path.html -> /path  (not the /mitos/ vanity tree)
     .replace(/(href|content)="(https:\/\/mitos\.run)?(\/(?!mitos\/)[^"]*?)\.html"/g, '$1="$2$3"');
 
-const hideKbd = (html) => html.replace(/<kbd(\s|>)/g, '<kbd aria-hidden="true"$1');
-
 let changed = 0;
 for await (const file of htmlFiles(DIST)) {
   const src = await readFile(file, 'utf8');
-  const out = hideKbd(cleanUrls(src));
+  const out = cleanUrls(src);
   if (out !== src) {
     await writeFile(file, out);
     changed++;

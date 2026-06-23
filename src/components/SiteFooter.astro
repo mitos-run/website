@@ -1,10 +1,8 @@
 ---
-// Shared branded footer. Used by both the marketing shell (Site.astro) and the
-// Starlight docs override (starlight/Footer.astro) so docs and marketing share
-// one footer instead of Starlight's default. Honest links only: every href
-// points at a real page or a real GitHub resource. Terms / Cookie-policy pages
-// and social channels (X/Discord) are intentionally absent until they exist
-// (legal pages tracked in issue #25). Never use em or en dashes in copy.
+// Shared branded footer for both marketing and docs. Honest links only: every
+// href points at a real page or a real GitHub resource. Terms / Cookie-policy
+// pages and social channels (X/Discord) are intentionally absent until they
+// exist (legal pages tracked in issue #25). Never use em or en dashes in copy.
 import Mark from './Mark.astro';
 import GhStars from './GhStars.astro';
 
@@ -31,9 +29,9 @@ const columns = [
   {
     label: 'Developers',
     links: [
-      { label: 'Docs', href: '/quickstart' },
-      { label: 'Quickstart', href: '/quickstart' },
-      { label: 'Architecture', href: '/architecture' },
+      { label: 'Docs', href: '/docs' },
+      { label: 'Quickstart', href: '/docs/quickstart' },
+      { label: 'Architecture', href: '/docs/architecture' },
       { label: 'Security', href: `${GITHUB}/blob/main/SECURITY.md`, external: true },
     ],
   },

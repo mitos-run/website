@@ -1,0 +1,51 @@
+---
+// /docs hub: grouped cards linking into the engine-sourced docs. Brand shell.
+import Site from '../../layouts/Site.astro';
+import { GROUPS } from '../../data/docs-nav';
+import { getCollection } from 'astro:content';
+
+const TITLE = 'Mitos docs: forkable microVM sandboxes for AI agents';
+const DESC = 'Quickstart, SDK and CLI reference, sandbox lifecycle, networking, and security for Mitos. Sourced from the open engine repository.';
+
+const all = await getCollection('docs');
+const meta = new Map(all.map((d) => [d.data.slug, d.data]));
+const groups = GROUPS
+  .map((g) => ({ label: g.label, items: g.slugs.map((s) => meta.get(s)).filter(Boolean) }))
+  .filter((g) => g.items.length);
+---
+
+<Site title={TITLE} description={DESC}>
+  <section class="hero container">
+    <h1>Documentation</h1>
+    <p class="lede">Everything to run, fork, and operate Mitos sandboxes. Sourced live from the open engine repository.</p>
+  </section>
+  <section class="container groups">
+    {groups.map((g) => (
+      <div class="group">
+        <h2 class="group-h">{g.label}</h2>
+        <div class="cards">
+          {g.items.map((d) => (
+            <a class="card" href={`/docs/${d.slug}`}>
+              <span class="card-title">{d.title}</span>
+              <span class="card-desc">{d.description}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    ))}
+  </section>
+</Site>
+
+<style>
+  .hero { padding-top: 64px; padding-bottom: 8px; }
+  .hero h1 { font-size: var(--text-h1); font-weight: 300; letter-spacing: var(--track-display); margin: 0 0 14px; }
+  .lede { color: var(--ink-2); font-size: var(--text-lede); line-height: 1.5; max-width: 40em; }
+  .groups { padding-top: 40px; padding-bottom: 96px; }
+  .group { margin-bottom: 44px; }
+  .group-h { font-size: var(--text-h3); font-weight: 400; letter-spacing: var(--track-display); margin: 0 0 18px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+  .card { display: flex; flex-direction: column; gap: 6px; border: 1px solid var(--hairline); border-radius: var(--r-md); padding: 20px; transition: border-color .14s var(--ease), transform .14s var(--ease); }
+  .card:hover { border-color: var(--magenta); transform: translateY(-2px); }
+  .card-title { color: var(--ink); font-size: var(--text-body); font-weight: 500; }
+  .card-desc { color: var(--ink-2); font-size: var(--text-dense); line-height: 1.5; }
+</style>

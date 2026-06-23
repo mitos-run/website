@@ -79,4 +79,4 @@ The [engine](https://github.com/mitos-run/mitos) is **Apache-2.0** and self-host
 
 Every figure is reproducible from the benchmark scripts in the repository. They are engine measurements on bare metal, not end-to-end wall-clock times or a matched head-to-head against other vendors, and we label them that way on the [benchmarks](/benchmarks) page.
 
-Run it today: the [quickstart](/quickstart) forks a sandbox in a few lines, and a managed cloud is coming. Release-by-release shipping notes live on the [changelog](https://github.com/mitos-run/mitos/releases).
+Run it today: the [quickstart](/docs/quickstart) forks a sandbox in a few lines, and a managed cloud is coming. Release-by-release shipping notes live on the [changelog](https://github.com/mitos-run/mitos/releases).
