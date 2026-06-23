@@ -46,6 +46,7 @@ note is the de-facto drift each token absorbs.
 --text-h2:              clamp(28px, 3.6vw, 42px); /* section titles, home division headline */
 --text-h2-sm:           clamp(24px, 7vw, 32px);   /* section titles, mobile */
 --text-h3:              clamp(22px, 2.6vw, 28px); /* in-article h2, pillars, FAQ heads, card titles */
+--text-cta:             clamp(30px, 5vw, 52px);   /* final-CTA headlines (sit between h2 and display) */
 ```
 
 | Token | Absorbs |
@@ -55,7 +56,8 @@ note is the de-facto drift each token absorbs.
 | `--text-display-compact` | pricing `clamp(40px,4.6vw,60px)` (preserved exception); layout `page-hero h1` `clamp(38px,5vw,60px)` → 40 |
 | `--text-h2` | page `section-title` `clamp(28px,3.6vw,42px)`; layout's `clamp(28px,4vw,40px)`/weight-600 drift; `division-h` `clamp(28px,4vw,44px)` → 42 |
 | `--text-h2-sm` | `section-title` mobile `clamp(24px,7vw,32px)` |
-| `--text-h3` | marketing `prose h2` `clamp(22px,2.6vw,28px)`; legal `prose h2` `clamp(20px,2.4vw,26px)` → 22–28; `pillar h3` `clamp(21px,2.3vw,27px)`; blog `post-title`/`rel-h`/`post-faq-h` `clamp(20px,2.6vw,26px)` |
+| `--text-h3` | marketing `prose h2` `clamp(22px,2.6vw,28px)`; legal `prose h2` `clamp(20px,2.4vw,26px)` → 22–28; `pillar h3` `clamp(21px,2.3vw,27px)`; blog `post-title`/`rel-h`/`post-faq-h` `clamp(20px,2.6vw,26px)`; `404 nf h1` `clamp(28px,4.4vw,46px)` → 28–42 |
+| `--text-cta` | final-CTA headlines: index/alternatives/compare `clamp(30px,5vw,52px)`; pricing `clamp(30px,5vw,50px)` → 52; benchmarks `clamp(28px,4.6vw,46px)` → 30–52 |
 
 ### Fixed
 
@@ -106,11 +108,21 @@ Keep existing `--lh-tight: 1.02` (display) and `--lh-body: 1.5`.
 - **Pricing compact hero** — the one intentional hero exception
   (`--text-display-compact`).
 - **Numeric data readouts** — `stat-v` `clamp(28px,4vw,40px)`, `calc-total-v` 36
-  (mobile 30), `division-stats .sv` 24. Figures preserved; they keep their own
-  weight/letter-spacing. Snap to the nearest token only where it's an exact match;
-  otherwise leave the literal value with a comment. These are data, not prose.
+  (mobile 30), `division-stats .sv` 24 (mobile 20). Figures preserved; they keep
+  their own weight/letter-spacing and stay as literals with a `/* readout */`
+  comment. These are data, not prose.
 - **SVG `text` sizes** in the home division diagram (`fan-*` 13/14) — left as-is
   (SVG coordinate space, not document flow).
+- **Hand-tuned mobile/overflow literals (kept, commented):**
+  - `Site.astro` `.nav-menu-links a` 23px — mobile-menu tap target.
+  - `index` `.division-h` mobile 21px — overflow-tuned headline (the page's
+    `--text-h2` floors at 28 on mobile, too big here).
+  - `index` `.code-panel` mobile 11.5px — overflow-tuned mono (code blocks are
+    "preserved exactly").
+  - Pricing hero mobile/tablet overrides `clamp(38px,8vw,52px)` /
+    `clamp(30px,8.4vw,46px)` — the compact-hero exception's own breakpoints.
+- **Redundant overrides removed:** `index` mobile `.pillar h3 { 22px }` — `--text-h3`
+  already floors at 22px on mobile, so the override is a no-op once tokenized.
 
 ## Edge cases / notes
 
