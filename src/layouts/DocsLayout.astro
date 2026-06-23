@@ -23,7 +23,7 @@ const bySlug = new Map(all.map((d) => [d.data.slug, d.data.title]));
 const groups = GROUPS
   .map((g) => ({
     label: g.label,
-    items: g.slugs.filter((s) => bySlug.has(s)).map((s) => ({ slug: s, title: bySlug.get(s) })),
+    items: g.slugs.filter((s) => bySlug.has(s)).map((s) => ({ slug: s, title: bySlug.get(s)! })),
   }))
   .filter((g) => g.items.length);
 
