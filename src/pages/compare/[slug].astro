@@ -190,8 +190,8 @@ const others = competitors.filter((o) => o.slug !== c.slug);
   .comp-table tbody tr:last-child td { border-bottom: none; }
   .comp-table tbody tr:hover td { background: rgba(255,255,255,.02); }
   .comp-table .feat { color: var(--ink-2); }
-  .comp-table th:first-child, .comp-table td:first-child { position: sticky; left: 0; background: var(--field); }
-  .comp-table thead th:first-child { background: var(--field-1); }
+  .comp-table th:first-child, .comp-table td:first-child { position: sticky; left: 0; z-index: 1; background: var(--field); }
+  .comp-table thead th:first-child { z-index: 2; background: var(--field-1); }
   .comp-table .mk { font-size: var(--text-ui); display: block; line-height: 1.15; }
   .mk-y { color: var(--magenta); } .mk-n { color: var(--ink-3); } .mk-p { color: var(--ink-2); }
   .comp-table .ct { color: var(--ink-3); font-size: var(--text-nano); margin-top: 3px; font-family: var(--mono); display: block; line-height: 1.25; }
