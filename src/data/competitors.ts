@@ -109,7 +109,7 @@ export const competitors: Competitor[] = [
     blurb: 'Closed Python and ML platform with GPU. Isolates with gVisor; offers snapshots, not a live fork.',
     title: 'mitos vs Modal: microVM fork vs gVisor sandbox',
     description:
-      'mitos vs Modal for AI agents: mitos forks a running microVM into a fleet and is open source; Modal is a closed, gVisor-based Python and ML platform with snapshots.',
+      'mitos vs Modal for AI agents: mitos forks a running microVM and is open source; Modal is a closed, gVisor-based Python and ML platform.',
     h1: 'mitos vs Modal',
     lede:
       'mitos gives each agent its own kernel and forks a running one into a fleet. Modal runs agent code on gVisor with snapshots, and is closed source.',
@@ -155,7 +155,7 @@ export const competitors: Competitor[] = [
     blurb: 'Fast container sandboxes with Computer Use. Memory fork is experimental and gated; the server is AGPL.',
     title: 'mitos vs Daytona: microVM fork vs container sandboxes',
     description:
-      'mitos vs Daytona for AI agents: mitos forks running memory by default, microVM-isolated and Apache-2.0; Daytona is container-default with an experimental, gated fork and an AGPL server.',
+      'mitos vs Daytona for AI agents: mitos forks running memory by default, microVM-isolated and Apache-2.0; Daytona is container-default with an AGPL server.',
     h1: 'mitos vs Daytona',
     lede:
       'mitos forks running memory into a fleet by default, each agent in its own microVM. Daytona runs containers by default, its memory fork is experimental and access-gated, and its server is AGPL.',

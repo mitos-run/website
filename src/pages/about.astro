@@ -4,21 +4,28 @@
 import Site from '../layouts/Site.astro';
 
 const GITHUB = 'https://github.com/mitos-run/mitos';
-const TITLE = 'About mitos: forkable microVM sandboxes for agent swarms';
+const TITLE = 'About mitos: infrastructure for agent swarms';
 const DESC =
   'mitos is managed, open-source infrastructure for AI agent swarms: fork a running Firecracker microVM into hundreds of isolated subagents. Why we build it.';
 ---
 
 <Site title={TITLE} description={DESC}>
-  <section class="page-hero container">
-    <p class="eyebrow mono">About</p>
-    <h1>We make agents divide.</h1>
-    <p class="lede">
-      mitos is infrastructure for the moment one agent needs to become many.
-    </p>
+  <section class="hero container">
+    <div class="hero-aura" aria-hidden="true"></div>
+    <div class="hero-in reveal">
+      <h1>Infrastructure for agent swarms.</h1>
+      <p class="lede">
+        mitos forks a running machine into a fleet of isolated microVMs, so one agent becomes a thousand.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary btn-lg" href="/quickstart">Start with the open engine</a>
+        <a class="btn btn-ghost btn-lg" href={GITHUB} target="_blank" rel="noopener">View on GitHub</a>
+      </div>
+    </div>
   </section>
 
-  <section class="container prose">
+  <section class="container">
+    <div class="prose">
     <p>
       Most sandbox platforms were built to <strong>run untrusted code safely</strong>. That problem
       is largely solved: microVMs are everywhere now. The pressure has moved to a harder one:
@@ -37,11 +44,10 @@ const DESC =
       we run. That is your no-lock-in guarantee, not a side project: you can read it, run it
       yourself, and leave whenever you want.
     </p>
-    <h2>What we will not do</h2>
+    <h2>Numbers you can reproduce</h2>
     <p>
-      We will not pretend the fork primitive is ours alone (others branch VMs too), and we will not
-      publish numbers we cannot reproduce. Every figure on this site comes from a script in the
-      open-source repository. If a claim is not backed by code, it is not here.
+      Every figure on this site comes from a script in the open-source repository. If a claim is not
+      backed by code you can run, it is not here.
     </p>
     <h2>Open source</h2>
     <p>
@@ -49,15 +55,24 @@ const DESC =
       under Apache 2.0. Issues, discussions, and pull requests are welcome. If you want to reach us,
       see the <a href="/contact">contact page</a>.
     </p>
+    </div>
   </section>
 </Site>
 
 <style>
-  .page-hero { position: relative; }
-  .prose { max-width: 52em; padding-bottom: 96px; }
+  .hero { padding-block: 184px 0; position: relative; }
+  .hero-aura { position: absolute; top: -60px; left: 4%; width: 680px; max-width: 90vw; height: 520px; z-index: 0; pointer-events: none;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--magenta) 11%, transparent), transparent 72%);
+    opacity: .5; filter: blur(8px); }
+  .hero-in { position: relative; z-index: 1; max-width: 720px; }
+  .hero h1 { font-size: clamp(46px, 6vw, 76px); line-height: 1.0; letter-spacing: -.035em; font-weight: 400; margin: 0 0 20px; }
+  .lede { font-size: 19px; color: var(--ink-2); max-width: 34em; margin: 0 0 28px; line-height: 1.5; }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .prose { max-width: 52em; padding-top: 56px; padding-bottom: 96px; }
   .prose p { color: var(--ink-2); font-size: 17px; line-height: 1.7; margin: 0 0 22px; }
   .prose strong { color: var(--ink); font-weight: 500; }
   .prose a { color: var(--cyan); border-bottom: 1px solid color-mix(in srgb, var(--cyan) 30%, transparent); }
   .prose a:hover { border-bottom-color: var(--cyan); }
   .prose h2 { font-size: clamp(22px, 2.6vw, 28px); font-weight: 400; letter-spacing: var(--track-display); margin: 40px 0 14px; }
+  @media (max-width: 760px) { .hero { padding-block: 104px 0; } .hero h1 { font-size: clamp(30px, 8.4vw, 48px); line-height: 1.06; } }
 </style>

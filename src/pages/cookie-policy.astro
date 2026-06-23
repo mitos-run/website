@@ -11,9 +11,9 @@ import Site from '../layouts/Site.astro';
 
 const LEGAL_EMAIL = 'legal@mitos.run';
 const UPDATED = 'June 23, 2026';
-const TITLE = 'Cookie Policy: what mitos.run stores';
+const TITLE = 'mitos cookie policy: what mitos.run stores';
 const DESC =
-  'The cookies and local storage mitos.run uses: an essential consent flag, and EU-hosted PostHog analytics loaded only after you opt in. No marketing or cross-site tracking.';
+  'The cookies mitos.run uses: an essential consent flag and EU-hosted PostHog analytics, loaded only after you opt in. No marketing or cross-site tracking.';
 
 const rows = [
   {
@@ -66,13 +66,13 @@ const rows = [
 
 <Site title={TITLE} description={DESC}>
   <section class="page-hero container">
-    <p class="eyebrow mono">Legal</p>
     <h1>Cookie Policy</h1>
     <p class="lede">What we store in your browser, and the analytics you can turn off in one click.</p>
     <p class="updated mono">Last updated: {UPDATED}</p>
   </section>
 
-  <section class="container prose">
+  <section class="container">
+    <div class="prose">
     <p>
       This policy explains the cookies and similar storage used on <strong>mitos.run</strong>, our
       marketing and documentation site. Read it alongside our <a href="/privacy">Privacy Policy</a>.
@@ -163,9 +163,10 @@ const rows = [
 
     <h2>Contact</h2>
     <p>
-      Questions about cookies can be sent to <a href={`mailto:${LEGAL_EMAIL}`}>{LEGAL_EMAIL}</a> or
+      Questions about cookies can be sent to {LEGAL_EMAIL} or
       raised through our <a href="/contact">contact page</a>.
     </p>
+    </div>
   </section>
 </Site>
 
