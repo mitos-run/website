@@ -14,8 +14,8 @@ import mcpIcon from '../assets/lang/mcp.svg?raw';
 const langIcons: Record<string, string> = { py: pythonIcon, ts: tsIcon, cli: cliIcon, mcp: mcpIcon };
 
 const GITHUB = 'https://github.com/mitos-run/mitos';
-const DOCS = '/quickstart';
-const SIGNUP = '/quickstart'; // hosted console not live yet; OSS run-now path
+const DOCS = '/docs';
+const SIGNUP = '/docs/quickstart'; // hosted console not live yet; OSS run-now path
 
 // Title carries the search keywords (fork / microVM / agent swarm) using the
 // brand's own locked vocabulary; the poetic line lives in the OG card + body.
@@ -151,7 +151,7 @@ const schema = [
     operatingSystem: 'Linux',
     description: DESC,
     url: 'https://mitos.run',
-    softwareHelp: 'https://mitos.run/quickstart',
+    softwareHelp: 'https://mitos.run/docs/quickstart',
     license: 'https://www.apache.org/licenses/LICENSE-2.0',
     isAccessibleForFree: true,
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
@@ -354,7 +354,7 @@ const schema = [
       <div class="pillar reveal">
         <h3>Every fork is a real microVM, not a shared kernel</h3>
         <p>Each subagent runs in its own Firecracker microVM with its own kernel. A prompt injection that turns into a shell stays inside one disposable fork, not your host and not the other agents.</p>
-        <a class="btn btn-ghost" href="/architecture">Read the architecture</a>
+        <a class="btn btn-ghost" href="/docs/architecture">Read the architecture</a>
       </div>
       <div class="pillar reveal" id="pricing-teaser">
         <h3>Pay for divergence, not duplication</h3>

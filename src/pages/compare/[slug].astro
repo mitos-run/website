@@ -14,7 +14,7 @@ export function getStaticPaths() {
 const { slug } = Astro.params;
 const c = getCompetitor(slug!)!;
 
-const ENGINE = '/quickstart';
+const ENGINE = '/docs/quickstart';
 
 const mark = (s: string) => (s === 'y' ? '✓' : s === 'n' ? '✗' : '◐');
 
@@ -157,7 +157,7 @@ const others = competitors.filter((o) => o.slug !== c.slug);
       <h2>Fork one machine into a swarm.</h2>
       <div class="hero-actions center">
         <a class="btn btn-primary btn-lg" href={ENGINE}>Start in the quickstart</a>
-        <a class="btn btn-ghost btn-lg" href="/architecture">Read the architecture</a>
+        <a class="btn btn-ghost btn-lg" href="/docs/architecture">Read the architecture</a>
       </div>
     </div>
   </section>

@@ -1,0 +1,179 @@
+---
+// /docs/<slug> shell: Site brand frame + left sidebar (from the manifest) +
+// reused .prose body and sticky ToC rail. Mermaid (one diagram on the
+// architecture page) renders client-side, brand-themed. Never use em/en dashes.
+import Site from './Site.astro';
+import { GROUPS } from '../data/docs-nav';
+import { getCollection } from 'astro:content';
+import '../styles/prose.css';
+
+interface Props {
+  title: string;
+  description: string;
+  sourceUrl: string;
+  slug: string;
+  headings: { depth: number; slug: string; text: string }[];
+}
+const { title, description, sourceUrl, slug, headings } = Astro.props;
+const toc = headings.filter((h) => h.depth === 2);
+
+// Build the sidebar from the manifest, resolving titles from the collection.
+const all = await getCollection('docs');
+const bySlug = new Map(all.map((d) => [d.data.slug, d.data.title]));
+const groups = GROUPS
+  .map((g) => ({
+    label: g.label,
+    items: g.slugs.filter((s) => bySlug.has(s)).map((s) => ({ slug: s, title: bySlug.get(s) })),
+  }))
+  .filter((g) => g.items.length);
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'TechArticle',
+    headline: title,
+    description,
+    author: { '@type': 'Organization', name: 'Mitos', url: 'https://mitos.run' },
+    publisher: { '@type': 'Organization', name: 'Mitos' },
+    mainEntityOfPage: `https://mitos.run/docs/${slug}`,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Mitos', item: 'https://mitos.run' },
+      { '@type': 'ListItem', position: 2, name: 'Docs', item: 'https://mitos.run/docs' },
+      { '@type': 'ListItem', position: 3, name: title, item: `https://mitos.run/docs/${slug}` },
+    ],
+  },
+];
+---
+
+<Site title={`${title} · Mitos docs`} description={description} schema={schema}>
+  <section class="docs container">
+    <aside class="docs-side">
+      <nav aria-label="Docs">
+        {groups.map((g) => (
+          <div class="side-group">
+            <p class="side-h mono">{g.label}</p>
+            <ul>
+              {g.items.map((it) => (
+                <li>
+                  <a href={`/docs/${it.slug}`} class:list={[it.slug === slug && 'current']}>{it.title}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </nav>
+    </aside>
+
+    <div class:list={['docs-body', toc.length > 0 && 'has-toc']}>
+      <div class="article-main">
+        <h1 class="docs-title">{title}</h1>
+        <article class="prose">
+          <slot />
+        </article>
+        <p class="src mono">
+          <a href={sourceUrl}>View source on GitHub &rarr;</a>
+        </p>
+      </div>
+      {toc.length > 0 && (
+        <aside class="toc-rail">
+          <nav class="toc" aria-label="On this page">
+            <p class="toc-h">On this page</p>
+            <ol>{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
+          </nav>
+        </aside>
+      )}
+    </div>
+  </section>
+
+  <script>
+    // Scrollspy for the ToC (same behavior as the blog).
+    const links = Array.from(document.querySelectorAll('.toc a'));
+    const hs = Array.from(document.querySelectorAll('.prose h2[id]'));
+    if (links.length && hs.length) {
+      const byId = new Map(links.map((a) => [a.getAttribute('href').slice(1), a]));
+      let active = null;
+      const io = new IntersectionObserver((entries) => {
+        const on = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        const id = on[0]?.target.id;
+        if (id && id !== active && byId.has(id)) {
+          active = id;
+          links.forEach((a) => a.classList.remove('active'));
+          byId.get(id).classList.add('active');
+        }
+      }, { rootMargin: '-90px 0px -68% 0px', threshold: 0 });
+      hs.forEach((h) => io.observe(h));
+    }
+  </script>
+
+  <!-- Render any ```mermaid blocks client-side, brand-themed.
+       EC renders: div.expressive-code > figure.frame > pre[data-language="mermaid"] > code
+       We replace the outer div.expressive-code with a .mermaid host div. -->
+  <script>
+    // EC structure: div.expressive-code wraps a figure > pre[data-language="mermaid"] > code
+    const ecBlocks = Array.from(document.querySelectorAll('pre[data-language="mermaid"]'))
+      .map((pre) => {
+        const wrapper = pre.closest('.expressive-code') || pre;
+        return { el: wrapper, source: (pre.querySelector('code') || pre).textContent || '' };
+      });
+    // Fallback: plain pre > code.language-mermaid (no EC)
+    const plainBlocks = Array.from(document.querySelectorAll('pre > code.language-mermaid, code.language-mermaid'))
+      .filter((code) => !code.closest('.expressive-code'))
+      .map((code) => ({ el: code.closest('pre') || code, source: code.textContent || '' }));
+
+    /** @type {{ el: Element; source: string }[]} */
+    const allSources = [...ecBlocks, ...plainBlocks];
+
+    if (allSources.length) {
+      const mermaid = (await import('mermaid')).default;
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: 'base',
+        themeVariables: {
+          background: 'transparent',
+          primaryColor: '#0A0C12',          // --field-1
+          primaryBorderColor: 'rgba(255,255,255,.14)', // --hairline-strong
+          primaryTextColor: 'rgba(255,255,255,.94)',   // --ink
+          lineColor: 'rgba(255,255,255,.40)',          // --ink-3
+          tertiaryColor: '#11141C',         // --field-2
+          fontFamily: 'var(--mono)',
+        },
+      });
+      for (const { el, source } of allSources) {
+        const host = document.createElement('div');
+        host.className = 'mermaid';
+        host.textContent = source.trim();
+        el.replaceWith(host);
+      }
+      await mermaid.run({ querySelector: '.mermaid' });
+    }
+  </script>
+</Site>
+
+<style>
+  .docs { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; padding-top: 36px; padding-bottom: 96px; align-items: start; }
+  .docs-side { position: sticky; top: 96px; }
+  .side-group { margin-bottom: 24px; }
+  .side-h { color: var(--ink-3); font-size: var(--text-micro); letter-spacing: .04em; text-transform: uppercase; margin: 0 0 10px; }
+  .docs-side ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
+  .docs-side a { color: var(--ink-2); font-size: var(--text-dense); line-height: 1.4; transition: color .14s var(--ease); }
+  .docs-side a:hover { color: var(--ink); }
+  .docs-side a.current { color: var(--magenta); }
+
+  .docs-body.has-toc { display: grid; grid-template-columns: minmax(0, 52em) minmax(0, 200px); gap: 56px; align-items: start; }
+  .docs-title { font-size: var(--text-h2); font-weight: 400; letter-spacing: var(--track-display); margin: 0 0 24px; }
+  .src { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--hairline); }
+  .src a { color: var(--ink-3); font-size: var(--text-caption); }
+  .src a:hover { color: var(--cyan); }
+  .mermaid { margin: 0 0 22px; }
+
+  @media (max-width: 1000px) {
+    .docs { grid-template-columns: 1fr; gap: 0; }
+    .docs-side { position: static; margin-bottom: 28px; }
+    .docs-body.has-toc { grid-template-columns: 1fr; gap: 0; }
+    .toc-rail { position: static; order: -1; margin-bottom: 28px; }
+  }
+</style>
