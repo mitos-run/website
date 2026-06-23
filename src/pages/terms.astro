@@ -1,0 +1,287 @@
+---
+// /terms — Terms of Service for the hosted mitos service + mitos.run site.
+// Written as if the hosted console is generally available. The contracting
+// entity is Paperclip.inc OU (Estonia), matching paperclip.inc/terms; governing
+// law is Estonia (no arbitration), with EU/EEA consumer rights preserved. The
+// open-source engine is OUT of scope here (it is licensed under Apache 2.0).
+// This is a good-faith, plain-language draft modelled on the Paperclip terms and
+// AI-sandbox category norms. Review with counsel before relying on it. Keep the
+// data-protection + sub-processor claims in sync with /privacy and /cookie-policy.
+// Never use em or en dashes in copy.
+import Site from '../layouts/Site.astro';
+
+const GITHUB = 'https://github.com/mitos-run/mitos';
+const ENTITY = 'Paperclip.inc OÜ';
+const LEGAL_EMAIL = 'legal@mitos.run';
+const UPDATED = 'June 23, 2026';
+const TITLE = 'Terms of Service for mitos';
+const DESC =
+  'The terms for using mitos: forkable microVM sandboxes for agent swarms. Plain language, EU governing law, pay-as-you-go, and we never train on your content.';
+---
+
+<Site title={TITLE} description={DESC}>
+  <section class="page-hero container">
+    <p class="eyebrow mono">Legal</p>
+    <h1>Terms of Service</h1>
+    <p class="lede">The agreement for using the hosted mitos service. Plain language, no surprises.</p>
+    <p class="updated mono">Last updated: {UPDATED}</p>
+  </section>
+
+  <section class="container prose">
+    <p>
+      These terms are a binding agreement for using <strong>mitos</strong>, the hosted service for
+      forking running microVM sandboxes into agent swarms, together with the website at
+      <strong>mitos.run</strong>, the dashboards, APIs, SDKs, and CLI that connect to the hosted
+      service (the <strong>"Service"</strong>). By creating an account, clicking to accept, or using
+      the Service, you agree to these terms. If you are using the Service for an organisation, you
+      confirm you are authorised to bind it, and "you" means that organisation.
+    </p>
+
+    <h2>1. Who these terms are with</h2>
+    <p>
+      The Service is provided by <strong>{ENTITY}</strong>, registry code 17517227, Sepapaja tn 6,
+      15551 Tallinn, Harju Maakond, Estonia ("we", "us", "mitos"). You can reach us at
+      <a href={`mailto:${LEGAL_EMAIL}`}>{LEGAL_EMAIL}</a>.
+    </p>
+
+    <h2>2. The open-source engine is separate</h2>
+    <p>
+      The mitos engine and its client libraries are open source under the
+      <a href={`${GITHUB}/blob/main/LICENSE`} target="_blank" rel="noopener">Apache License 2.0</a>.
+      When you run that software yourself, your rights and obligations come from the Apache 2.0
+      licence, <strong>not</strong> from these terms, and the software is provided on the "as is"
+      basis described in that licence. These terms govern only the <strong>hosted</strong> Service we
+      operate for you. Where the two ever conflict for the open-source software, the Apache 2.0
+      licence wins for that software.
+    </p>
+
+    <h2>3. Who can use mitos</h2>
+    <p>
+      You must be at least 18 and able to form a binding contract, and you must not be barred from
+      using the Service under the laws that apply to you (including sanctions and export-control
+      laws). You are responsible for everyone who uses the Service through your account.
+    </p>
+
+    <h2>4. The Service and your account</h2>
+    <p>
+      Once you have an account you may create, run, fork, and manage microVM sandboxes and related
+      resources, subject to these terms and any plan limits. You are responsible for your account
+      credentials and API keys, for activity under your account, and for keeping your contact and
+      billing details accurate. Tell us promptly at <a href={`mailto:${LEGAL_EMAIL}`}>{LEGAL_EMAIL}</a>
+      if you suspect unauthorised use.
+    </p>
+
+    <h2>5. Acceptable use</h2>
+    <p>You agree not to use the Service to:</p>
+    <ul>
+      <li>break the law, infringe others' rights, or process content you have no right to process;</li>
+      <li>distribute malware, run denial-of-service attacks, send spam, or mine cryptocurrency;</li>
+      <li>probe, scan, or test the security of the Service or break its isolation, rate limits, or
+        access controls without our prior written permission;</li>
+      <li>reverse engineer the hosted Service, or use it to build a competing service or to benchmark
+        it for that purpose, except where this restriction is prohibited by law;</li>
+      <li>interfere with other customers or the integrity or performance of the Service.</li>
+    </ul>
+    <p>
+      Running untrusted or model-generated code inside a sandbox is an intended use of mitos. The
+      restrictions above are about how you use the Service overall, not about what runs inside your
+      isolated sandboxes, provided that use is lawful and within these terms.
+    </p>
+
+    <h2>6. Your sandboxes, and stopping them</h2>
+    <p>
+      Sandboxes and other resources consume compute for as long as they run. <strong>You are
+      responsible for stopping or deleting resources you no longer need.</strong> Usage charges keep
+      accruing while a sandbox runs, even if it is idle, and we are not responsible for charges from
+      resources you left running. We provide controls and APIs to stop and delete resources, and may
+      offer optional spend caps and idle timeouts to help you manage this.
+    </p>
+
+    <h2>7. Your content, inputs, and outputs</h2>
+    <p>
+      As between you and us, you own the code, data, prompts, and other content you bring to the
+      Service ("your content") and the outputs generated from it. You grant us only the limited rights
+      needed to operate and provide the Service to you (for example, to store, transmit, and process
+      your content so your sandboxes run). You are responsible for your content and for having the
+      rights to use it.
+    </p>
+
+    <h2>8. Model-provider keys and connected systems</h2>
+    <p>
+      If you connect third-party systems, or supply API keys for model providers or other services,
+      you authorise us to use them solely to provide the Service as you direct. Your use of those
+      third-party services is governed by their terms, and we are not responsible for them. Keep your
+      keys scoped and rotate them as needed; you remain responsible for activity carried out with the
+      keys you provide.
+    </p>
+
+    <h2>9. We do not train on your content</h2>
+    <p>
+      We do not use your content to train, fine-tune, or improve any machine-learning models, and we
+      do not sell your content or share it with third parties for their own purposes. We process your
+      content only to provide and secure the Service, to comply with law, and as otherwise described
+      in our <a href="/privacy">Privacy Policy</a>. Aggregated, anonymised operational metrics that do
+      not identify you or your content may be used to run and improve the Service.
+    </p>
+
+    <h2>10. Agents and outputs can be wrong</h2>
+    <p>
+      mitos runs code and AI agents that can produce inaccurate, incomplete, or unexpected results.
+      You are responsible for reviewing and validating anything produced in or by the Service before
+      relying on it, and for any decisions or actions you take based on it.
+    </p>
+
+    <h2>11. Fees, billing, and taxes</h2>
+    <p>
+      The Service is <strong>pay-as-you-go</strong>: you pay for the compute and resources you use,
+      at the rates on our <a href="/pricing">pricing page</a>, billed in arrears for each period.
+      New accounts may receive a starting credit, and you can set a spend cap. Fees are exclusive of
+      taxes, which you are responsible for unless we are required to collect them. Undisputed amounts
+      are due when invoiced; late amounts may accrue interest at 1.5% per month or the maximum allowed
+      by law, whichever is lower. Except where required by law, <strong>all fees are non-refundable</strong>
+      and we do not provide refunds or credits for partial periods, unused resources, or dissatisfaction.
+      We may change prices on a going-forward basis with reasonable notice; continued use after a change
+      means you accept the new prices.
+    </p>
+
+    <h2>12. Free and early-access features</h2>
+    <p>
+      We may offer free tiers, trials, credits, beta, or early-access features. These may change or be
+      withdrawn at any time, may have lower or no availability commitments, and are provided "as is"
+      without warranties or indemnities to the maximum extent permitted by law.
+    </p>
+
+    <h2>13. Availability</h2>
+    <p>
+      We work to keep the Service reliable but do not promise it will be uninterrupted or error-free,
+      and we may perform maintenance, updates, and changes. Unless we agree a separate written service
+      level with you, the Service is provided without an uptime guarantee or service credits.
+    </p>
+
+    <h2>14. Data protection and security</h2>
+    <p>
+      We process personal data as described in our <a href="/privacy">Privacy Policy</a> and, where we
+      process personal data on your behalf, under a data processing agreement that forms part of these
+      terms. We apply appropriate technical and organisational measures to protect the Service, but no
+      system is perfectly secure, and you are responsible for your own security choices, including how
+      you configure sandboxes and handle secrets.
+    </p>
+
+    <h2>15. Confidentiality</h2>
+    <p>
+      Each party may receive non-public information from the other. The receiving party will use it
+      only to exercise its rights and meet its obligations under these terms, protect it with
+      reasonable care, and not disclose it except to people who need it and are bound by similar
+      duties. This does not apply to information that is or becomes public through no fault of the
+      receiving party, was already known to it, or is independently developed.
+    </p>
+
+    <h2>16. Our intellectual property</h2>
+    <p>
+      We and our licensors own the hosted Service, the website, and the "mitos" name and brand, other
+      than the open-source software licensed under Apache 2.0 and your content. These terms do not
+      grant you any rights in our brand. If you send us feedback, you allow us to use it freely to
+      improve the Service, without obligation to you.
+    </p>
+
+    <h2>17. Term, suspension, and termination</h2>
+    <p>
+      These terms apply for as long as you use the Service. You may stop and close your account at any
+      time; you remain responsible for fees incurred up to closure. We may suspend, limit, or restrict
+      the Service, with or without notice, if needed to protect the Service, other customers, or third
+      parties, to stop a violation of these terms, for non-payment, or where required by law, and we
+      may terminate for convenience with reasonable notice. On termination your right to use the Service
+      ends and we may delete your content after a reasonable period; you are responsible for exporting
+      anything you need before then.
+    </p>
+
+    <h2>18. Warranties and disclaimers</h2>
+    <p>
+      Except as expressly stated in these terms and as required by applicable consumer law, the
+      Service is provided <strong>"as is" and "as available"</strong>, and we disclaim all other
+      warranties, whether express or implied, including merchantability, fitness for a particular
+      purpose, and non-infringement. We do not warrant that the Service will meet your requirements or
+      that it will be uninterrupted, secure, or error-free. You are responsible for maintaining your own
+      backups of your content; the Service is not a backup service, and we do not guarantee that your
+      content will be retained or recoverable.
+    </p>
+
+    <h2>19. Indemnification</h2>
+    <p>
+      You will defend and indemnify us against third-party claims, and related losses, damages, and
+      reasonable legal fees and costs, arising from your content or your use of the Service in breach of
+      these terms or of applicable law, except to the extent the claim results from our own breach or
+      negligence. We may assume the exclusive defense and control of any matter you are required to
+      indemnify, and you will cooperate with us; you may not settle any claim in a way that imposes
+      obligations on us without our prior written consent. This does not limit any non-waivable rights
+      you have as a consumer.
+    </p>
+
+    <h2>20. Limitation of liability</h2>
+    <p>
+      Neither party is liable for indirect, incidental, special, or consequential losses, or for lost
+      profits, revenue, data, or goodwill. Each party's total liability arising out of or relating to
+      these terms is capped at the greater of the fees you paid us for the Service in the 12 months
+      before the event giving rise to the liability, or <strong>€100</strong>. To the maximum extent
+      permitted by law, we are not liable for any loss or damage arising from your content or code, from
+      how you configure, run, or fail to stop your sandboxes, or from any third-party services or model
+      providers you connect. Any claim arising out of or relating to these terms or the Service must be
+      brought within <strong>12 months</strong> after the event giving rise to it, except where a longer
+      period is required by law. These limits do not apply to liability that cannot be limited by law,
+      including for death or personal injury caused by negligence, fraud, your payment obligations, or
+      your indemnity obligations, and they do not affect any non-waivable rights you have as a consumer.
+    </p>
+
+    <h2>21. Changes to the Service and these terms</h2>
+    <p>
+      We may update the Service and these terms. For material changes to these terms we will give
+      reasonable notice (for example, by posting here and updating the date above, or by email). If you
+      keep using the Service after a change takes effect, you accept the updated terms; if you do not
+      agree, stop using the Service.
+    </p>
+
+    <h2>22. Governing law and disputes</h2>
+    <p>
+      These terms are governed by the law of Estonia, without regard to its conflict-of-law rules, and
+      the courts of Estonia, with Harju County Court as the court of first instance, have jurisdiction.
+      Nothing here removes mandatory protections of the law where you live, or, if you are an EU or EEA
+      consumer, your right to bring proceedings in the courts of your home country.
+    </p>
+
+    <h2>23. Your rights as a consumer</h2>
+    <p>
+      If you use the Service as a consumer, you keep all mandatory rights under the consumer-protection
+      law that applies to you, and nothing in these terms limits or replaces those rights. Where a term
+      here conflicts with a right you cannot waive, that right prevails for you.
+    </p>
+
+    <h2>24. General</h2>
+    <p>
+      These terms are the entire agreement between you and us about the Service and replace any earlier
+      agreement on the same subject. If a term is unenforceable, the rest stays in effect. Our not
+      enforcing a term is not a waiver. You may not assign these terms without our consent; we may
+      assign them to an affiliate or in connection with a merger or sale of assets. We are not liable
+      for delays or failures caused by events beyond our reasonable control. Notices to you may be sent
+      to your account or email; notices to us go to <a href={`mailto:${LEGAL_EMAIL}`}>{LEGAL_EMAIL}</a>.
+    </p>
+
+    <h2>Contact</h2>
+    <p>
+      Questions about these terms can be sent to <a href={`mailto:${LEGAL_EMAIL}`}>{LEGAL_EMAIL}</a> or
+      raised through the channels on our <a href="/contact">contact page</a>.
+    </p>
+  </section>
+</Site>
+
+<style>
+  .page-hero { position: relative; }
+  .updated { color: var(--ink-3); font-size: 13px; margin-top: 8px; }
+  .prose { max-width: 52em; padding-bottom: 96px; }
+  .prose p { color: var(--ink-2); font-size: 16px; line-height: 1.7; margin: 0 0 18px; }
+  .prose ul { color: var(--ink-2); font-size: 16px; line-height: 1.7; margin: 0 0 18px; padding-left: 22px; }
+  .prose li { margin: 0 0 8px; }
+  .prose strong { color: var(--ink); font-weight: 500; }
+  .prose a { color: var(--cyan); border-bottom: 1px solid color-mix(in srgb, var(--cyan) 30%, transparent); }
+  .prose a:hover { border-bottom-color: var(--cyan); }
+  .prose h2 { font-size: clamp(20px, 2.4vw, 26px); font-weight: 400; letter-spacing: var(--track-display); margin: 36px 0 12px; }
+</style>

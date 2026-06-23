@@ -20,3 +20,13 @@ const REPO = 'https://github.com/mitos-run/mitos';
   <span class="gh-star-glyph" aria-hidden="true">★</span>
   <span class="gh-star-count">{formatStars(count)}</span>
 </a>
+
+<style>
+  /* Self-contained so the button renders identically wherever it mounts (nav,
+     mobile menu, footer). Positional tweaks (margins) live in the consumer. */
+  .gh-star { display: inline-flex; align-items: center; gap: 6px; padding: 6px 11px; border: 1px solid var(--hairline-strong); border-radius: 999px; color: var(--ink-2); font-size: 13px; line-height: 1; white-space: nowrap; transition: border-color .14s var(--ease), color .14s var(--ease); }
+  .gh-star:hover { color: var(--ink); border-color: color-mix(in srgb, var(--ink) 30%, transparent); }
+  .gh-star-mark { flex-shrink: 0; }
+  .gh-star-glyph { color: var(--amber); font-size: 12px; }
+  .gh-star-count { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+</style>

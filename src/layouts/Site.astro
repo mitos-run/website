@@ -5,6 +5,7 @@
 // monochrome, hosted-first. Never use em or en dashes in copy.
 import Mark from '../components/Mark.astro';
 import GhStars from '../components/GhStars.astro';
+import SiteFooter from '../components/SiteFooter.astro';
 import Analytics from '../components/Analytics.astro';
 import { getStars } from '../lib/stars';
 import '../styles/tokens.css';
@@ -135,46 +136,7 @@ const navLinks = [
       <slot />
     </main>
 
-    <footer class="footer">
-      <div class="container footer-grid">
-        <div class="footer-brand">
-          <a class="brand" href="/"><Mark class="brand-mark" /> mitos</a>
-          <p class="muted">Millisecond microVM sandbox forking for agent swarms.</p>
-          <GhStars count={stars} class="footer-stars" />
-          <p class="muted mono oss-badge">Open source · Apache 2.0</p>
-        </div>
-        <div class="footer-col">
-          <p class="footer-h">Product</p>
-          <a href="/#how">How it works</a>
-          <a href="/benchmarks">Benchmarks</a>
-          <a href="/pricing">Pricing</a>
-          <a href="/#compare">Comparison</a>
-        </div>
-        <div class="footer-col">
-          <p class="footer-h">Developers</p>
-          <a href={DOCS}>Docs</a>
-          <a href="/quickstart">Quickstart</a>
-          <a href="/architecture">Architecture</a>
-          <a href={GITHUB} target="_blank" rel="noopener">GitHub</a>
-        </div>
-        <div class="footer-col">
-          <p class="footer-h">Company</p>
-          <a href="/about">About</a>
-          <a href="/contact">Contact</a>
-          <a href="/alternatives">Alternatives</a>
-          <a href={`${GITHUB}/releases`} target="_blank" rel="noopener">Changelog</a>
-          <a href={`${GITHUB}/blob/main/SECURITY.md`} target="_blank" rel="noopener">Security</a>
-          <a href={`${GITHUB}/blob/main/LICENSE`} target="_blank" rel="noopener">License</a>
-        </div>
-      </div>
-      <div class="container footer-bottom">
-        <span class="muted mono">© 2026 mitos · Apache 2.0</span>
-        <span class="footer-bottom-links">
-          <button class="muted mono footer-privacy as-link" type="button" onclick="window.openCookieSettings && window.openCookieSettings()">Cookie settings</button>
-          <a class="muted mono footer-privacy" href="/privacy">Privacy</a>
-        </span>
-      </div>
-    </footer>
+    <SiteFooter stars={stars} />
 
     <Analytics />
 
@@ -294,13 +256,7 @@ const navLinks = [
       .ghost-link { color: var(--ink-2); font-size: 14px; }
       .ghost-link:hover { color: var(--ink); }
 
-      /* GitHub star button */
-      .gh-star { display: inline-flex; align-items: center; gap: 6px; padding: 6px 11px; border: 1px solid var(--hairline-strong); border-radius: 999px; color: var(--ink-2); font-size: 13px; line-height: 1; white-space: nowrap; transition: border-color .14s var(--ease), color .14s var(--ease); }
-      .gh-star:hover { color: var(--ink); border-color: color-mix(in srgb, var(--ink) 30%, transparent); }
-      .gh-star-mark { flex-shrink: 0; }
-      .gh-star-glyph { color: var(--amber); font-size: 12px; }
-      .gh-star-count { font-family: var(--mono); font-variant-numeric: tabular-nums; }
-      .footer-stars { margin: 4px 0 14px; }
+      /* GitHub star button styles live in GhStars.astro; positional tweaks here. */
       .nav-menu-stars { margin-top: 30px; align-self: flex-start; }
 
       /* mobile hamburger + overlay menu */
@@ -346,30 +302,13 @@ const navLinks = [
       .page-hero .lede strong { color: var(--ink); font-weight: 600; }
       .page-actions { display: flex; gap: 12px; flex-wrap: wrap; }
 
-      /* footer */
-      .footer { border-top: 1px solid var(--hairline); padding: 56px 0 32px; background: var(--field-1); margin-top: 40px; }
-      .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 32px; }
-      .footer-brand .brand { margin-bottom: 12px; }
-      .footer-brand p { font-size: 14px; max-width: 26em; margin: 0 0 8px; }
-      .oss-badge { font-size: 12px; } .oss-badge a:hover { color: var(--ink); }
-      .footer-col .footer-h { margin: 0 0 14px; font-size: 13px; font-weight: 500; color: var(--ink-2); }
-      .footer-col a { display: block; color: var(--ink-2); font-size: 14px; padding: 4px 0; }
-      .footer-col a:hover { color: var(--ink); }
-      .footer-bottom { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--hairline); font-size: 13px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-      .footer-bottom-links { display: inline-flex; gap: 18px; align-items: center; }
-      .footer-privacy { font-size: 13px; }
-      .footer-privacy:hover { color: var(--ink); }
-      .as-link { background: none; border: none; padding: 0; cursor: pointer; }
+      /* footer styles live in SiteFooter.astro */
 
       @media (max-width: 900px) {
-        .footer-grid { grid-template-columns: 1fr 1fr; }
         .nav-links { display: none; }
         .nav-stars { display: none; }
         .nav-toggle { display: flex; }
         .brand { margin-right: auto; }
-      }
-      @media (max-width: 460px) {
-        .footer-grid { grid-template-columns: 1fr; gap: 28px; }
       }
     </style>
   </body>
