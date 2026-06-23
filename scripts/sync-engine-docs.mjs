@@ -42,41 +42,44 @@ function main() {
   }
   const { tmp, sha } = repo;
 
-  rmSync(OUT, { recursive: true, force: true });
-  mkdirSync(OUT, { recursive: true });
-  rmSync(ASSETS_OUT, { recursive: true, force: true });
-  mkdirSync(ASSETS_OUT, { recursive: true });
+  try {
+    rmSync(OUT, { recursive: true, force: true });
+    mkdirSync(OUT, { recursive: true });
+    rmSync(ASSETS_OUT, { recursive: true, force: true });
+    mkdirSync(ASSETS_OUT, { recursive: true });
 
-  const readme = readFileSync(join(tmp, 'README.md'), 'utf8');
+    const readme = readFileSync(join(tmp, 'README.md'), 'utf8');
 
-  for (const { slug, group, order, fromReadme } of ALLOWLIST) {
-    let markdown;
-    if (fromReadme) {
-      markdown = `# Architecture\n\n${extractArchitecture(readme)}\n`;
-    } else {
-      const src = join(tmp, 'docs', `${slug}.md`);
-      if (!existsSync(src)) {
-        console.error(`\n[sync-engine-docs] allowlisted doc "${slug}" not found at docs/${slug}.md upstream.`);
-        console.error('Update scripts/lib/docs-manifest.mjs (the doc was renamed or removed).');
-        rmSync(tmp, { recursive: true, force: true });
-        process.exit(1);
+    for (const { slug, group, order, fromReadme } of ALLOWLIST) {
+      let markdown;
+      if (fromReadme) {
+        markdown = `# Architecture\n\n${extractArchitecture(readme)}\n`;
+      } else {
+        const src = join(tmp, 'docs', `${slug}.md`);
+        if (!existsSync(src)) {
+          console.error(`\n[sync-engine-docs] allowlisted doc "${slug}" not found at docs/${slug}.md upstream.`);
+          console.error('Update scripts/lib/docs-manifest.mjs (the doc was renamed or removed).');
+          rmSync(tmp, { recursive: true, force: true });
+          process.exit(1);
+        }
+        markdown = readFileSync(src, 'utf8');
       }
-      markdown = readFileSync(src, 'utf8');
+      const sourceUrl = fromReadme ? `${repoBlobBase}/README.md#architecture` : `${repoBlobBase}/docs/${slug}.md`;
+      const file = toContentFile({ markdown, slug, group, order, sourceUrl, allowSlugs: ALLOW_SLUGS, repoBlobBase });
+      writeFileSync(join(OUT, `${slug}.md`), file);
     }
-    const sourceUrl = fromReadme ? `${repoBlobBase}/README.md#architecture` : `${repoBlobBase}/docs/${slug}.md`;
-    const file = toContentFile({ markdown, slug, group, order, sourceUrl, allowSlugs: ALLOW_SLUGS, repoBlobBase });
-    writeFileSync(join(OUT, `${slug}.md`), file);
-  }
 
-  // Copy any referenced assets (best-effort; rewrite handled by referencing docs).
-  const assetsDir = join(tmp, 'docs/assets');
-  if (existsSync(assetsDir)) {
-    for (const f of readdirSync(assetsDir)) cpSync(join(assetsDir, f), join(ASSETS_OUT, f));
-  }
+    // Copy any referenced assets (best-effort; rewrite handled by referencing docs).
+    const assetsDir = join(tmp, 'docs/assets');
+    if (existsSync(assetsDir)) {
+      for (const f of readdirSync(assetsDir)) cpSync(join(assetsDir, f), join(ASSETS_OUT, f));
+    }
 
-  writeFileSync(join(OUT, '.source-sha'), sha + '\n');
-  rmSync(tmp, { recursive: true, force: true });
-  console.log(`[sync-engine-docs] wrote ${ALLOWLIST.length} docs from ${REPO}@${sha.slice(0, 8)}`);
+    writeFileSync(join(OUT, '.source-sha'), sha + '\n');
+    console.log(`[sync-engine-docs] wrote ${ALLOWLIST.length} docs from ${REPO}@${sha.slice(0, 8)}`);
+  } finally {
+    rmSync(tmp, { recursive: true, force: true });
+  }
 }
 
 main();
