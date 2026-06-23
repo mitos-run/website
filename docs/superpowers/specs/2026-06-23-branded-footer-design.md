@@ -36,9 +36,10 @@ they already fetch. It must not hard-fail when stars is absent.
 
 ## Information architecture (real pages only)
 
-**Brand band (top, full width):** Division mark + `mitos`, tagline *"One agent divides
-into a thousand."*, `Open source · Apache 2.0` badge, live GitHub stars. One sensor-grain
-hairline below. No large motif.
+**Brand band (top, full width):** Division mark + `mitos`, tagline synced to the live
+hero lede (*"Isolated, forkable computers for your agents."*). One hairline below. No
+large motif. The OSS badge + GitHub stars are NOT here — they live in the bottom row to
+avoid duplicating "Apache 2.0".
 
 **Columns:**
 
@@ -49,9 +50,9 @@ hairline below. No large motif.
 | Pricing (`/pricing`) | Architecture (`/architecture`) | Alternatives (`/alternatives`) | License (GitHub LICENSE) |
 | Comparison (`/#compare`) | GitHub (repo) | Changelog (GitHub releases) | Security (GitHub SECURITY.md) |
 
-**Bottom row:** `© 2026 mitos · Apache-2.0` left; minimal right side (legal links live in
-the Legal column, so no duplication). Cookie settings remains a real `openCookieSettings`
-button.
+**Bottom row:** `© 2026 mitos · Open source, Apache 2.0` left; right side carries the live
+GitHub stars button + a `Back to top ↑` link. Cookie settings is a real `openCookieSettings`
+button living in the Legal column.
 
 ## Decisions (locked with user)
 

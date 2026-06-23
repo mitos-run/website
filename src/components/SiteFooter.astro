@@ -1,0 +1,152 @@
+---
+// Shared branded footer. Used by both the marketing shell (Site.astro) and the
+// Starlight docs override (starlight/Footer.astro) so docs and marketing share
+// one footer instead of Starlight's default. Honest links only: every href
+// points at a real page or a real GitHub resource. Terms / Cookie-policy pages
+// and social channels (X/Discord) are intentionally absent until they exist
+// (legal pages tracked in issue #25). Never use em or en dashes in copy.
+import Mark from './Mark.astro';
+import GhStars from './GhStars.astro';
+
+interface Props {
+  /** GitHub star count, baked at build time by the caller (lib/stars). */
+  stars: number;
+}
+const { stars } = Astro.props;
+
+const GITHUB = 'https://github.com/mitos-run/mitos';
+
+// Desktop: a static multi-column sitemap. Mobile (<=480px): each group collapses
+// into a <details> accordion (links stay in the DOM, so they remain crawlable).
+const columns = [
+  {
+    label: 'Product',
+    links: [
+      { label: 'How it works', href: '/#how' },
+      { label: 'Benchmarks', href: '/benchmarks' },
+      { label: 'Pricing', href: '/pricing' },
+      { label: 'Comparison', href: '/#compare' },
+    ],
+  },
+  {
+    label: 'Developers',
+    links: [
+      { label: 'Docs', href: '/quickstart' },
+      { label: 'Quickstart', href: '/quickstart' },
+      { label: 'Architecture', href: '/architecture' },
+      { label: 'GitHub', href: GITHUB, external: true },
+    ],
+  },
+  {
+    label: 'Company',
+    links: [
+      { label: 'About', href: '/about' },
+      { label: 'Contact', href: '/contact' },
+      { label: 'Alternatives', href: '/alternatives' },
+      { label: 'Changelog', href: `${GITHUB}/releases`, external: true },
+    ],
+  },
+];
+
+// Legal is its own group (rendered with the cookie-settings button inline) so it
+// reads as a first-class section per current footer best practice.
+const legalLinks = [
+  { label: 'Privacy', href: '/privacy' },
+  { label: 'Security', href: `${GITHUB}/blob/main/SECURITY.md`, external: true },
+  { label: 'License', href: `${GITHUB}/blob/main/LICENSE`, external: true },
+];
+---
+
+<footer class="footer">
+  <div class="container">
+    <!-- Brand band: the footer's only "expression". Mark + tagline. -->
+    <div class="footer-band">
+      <a class="brand" href="/"><Mark class="brand-mark" /> mitos</a>
+      <p class="footer-tag">Isolated, forkable computers for your agents.</p>
+    </div>
+
+    <div class="footer-grid">
+      {columns.map((col) => (
+        <details class="footer-col" open>
+          <summary class="footer-h"><h2>{col.label}</h2></summary>
+          <nav aria-label={col.label}>
+            {col.links.map((link) => (
+              link.external
+                ? <a href={link.href} target="_blank" rel="noopener">{link.label}</a>
+                : <a href={link.href}>{link.label}</a>
+            ))}
+          </nav>
+        </details>
+      ))}
+
+      <details class="footer-col" open>
+        <summary class="footer-h"><h2>Legal</h2></summary>
+        <nav aria-label="Legal">
+          {legalLinks.map((link) => (
+            link.external
+              ? <a href={link.href} target="_blank" rel="noopener">{link.label}</a>
+              : <a href={link.href}>{link.label}</a>
+          ))}
+          <button class="as-link" type="button" onclick="window.openCookieSettings && window.openCookieSettings()">Cookie settings</button>
+        </nav>
+      </details>
+    </div>
+
+    <div class="footer-bottom">
+      <span class="muted mono">© 2026 mitos · Open source, Apache 2.0</span>
+      <div class="footer-bottom-meta">
+        <GhStars count={stars} class="footer-stars" />
+        <a class="muted footer-top" href="#top">Back to top ↑</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer { border-top: 1px solid var(--hairline); padding: 56px 0 32px; background: var(--field-1); margin-top: 40px; }
+
+  /* Brand band */
+  .footer-band { padding-bottom: 36px; border-bottom: 1px solid var(--hairline); }
+  .brand { font-weight: 600; font-size: 17px; letter-spacing: -.02em; display: inline-flex; align-items: center; gap: 8px; }
+  .brand-mark { height: 18px; width: auto; filter: drop-shadow(0 0 6px color-mix(in srgb, var(--magenta) 60%, transparent)); }
+  .footer-tag { margin: 12px 0 0; font-size: 14px; color: var(--ink-2); max-width: 26em; }
+
+  /* Sitemap columns */
+  .footer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; padding: 40px 0; }
+  .footer-col { min-width: 0; }
+  /* Columns ship open. On desktop they're static, not collapsible: the summary
+     is neutralised (no marker, not focusable-as-toggle) so the open state can't
+     be changed. Mobile re-enables the disclosure below. */
+  .footer-h { list-style: none; cursor: default; margin: 0 0 14px; pointer-events: none; }
+  .footer-h::-webkit-details-marker { display: none; }
+  .footer-h::marker { content: ''; }
+  .footer-h h2 { margin: 0; font-size: 13px; font-weight: 500; color: var(--ink-2); }
+  .footer-col nav a,
+  .footer-col nav .as-link { display: block; color: var(--ink-2); font-size: 14px; padding: 4px 0; text-align: left; }
+  .footer-col nav a:hover,
+  .footer-col nav .as-link:hover { color: var(--ink); }
+  .as-link { background: none; border: none; font: inherit; cursor: pointer; }
+
+  /* Bottom row */
+  .footer-bottom { padding-top: 24px; border-top: 1px solid var(--hairline); font-size: 13px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .footer-bottom-meta { display: inline-flex; align-items: center; gap: 18px; }
+  .footer-top { font-size: 13px; }
+  .footer-top:hover { color: var(--ink); }
+
+  @media (max-width: 900px) {
+    .footer-grid { grid-template-columns: 1fr 1fr; row-gap: 28px; }
+  }
+
+  /* Mobile: collapse each group into a real accordion. Links remain in the DOM. */
+  @media (max-width: 480px) {
+    .footer-band { flex-direction: column; gap: 18px; }
+    .footer-grid { grid-template-columns: 1fr; gap: 0; padding: 12px 0 24px; }
+    .footer-col { border-bottom: 1px solid var(--hairline); }
+    .footer-h { pointer-events: auto; cursor: pointer; display: flex; align-items: center; justify-content: space-between; padding: 16px 0; margin: 0; min-height: 44px; }
+    .footer-h::after { content: '+'; color: var(--ink-3); font-size: 18px; line-height: 1; }
+    .footer-col[open] .footer-h::after { content: '\2212'; } /* minus */
+    .footer-col > nav { padding-bottom: 12px; }
+    .footer-col nav a,
+    .footer-col nav .as-link { padding: 8px 0; min-height: 44px; }
+  }
+</style>

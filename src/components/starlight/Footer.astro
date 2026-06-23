@@ -1,11 +1,18 @@
 ---
-// Starlight Footer override: render Starlight's default footer, then mount the
-// shared consent-gated Analytics component so the docs pages (which use
-// Starlight's layout, not Site.astro) also get the consent banner + PostHog.
-// Consent state is shared via localStorage, so a visitor who already chose on a
-// marketing page won't see the banner again here.
+// Starlight Footer override. Render Starlight's default footer first (it carries
+// the docs-native pagination, "Edit page", and "last updated" controls), then
+// append the shared branded SiteFooter so docs pages get the same site-wide
+// footer as the marketing pages, and finally mount the consent-gated Analytics
+// component (docs use Starlight's layout, not Site.astro, so they need it
+// mounted here too). Consent state is shared via localStorage, so a visitor who
+// already chose on a marketing page won't see the banner again here. Stars are
+// baked at build time (lib/stars).
 import Default from '@astrojs/starlight/components/Footer.astro';
+import SiteFooter from '../SiteFooter.astro';
 import Analytics from '../Analytics.astro';
+import { getStars } from '../../lib/stars';
+const stars = await getStars();
 ---
 <Default><slot /></Default>
+<SiteFooter stars={stars} />
 <Analytics />
