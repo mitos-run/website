@@ -1014,10 +1014,13 @@ if (!existsSync(join(DIST, 'docs.html'))) fail('missing dist/docs.html (hub)');
 
 // Collect all generated doc paths, assert internal /docs/<slug> links resolve.
 const valid = new Set(ALLOWLIST.map((d) => `/docs/${d.slug}`).concat(['/docs']));
+// Expressive Code renders the ```mermaid fence as <pre data-language="mermaid">
+// in the STATIC html; the <div class="mermaid"> SVG host is created client-side
+// at runtime, so it is NOT present in the built file. Assert the EC attribute.
 const archHtml = existsSync(join(DIST, 'docs', 'architecture.html'))
   ? readFileSync(join(DIST, 'docs', 'architecture.html'), 'utf8') : '';
-if (archHtml && !/language-mermaid|class="mermaid"/.test(archHtml)) {
-  fail('architecture page has no mermaid block');
+if (archHtml && !/data-language="mermaid"/.test(archHtml)) {
+  fail('architecture page has no mermaid block (expected EC <pre data-language="mermaid">)');
 }
 for (const { slug } of ALLOWLIST) {
   const p = join(DIST, 'docs', `${slug}.html`);
