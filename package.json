@@ -12,6 +12,7 @@
     "build": "astro build && node scripts/postbuild-clean-urls.mjs",
     "preview": "astro preview",
     "astro": "astro",
+    "check:docs": "node scripts/check-docs-build.mjs",
     "test": "node --test scripts/lib/*.test.mjs"
   },
   "dependencies": {

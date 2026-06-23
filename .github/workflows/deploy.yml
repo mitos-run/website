@@ -42,6 +42,8 @@ jobs:
         env:
           # Authenticated star fetch (lib/stars.ts) so the baked count is reliable, not rate-limited.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: npm test
+      - run: npm run check:docs
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload Pages artifact
