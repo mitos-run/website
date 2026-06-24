@@ -9,7 +9,7 @@
     "predev": "node scripts/sync-engine-docs.mjs",
     "dev": "astro dev",
     "prebuild": "node scripts/sync-engine-docs.mjs",
-    "build": "astro build && node scripts/postbuild-clean-urls.mjs",
+    "build": "astro build && node scripts/postbuild-clean-urls.mjs && node scripts/gen-gh-stars.mjs dist/gh-stars.png",
     "preview": "astro preview",
     "astro": "astro",
     "check:docs": "node scripts/check-docs-build.mjs",
