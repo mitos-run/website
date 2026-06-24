@@ -88,7 +88,7 @@ export const competitors: Competitor[] = [
       },
       {
         h: 'Built for the fleet',
-        body: 'Fanning one agent into many is what Mitos is built around, managed and open. E2B users asked for a live fork in issue #928, and it was closed as out of scope, pointing instead to snapshots that pause and resume a single sandbox.',
+        body: 'Fanning one agent into many is what Mitos is built around, managed and open. E2B users have asked for a live fork, and the request was closed as out of scope, pointing instead to snapshots that pause and resume a single sandbox.',
       },
     ],
     mitosWins: [
