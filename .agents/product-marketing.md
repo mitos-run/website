@@ -11,7 +11,7 @@
 
 **Product type:** Usage-based PaaS (managed cloud) on top of an open-source engine (open-core-by-trust, not paywall).
 
-**Business model:** Pay-as-you-go. Decoupled per-second vCPU + RAM, storage GiB-hour, GPU-second; egress free; $100 signup credit; soft + hard spend caps on by default. All rates are **illustrative placeholders** until a deployment sets them.
+**Business model:** Pay-as-you-go. Decoupled per-second vCPU + RAM, storage GiB-hour, GPU-second; egress free; $5 signup credit; soft + hard spend caps on by default. All rates are **illustrative placeholders** until a deployment sets them.
 
 ## Target Audience
 **Target companies:** Teams building AI agent products and agent platforms, early-to-growth stage; AI-native startups, applied-AI teams inside larger companies, eval/RL/research teams. Not regulated-enterprise-compliance-first buyers (no SOC2 yet).
@@ -142,7 +142,7 @@ Honesty is a weapon, not a giveaway. Our audience proves rather than gets persua
 **Personality:** instrument-grade, honest, technical, understated, ownable. CTAs are imperative and name the real action ("Fork a sandbox," "Run the benchmark," "Read the spec") — never "Get started" / "Learn more." No eyebrow/kicker labels above headlines. Full rules: `docs/brand/brand-book.md` §8.
 
 ## Proof Points
-**Metrics (illustrative / reproducible-from-bench, never stated as competitor-beating fact):** ~27 ms to activate a warm fork; ~3 MiB marginal memory per daughter at fork time (the fork-time floor, not steady state — do not claim a big "Nx less memory" factor); per-second billing; egress free; $100 signup credit; hard spend caps.
+**Metrics (illustrative / reproducible-from-bench, never stated as competitor-beating fact):** ~27 ms to activate a warm fork; ~3 MiB marginal memory per daughter at fork time (the fork-time floor, not steady state — do not claim a big "Nx less memory" factor); per-second billing; egress free; $5 signup credit; hard spend caps.
 **Openness:** Apache-2.0 engine on GitHub; the managed service runs the same code. Real GitHub star count only (no fabrication; fall back to "open source" if low).
 **Honesty constraints (do not regress):** no fabricated logos/testimonials/stars; no SOC2/compliance or suspend-to-zero claims; hosted console not live → CTA is run-the-OSS-engine / early access; rates labelled illustrative; CoW marginal is a fork-time floor; egress-free is parity not a unique win; fork-not-unique. **Do not invent a "Daytona AGPL got torched on HN" thread or quote — it is not a real canonical thread.** The OSS/lock-in wedge is real but must lean on verified structural facts (AGPL is a corporate non-starter, e.g. Google bans it; Daytona's control plane is not fully open) plus the general fake-OSS backlash and the YC "Runtime" HN thread, not a fabricated Daytona quote.
 **Value themes:**
