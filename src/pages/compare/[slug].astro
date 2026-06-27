@@ -138,6 +138,12 @@ const others = competitors.filter((o) => o.slug !== c.slug);
   <section class="container more-compare">
     <h2 class="section-title reveal">Other comparisons</h2>
     <div class="more-grid reveal">
+      {c.relatedPost && (
+        <a class="more-card" href={c.relatedPost.href}>
+          <span class="more-name">Further reading</span>
+          <span class="more-blurb">{c.relatedPost.title}</span>
+        </a>
+      )}
       <a class="more-card" href="/alternatives">
         <span class="more-name">All alternatives</span>
         <span class="more-blurb">The full agent-sandbox landscape, side by side.</span>
