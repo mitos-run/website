@@ -183,6 +183,23 @@ base). One biology word per idea, at most.
 
 ---
 
+## Journey (experience is DNA)
+
+The Apple-for-agents bar: strong brand, dead simple to use, loved end to end.
+Three rules every surface inherits:
+
+- The journey has no dead ends. Marketing, onboarding, first success, and
+  billing are one designed path; each step carries the user's intent forward.
+- Simple surface, depth one click down. Broad coverage never becomes surface
+  complexity. One restrained Use-cases panel, not a sprawling mega menu.
+- The aha is intent-shaped. One machine, many on-ramps: each use-case page seeds
+  context and routes to a tailored first success.
+
+Anti-patterns: mega-menu sprawl, a single generic pricing table, untailored
+onboarding, a CTA that dead-ends in docs.
+
+---
+
 ## 9. Components
 
 Defined in `src/layouts/Site.astro`; all consume tokens (no inline hex).

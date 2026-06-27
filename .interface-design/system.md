@@ -44,6 +44,12 @@ Motion: `--ease` cubic-bezier(.2,1,.2,1) · `--dur` 240ms. Layout: `--maxw` 1140
 - Signature: `Division.astro` — magenta membrane + cyan-white genome core.
 - Field: fixed `.field` layer = reticle (~2%) + sensor grain (~3.5%).
 
+## Journey (experience is DNA)
+
+- No dead ends: marketing, onboarding, first success, and billing form one path.
+- Simple surface, depth one click down: broad coverage without surface complexity.
+- Intent-shaped aha: each on-ramp seeds context and routes to tailored first success.
+
 ## Hard rules (flag violations)
 
 1. Glow must be **additive, white-cored, layered** (`mix-blend-mode: screen`). Never a
