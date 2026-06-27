@@ -114,7 +114,8 @@ export function validateUseCases(list, knownCompetitorSlugs) {
     if (u.title && u.title.length > 65) problems.push(`${where}: title over 65 chars`);
     if (!u.snippet || !u.snippet.code) problems.push(`${where}: missing snippet`);
     else if (DASH.test(u.snippet.code)) problems.push(`${where}: snippet contains an em or en dash`);
-    if (!u.proof || !u.proof.value) problems.push(`${where}: missing proof`);
+    if (!u.faqs || u.faqs.length === 0) problems.push(`${where}: missing faqs`);
+    if (!u.proof || !u.proof.value || !u.proof.label || !u.proof.source) problems.push(`${where}: missing proof`);
     for (const f of u.faqs || []) {
       if (DASH.test(f.q) || DASH.test(f.a)) problems.push(`${where}: faq contains an em or en dash`);
     }
