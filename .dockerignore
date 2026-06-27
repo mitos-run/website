@@ -1,0 +1,16 @@
+# Keep the build context small and let the image build from a clean tree.
+# node_modules is reinstalled via `npm ci`; dist and the generated docs are
+# produced by the in image build.
+node_modules
+dist
+.astro
+.git
+.git-worktrees
+.github
+.superpowers
+.interface-design
+.agents
+.DS_Store
+# Generated at build time by scripts/sync-engine-docs.mjs.
+src/content/engine-docs
+public/docs-assets
