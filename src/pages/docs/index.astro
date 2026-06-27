@@ -18,6 +18,11 @@ const groups = GROUPS
   <section class="hero container">
     <h1>Documentation</h1>
     <p class="lede">Everything to run, fork, and operate Mitos sandboxes.</p>
+    <p class="repo-link">
+      Looking for the deep reference? The full docs tree, including snapshot
+      internals, scheduling, encryption, and recipes, lives in the
+      <a href="https://github.com/mitos-run/mitos/tree/main/docs">engine repository</a>.
+    </p>
   </section>
   <section class="container groups">
     {groups.map((g) => (
@@ -40,6 +45,8 @@ const groups = GROUPS
   .hero { padding-top: 64px; padding-bottom: 8px; }
   .hero h1 { font-size: var(--text-h1); font-weight: 300; letter-spacing: var(--track-display); margin: 0 0 14px; }
   .lede { color: var(--ink-2); font-size: var(--text-lede); line-height: 1.5; max-width: 40em; }
+  .repo-link { color: var(--ink-2); font-size: var(--text-dense); line-height: 1.5; max-width: 40em; margin: 12px 0 0; }
+  .repo-link a { color: var(--magenta); }
   .groups { padding-top: 40px; padding-bottom: 96px; }
   .group { margin-bottom: 44px; }
   .group-h { font-size: var(--text-h3); font-weight: 400; letter-spacing: var(--track-display); margin: 0 0 18px; }
