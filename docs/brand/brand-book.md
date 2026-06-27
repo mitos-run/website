@@ -1,9 +1,9 @@
-# mitos Brand Book: "Fluorescence"
+# mitos Brand Book — "Fluorescence"
 
 The single source of truth for how mitos looks, moves, and speaks. Tokens live in
 `src/styles/tokens.css`; this book explains them and the rules around them. When a
 value here and a value in `tokens.css` disagree, `tokens.css` wins and this book is
-wrong - fix it.
+wrong — fix it.
 
 Direction in one line: **a live-cell fluorescence microscope at 2am.** True-black
 field, luminous magenta signal, cyan genome, instrumentation-grade precision.
@@ -18,7 +18,7 @@ isolated daughters (~27 ms each, ~3 MiB marginal memory). Hosted SaaS plus an
 Apache-2.0 open-source engine.
 
 **The metaphor is the product.** "mitos" is mitosis. One living cell divides into N
-identical daughters by copying itself - which is exactly what a CoW fork of a running
+identical daughters by copying itself — which is exactly what a CoW fork of a running
 VM does. No competitor can credibly take this: it is true to the tech, it is in the
 name, and it opens a visual and verbal world the rest of the category cannot enter.
 
@@ -27,7 +27,7 @@ swarm of isolated subagents, each its own computer, alive in ~27 ms. Open source
 Fully managed. Division leads; ~27 ms is proof, not the headline; "run it yourself"
 is the trust wedge.
 
-**Audience #1.** AI agent engineers - people building agent products who buy on DX,
+**Audience #1.** AI agent engineers — people building agent products who buy on DX,
 the fork primitive, real numbers, and trust. They prove, they don't get persuaded.
 
 ---
@@ -61,10 +61,10 @@ never a drop-shadow.
 | `--ink` | `rgba(236,240,250,.94)` | primary text |
 | `--ink-2` | `rgba(236,240,250,.62)` | secondary text |
 | `--ink-3` | `rgba(236,240,250,.40)` | muted / disabled |
-| `--magenta` | `#FF45C8` | **primary signature** - division / spindle / fork |
-| `--cyan` | `#3DDCFF` | secondary - genome / parent / steady "alive" |
-| `--green` | `#4DF0A0` | tertiary - live / ready |
-| `--amber` | `#FFC24B` | tertiary - warning / winner |
+| `--magenta` | `#FF45C8` | **primary signature** — division / spindle / fork |
+| `--cyan` | `#3DDCFF` | secondary — genome / parent / steady "alive" |
+| `--green` | `#4DF0A0` | tertiary — live / ready |
+| `--amber` | `#FFC24B` | tertiary — warning / winner |
 | `--signal-core` | `#FFFFFF` | white-hot emission core; cyan+magenta overlap |
 
 **Magenta is dominant.** It is the rarest, most ownable color in the agent-sandbox
@@ -73,19 +73,19 @@ for colorblind safety. Cyan is the steady secondary. Green and amber are ratione
 
 **The four glow rules** (this is what keeps a dark-plus-accent look from reading as a
 generic AI default):
-1. Glow is additive and white-cored - cores clip toward white; the channel hue lives
-   only in the falloff; layer it (tight - mid - ambient); composite with
+1. Glow is additive and white-cored — cores clip toward white; the channel hue lives
+   only in the falloff; layer it (tight → mid → ambient); composite with
    `mix-blend-mode: screen`. Never a flat neon ring.
 2. Less than 10% of any frame is lit at full intensity. Black dominates.
-3. Co-localization is white - where cyan and magenta overlap (the division instant),
+3. Co-localization is white — where cyan and magenta overlap (the division instant),
    the intersection brightens toward white.
 4. Color encodes a real entity only. Magenta especially appears only as emitted
-   signal, never as gradient filler - so it reads "fluorescent stain," not "trendy."
+   signal, never as gradient filler — so it reads "fluorescent stain," not "trendy."
 
-**Text:** white at opacity, never gray hex - it auto-adapts across elevation.
+**Text:** white at opacity, never gray hex — it auto-adapts across elevation.
 
 **Contrast on `--field`:** ink 17.85:1, cyan 12.49:1, green 13.85:1, amber 12.67:1,
-magenta 6.73:1 - all clear the WCAG floors (see §11).
+magenta 6.73:1 — all clear the WCAG floors (see §11).
 
 ---
 
@@ -116,7 +116,7 @@ stays; Geist *Sans* is gone (it is Vercel's font and undercuts the rebrand).
 - Depth model: hairline border plus an optional faint lighter top edge. Never a
   hairline and a diffuse shadow on the same element.
 - The field carries a faint focus-reticle / graticule (calibration lines at ~2%) and
-  ~3.5% sensor grain - the cheapest escape from "every dark dev tool." Keep both near
+  ~3.5% sensor grain — the cheapest escape from "every dark dev tool." Keep both near
   invisible; if the grid is the first thing you notice, it is too strong.
 
 ---
@@ -135,28 +135,28 @@ stays; Geist *Sans* is gone (it is Vercel's font and undercuts the rebrand).
 
 ## 7. The Division (signature element)
 
-`fork()` rendered as mitosis - the aha and the brand are one image. Component:
+`fork()` rendered as mitosis — the aha and the brand are one image. Component:
 `src/components/Division.astro`.
 
 Each cell is a **magenta membrane** (the dominant brand signal) wrapping a
 **cyan-white genome core** (the shared CoW base). States:
-1. Rest - one luminous cell: white-hot core, cyan genome falloff, magenta membrane.
-2. Prophase - the membrane elongates; a magenta spindle flares (thin luminous line).
-3. Separation - the cell pinches; a white-hot flash at the split (cyan+magenta - white).
-4. Daughters - two cells drift apart, each a cyan core in a magenta membrane, each
+1. Rest — one luminous cell: white-hot core, cyan genome falloff, magenta membrane.
+2. Prophase — the membrane elongates; a magenta spindle flares (thin luminous line).
+3. Separation — the cell pinches; a white-hot flash at the split (cyan+magenta → white).
+4. Daughters — two cells drift apart, each a cyan core in a magenta membrane, each
    able to divide again.
 
 Built in SVG + CSS (`mix-blend-mode: screen` for the additive feel). ~1.2s,
 user-triggerable ("Run fork(8)"), loops on demand, reduced-motion → static split.
 Scales fractally: one division = the logo; eight chained = the hero swarm; a field =
-the OG image. Encodes the real economics - daughters share the glowing core (shared
+the OG image. Encodes the real economics — daughters share the glowing core (shared
 genome), only the divergent edge lights uniquely (~3 MiB marginal).
 
 ---
 
 ## 8. Voice & verbal identity
 
-**Tone:** precise, fast, quietly confident - a senior systems engineer who knows the
+**Tone:** precise, fast, quietly confident — a senior systems engineer who knows the
 biology and never overplays it. Biology supplies verbs, never adjectives.
 
 **Owned vocabulary (four, used only where the mechanism literally maps):** fork /
@@ -172,7 +172,7 @@ base). One biology word per idea, at most.
   emoji headers; rhetorical-question openers; em/en dashes in site copy.
 
 **Always:**
-- Prove, don't persuade - every adjective becomes a number, unit, or mechanism.
+- Prove, don't persuade — every adjective becomes a number, unit, or mechanism.
 - State the mechanism and let it be the benefit ("daughters share the parent's pages
   until they write").
 - Have a falsifiable point of view; name the tradeoff honestly.
@@ -222,8 +222,8 @@ Defined in `src/layouts/Site.astro`; all consume tokens (no inline hex).
 
 ## 10. OG / social
 
-A colony field - chained Divisions (fractal) on the black field with the magenta
-signature and the wordmark - generated from the same SVG primitive as the Division.
+A colony field — chained Divisions (fractal) on the black field with the magenta
+signature and the wordmark — generated from the same SVG primitive as the Division.
 1200×630. Per-page variants reuse one generator.
 
 ---
@@ -231,7 +231,7 @@ signature and the wordmark - generated from the same SVG primitive as the Divisi
 ## 11. Accessibility
 
 - Contrast floors: body ≥ 4.5:1, large/bold ≥ 3:1, UI/focus ≥ 3:1. Measured on
-  `--field`: ink 17.85, magenta 6.73, cyan 12.49, green 13.85, amber 12.67 - all pass.
+  `--field`: ink 17.85, magenta 6.73, cyan 12.49, green 13.85, amber 12.67 — all pass.
 - The palette is colorblind-safe by construction (magenta / green / cyan, not
   red / green).
 - Visible keyboard focus: a magenta 2px ring (in `base.css`).
