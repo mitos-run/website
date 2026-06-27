@@ -1,8 +1,8 @@
-# Design System — mitos "Fluorescence"
+# Design System: mitos "Fluorescence"
 
 Source of truth for tokens: `src/styles/tokens.css`. Prose rationale:
 `docs/brand/brand-book.md`. This file is the enforceable mirror used by `/audit` and
-`/critique` — flag any code that violates the rules below.
+`/critique`: flag any code that violates the rules below.
 
 ## Direction
 
@@ -11,7 +11,7 @@ emits light. **Magenta-dominant** on near-black, with cyan as the steady seconda
 Instrumentation-grade precision, not "dark SaaS dashboard." Someone reading only these
 tokens should picture a confocal microscope, not a template.
 
-## Tokens (names + values — must match tokens.css)
+## Tokens (names + values: must match tokens.css)
 
 Field / surfaces (elevation = lightness ladder, never shadow):
 - `--field` #04050A · `--field-1` #0A0C12 · `--field-2` #11141C
@@ -21,11 +21,11 @@ Ink (white at opacity, never gray hex):
 - `--ink` rgba(236,240,250,.94) · `--ink-2` .62 · `--ink-3` .40
 
 Signal channels (color = meaning only):
-- `--magenta` #FF45C8 — PRIMARY signature: division / spindle / fork
-- `--cyan` #3DDCFF — secondary: genome / parent / steady "alive"
-- `--green` #4DF0A0 — live / ready (rationed)
-- `--amber` #FFC24B — warning / winner (rationed)
-- `--signal-core` #FFFFFF — white-hot core; cyan+magenta overlap
+- `--magenta` #FF45C8: PRIMARY signature: division / spindle / fork
+- `--cyan` #3DDCFF: secondary: genome / parent / steady "alive"
+- `--green` #4DF0A0: live / ready (rationed)
+- `--amber` #FFC24B: warning / winner (rationed)
+- `--signal-core` #FFFFFF: white-hot core; cyan+magenta overlap
 
 Type: `--sans` Satoshi · `--mono` Geist Mono · scale `--step--1`…`--step-6` (~1.25) ·
 display weights 300/400 · `--track-display` -0.03em · `--lh-tight` 1.02 · `--lh-body` 1.5.
@@ -41,7 +41,7 @@ Motion: `--ease` cubic-bezier(.2,1,.2,1) · `--dur` 240ms. Layout: `--maxw` 1140
 - Terminal: `.terminal` + `.terminal-bar` (dots) + `.terminal-body`; output via
   `.t-fork` (magenta), `.t-ok` (green), `.t-dim` (ink-3).
 - Comparison: `.cmp`, rule-divided, mitos wins in `.win` (magenta).
-- Signature: `Division.astro` — magenta membrane + cyan-white genome core.
+- Signature: `Division.astro`: magenta membrane + cyan-white genome core.
 - Field: fixed `.field` layer = reticle (~2%) + sensor grain (~3.5%).
 
 ## Journey (experience is DNA)
@@ -55,7 +55,7 @@ Motion: `--ease` cubic-bezier(.2,1,.2,1) · `--dur` 240ms. Layout: `--maxw` 1140
 1. Glow must be **additive, white-cored, layered** (`mix-blend-mode: screen`). Never a
    single flat neon ring. Never animate `box-shadow` blur.
 2. **< 10%** of any frame lit at full intensity. Black dominates.
-3. **Magenta only as emitted signal** — never gradient filler or decorative fill.
+3. **Magenta only as emitted signal** - never gradient filler or decorative fill.
 4. Color must encode a real entity (parent=cyan, division=magenta, alive=green).
 5. Near-black field (#04050A), **never `#000`**. Elevation by lightness ladder, never
    drop-shadow. Never a hairline border AND a diffuse shadow on the same element.
