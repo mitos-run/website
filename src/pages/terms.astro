@@ -9,10 +9,10 @@
 // data-protection + sub-processor claims in sync with /privacy and /cookie-policy.
 // Never use em or en dashes in copy.
 import Site from '../layouts/Site.astro';
+import Email from '../components/Email.astro';
 
 const GITHUB = 'https://github.com/mitos-run/mitos';
 const ENTITY = 'Paperclip.inc OÜ';
-const LEGAL_EMAIL = 'legal@mitos.run';
 const UPDATED = 'June 23, 2026';
 const TITLE = 'Mitos terms of service: plain language, EU law';
 const DESC =
@@ -41,7 +41,7 @@ const DESC =
     <p>
       The Service is provided by <strong>{ENTITY}</strong>, registry code 17517227, Sepapaja tn 6,
       15551 Tallinn, Harju Maakond, Estonia ("we", "us", "Mitos"). You can reach us at
-      {LEGAL_EMAIL}.
+      <Email />.
     </p>
 
     <h2>2. The open-source engine is separate</h2>
@@ -67,7 +67,7 @@ const DESC =
       Once you have an account you may create, run, fork, and manage microVM sandboxes and related
       resources, subject to these terms and any plan limits. You are responsible for your account
       credentials and API keys, for activity under your account, and for keeping your contact and
-      billing details accurate. Tell us promptly at {LEGAL_EMAIL}
+      billing details accurate. Tell us promptly at <Email />
       if you suspect unauthorised use.
     </p>
 
@@ -262,12 +262,12 @@ const DESC =
       enforcing a term is not a waiver. You may not assign these terms without our consent; we may
       assign them to an affiliate or in connection with a merger or sale of assets. We are not liable
       for delays or failures caused by events beyond our reasonable control. Notices to you may be sent
-      to your account or email; notices to us go to {LEGAL_EMAIL}.
+      to your account or email; notices to us go to <Email />.
     </p>
 
     <h2>Contact</h2>
     <p>
-      Questions about these terms can be sent to {LEGAL_EMAIL} or
+      Questions about these terms can be sent to <Email /> or
       raised through the channels on our <a href="/contact">contact page</a>.
     </p>
     </div>

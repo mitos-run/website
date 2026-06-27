@@ -1,32 +1,54 @@
 // Pure, dependency-free transforms for engine docs. No fs, no network here so
 // the logic is unit-testable in isolation.
 
-const LINK_RE = /\]\(([^)]+)\)/g;
+// Match the whole `[text](target)` (and the leading `!` of an image), so image
+// refs can be told apart from links. Engine docs never put `]` in link text.
+const LINK_RE = /(!?)\[([^\]]*)\]\(([^)]+)\)/g;
 
 /**
  * Rewrite markdown links:
  *  - bare `name.md` (optionally `./name.md`, with optional #anchor) where `name`
- *    is allowlisted        -> `/docs/name#anchor`
- *  - any other `*.md` link -> GitHub blob URL (so nothing is broken or leaked)
- *  - external / in-page / non-md links -> untouched
+ *    is allowlisted              -> `/docs/name#anchor`
+ *  - any other relative link (md or a repo file/dir, e.g. `../cmd/sandbox-server`)
+ *                                -> GitHub blob URL (so nothing renders as a
+ *                                   broken site-relative link or leaks)
+ *  - external / in-page / site-absolute (`/...`) links, and image refs -> untouched
  */
 export function rewriteLinks(markdown, { allowSlugs, repoBlobBase }) {
-  return markdown.replace(LINK_RE, (whole, target) => {
-    if (/^(https?:|mailto:|#)/.test(target)) return whole;
-    if (!target.includes('.md')) return whole;
+  return markdown.replace(LINK_RE, (whole, bang, text, target) => {
+    // Leave image asset refs alone; they are handled (best-effort) by the sync.
+    if (bang) return whole;
+    // External, mailto, in-page anchor, or already site-absolute -> untouched.
+    if (/^(https?:|mailto:|#|\/)/.test(target)) return whole;
 
     const [path, anchor] = target.split('#');
     const clean = path.replace(/^\.\//, '');
+    const suffix = anchor ? '#' + anchor : '';
+
     const bare = clean.match(/^([a-z0-9-]+)\.md$/);
     if (bare && allowSlugs.has(bare[1])) {
-      return `](/docs/${bare[1]}${anchor ? '#' + anchor : ''})`;
+      return `[${text}](/docs/${bare[1]}${suffix})`;
     }
-    // Resolve relative to docs/: `../x.md` -> blob/main/x.md ; `x.md` -> blob/main/docs/x.md
-    let repoPath;
-    if (clean.startsWith('../')) repoPath = clean.replace(/^\.\.\//, '');
-    else repoPath = `docs/${clean}`;
-    return `](${repoBlobBase}/${repoPath}${anchor ? '#' + anchor : ''})`;
+    // Any other relative path points into the engine repo. Resolve relative to
+    // docs/: `../x` -> blob/main/x ; `x` -> blob/main/docs/x. GitHub redirects
+    // blob URLs for directories to the tree view, so dirs resolve too.
+    const repoPath = clean.startsWith('../') ? clean.replace(/^\.\.\//, '') : `docs/${clean}`;
+    return `[${text}](${repoBlobBase}/${repoPath}${suffix})`;
   });
+}
+
+/**
+ * Clamp a meta description to <= max chars (Ahrefs/Google flag long ones). Cut
+ * at the last sentence boundary when one sits reasonably deep in the string,
+ * otherwise at the last whole word with an ellipsis. Never splits a word.
+ */
+export function clampDescription(s, max = 160) {
+  if (s.length <= max) return s;
+  const slice = s.slice(0, max);
+  const sentence = slice.match(/^[\s\S]*[.!?](?=\s|$)/);
+  if (sentence && sentence[0].length >= 80) return sentence[0].trim();
+  const word = slice.slice(0, max - 1).replace(/\s+\S*$/, '').trim();
+  return word + '…';
 }
 
 /** First H1 -> title; first non-heading, non-empty paragraph -> description. */
@@ -62,7 +84,7 @@ export function deriveFrontmatter(markdown, _opts = {}) {
     .replace(/\*([^*]+)\*/g, '$1')
     .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
     .trim();
-  return { title, description: desc };
+  return { title, description: clampDescription(desc) };
 }
 
 function yamlEscape(s) { return String(s).replace(/"/g, '\\"'); }

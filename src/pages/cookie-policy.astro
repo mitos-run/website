@@ -8,8 +8,8 @@
 // names + PostHog config) and src/pages/privacy.astro. Review with counsel before
 // relying on it. Never use em or en dashes in copy.
 import Site from '../layouts/Site.astro';
+import Email from '../components/Email.astro';
 
-const LEGAL_EMAIL = 'legal@mitos.run';
 const UPDATED = 'June 23, 2026';
 const TITLE = 'Mitos cookie policy: what mitos.run stores';
 const DESC =
@@ -163,7 +163,7 @@ const rows = [
 
     <h2>Contact</h2>
     <p>
-      Questions about cookies can be sent to {LEGAL_EMAIL} or
+      Questions about cookies can be sent to <Email /> or
       raised through our <a href="/contact">contact page</a>.
     </p>
     </div>

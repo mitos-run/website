@@ -216,9 +216,9 @@ const schema = [
     <div class="container division-head reveal">
       <h2 class="division-h">Most sandboxes cold-boot or restore a snapshot.<br class="dh-br" /> <span class="division-h-hl">Mitos forks the running machine.</span></h2>
       <p class="division-lede">
-        A fork copies the <em>live</em> VM, memory and all, not just the disk. Daughters share
-        the parent's pages and pay only for what they change: about 3&nbsp;MiB each, not eight
-        whole VMs.
+        A fork copies the <em>live</em> VM, <a href="/blog/fork-dont-rebuild">memory and all</a>, not
+        just the disk. Daughters share the parent's pages and pay only for what they change: about
+        3&nbsp;MiB each, not eight whole VMs.
       </p>
     </div>
 
@@ -502,6 +502,8 @@ const schema = [
   .division-h-hl { color: var(--magenta); }
   .division-lede { color: var(--ink-2); font-size: var(--text-body); margin: 0 auto; max-width: 42em; text-wrap: pretty; line-height: 1.55; }
   .division-lede em { font-style: normal; color: var(--cyan); }
+  .division-lede a { color: var(--cyan); border-bottom: 1px solid color-mix(in srgb, var(--cyan) 30%, transparent); transition: border-color .14s var(--ease); }
+  .division-lede a:hover { border-bottom-color: var(--cyan); }
 
   .division-stage { position: relative; max-width: 900px; margin: 24px auto 0; padding: 0 24px; }
   .division-cell-m { display: none; }

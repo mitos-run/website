@@ -1,6 +1,6 @@
 ---
 title: "The open source Daytona alternative for running AI code"
-description: "Daytona moved its runtime to a private codebase. Mitos is the open source, self-hostable alternative for running AI-generated code in secure Firecracker microVMs, with a one-import migration."
+description: "Daytona moved its runtime to a private codebase. Mitos is the open source, self-hostable alternative for running AI-generated code in Firecracker microVMs."
 date: 2026-06-28
 category: engineering
 tags: ["daytona alternative", "open source", "self-hostable", "AI sandbox", "Firecracker microVM", "code interpreter", "drop-in"]
