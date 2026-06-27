@@ -1,0 +1,17 @@
+---
+// Render a literal email address that Cloudflare must NOT obfuscate.
+//
+// mitos.run is proxied through Cloudflare, whose "Email Address Obfuscation"
+// rewrites any email it finds into a /cdn-cgi/l/email-protection link. On
+// GitHub Pages that endpoint 404s, so crawlers (Ahrefs) reported broken links
+// on /terms and /cookie-policy. Wrapping the address in Cloudflare's
+// `email_off` HTML comment directive opts that span out of obfuscation, so the
+// plain address ships as-is and no broken link is generated. set:html keeps the
+// comments verbatim in the output.
+interface Props {
+  /** The address to render. Defaults to the legal contact. */
+  addr?: string;
+}
+const { addr = 'legal@mitos.run' } = Astro.props;
+---
+<Fragment set:html={`<!--email_off-->${addr}<!--/email_off-->`} />

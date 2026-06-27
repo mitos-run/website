@@ -157,7 +157,7 @@ export const competitors: Competitor[] = [
     blurb: 'Fast container sandboxes with Computer Use. Memory fork is experimental and gated; the runtime is now closed source.',
     title: 'Mitos vs Daytona: microVM fork vs container sandboxes',
     description:
-      'Mitos vs Daytona for AI agents: Mitos forks running memory by default, microVM-isolated and Apache-2.0; Daytona is container-default and its runtime is now closed source.',
+      'Mitos vs Daytona: Mitos forks running memory by default, microVM-isolated and Apache-2.0; Daytona is container-default and its runtime is now closed source.',
     h1: 'Mitos vs Daytona',
     lede:
       'Mitos forks running memory into a fleet by default, each agent in its own microVM. Daytona runs containers by default, its memory fork is experimental and access-gated, and its runtime moved to a private codebase in June 2026.',
@@ -250,7 +250,7 @@ export const competitors: Competitor[] = [
     blurb: 'Closed, hosted SDK that also forks running microVMs, but slower and not self-hostable.',
     title: 'Mitos vs CodeSandbox: open microVM fork vs hosted SDK',
     description:
-      'Mitos vs the CodeSandbox SDK for AI agents: both fork a running Firecracker microVM, but Mitos activates in about 27 ms, is Apache-2.0, and self-hosts on your cluster.',
+      'Mitos vs the CodeSandbox SDK for AI agents: both fork a running Firecracker microVM, but Mitos activates in ~27 ms, is Apache-2.0, and self-hosts.',
     h1: 'Mitos vs CodeSandbox',
     lede:
       'Mitos and the CodeSandbox SDK both fork a running microVM into copies. Mitos lands a warm fork in about 27 ms, ships under Apache 2.0, and runs on your own Kubernetes cluster; CodeSandbox is closed and hosted only.',

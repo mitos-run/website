@@ -35,7 +35,7 @@ export const useCases = [
     navDesc: 'Fork one warm env into thousands of parallel runs.',
     title: 'Mitos for RL rollouts and parallel agent runs',
     description:
-      'Fork one warm environment into thousands of isolated rollouts for reinforcement learning, best-of-N, and tree search. Each fork is its own microVM, warm in ~27 ms.',
+      'Fork one warm environment into thousands of isolated rollouts for reinforcement learning, best-of-N, and tree search. Each is its own microVM, warm in ~27 ms.',
     h1: 'Fork one warm environment into thousands of rollouts',
     lede:
       'Run reinforcement learning, best-of-N, and tree search by forking one warm environment into many isolated runs at once. Each run is its own microVM, alive in ~27 ms, and you pay only for what it changes.',
