@@ -6,10 +6,14 @@
 // canonicals, and "same text -> 2 URLs" link warnings. We rewrite internal
 // `.html` hrefs/canonicals to the clean form.
 //
+// Use-case pages are additionally moved from dist/use-cases/slug.html to
+// dist/use-cases/slug/index.html so they can be served from clean directory
+// paths (/use-cases/slug/) by any static host.
+//
 // Runs as part of `npm run build` (astro build && node scripts/...). Skips the
 // Go vanity-import meta (public/mitos) and the OG render target.
-import { readdir, readFile, writeFile } from 'node:fs/promises';
-import { join, relative } from 'node:path';
+import { readdir, readFile, writeFile, mkdir, rename } from 'node:fs/promises';
+import { join, relative, basename, dirname } from 'node:path';
 
 const DIST = new URL('../dist/', import.meta.url).pathname;
 const SKIP_DIRS = new Set(['mitos']); // go-get meta page, leave untouched
@@ -32,6 +36,25 @@ const cleanUrls = (html) =>
     .replace(/(href|content)="(https:\/\/mitos\.run)?\/index\.html"/g, '$1="$2/"')
     // internal /path.html -> /path  (not the /mitos/ vanity tree)
     .replace(/(href|content)="(https:\/\/mitos\.run)?(\/(?!mitos\/)[^"]*?)\.html"/g, '$1="$2$3"');
+
+// Move dist/use-cases/<slug>.html -> dist/use-cases/<slug>/index.html so
+// static hosts can serve the page from /use-cases/<slug>/ without server config.
+const UC_DIR = join(DIST, 'use-cases');
+try {
+  for (const entry of await readdir(UC_DIR, { withFileTypes: true })) {
+    if (!entry.isFile() || !entry.name.endsWith('.html') || entry.name === 'index.html') continue;
+    const slug = basename(entry.name, '.html');
+    const src = join(UC_DIR, entry.name);
+    const destDir = join(UC_DIR, slug);
+    const dest = join(destDir, 'index.html');
+    await mkdir(destDir, { recursive: true });
+    await rename(src, dest);
+    console.log(`  moved use-cases/${entry.name} -> use-cases/${slug}/index.html`);
+  }
+} catch (err) {
+  if (err.code !== 'ENOENT') throw err;
+  // use-cases directory does not exist yet; nothing to move.
+}
 
 let changed = 0;
 for await (const file of htmlFiles(DIST)) {

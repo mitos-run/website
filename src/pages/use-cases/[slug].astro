@@ -1,0 +1,90 @@
+---
+// /use-cases/<slug> — intent-shaped landing pages. Data + brand rules live in
+// src/data/usecases.mjs. One machine, many on-ramps: each page seeds signup.
+import Site from '../../layouts/Site.astro';
+import Division from '../../components/Division.astro';
+import { useCases, getUseCase } from '../../data/usecases.mjs';
+import { getCompetitor } from '../../data/competitors';
+
+export function getStaticPaths() {
+  return useCases.map((u) => ({ params: { slug: u.slug } }));
+}
+
+const { slug } = Astro.params;
+const uc = getUseCase(slug)!;
+const cmp = uc.compareSlug ? getCompetitor(uc.compareSlug) : null;
+const pricingHref = { metered: '/pricing#payg', box: '/pricing#box', packaged: '/pricing#apps' }[uc.pricing];
+const pricingLabel = { metered: 'Pay as you go', box: 'Reserve a box', packaged: 'Buy it as an app' }[uc.pricing];
+---
+
+<Site title={uc.title} description={uc.description}>
+  <main class="uc">
+    <section class="uc-hero">
+      <h1>{uc.h1}</h1>
+      <p class="lede">{uc.lede}</p>
+      <div class="uc-cta">
+        <a class="btn btn-primary" href={`/docs/quickstart?uc=${uc.slug}`}>Start free</a>
+        <a class="btn btn-ghost" href={uc.proof.source}>See the benchmark</a>
+      </div>
+    </section>
+
+    <section class="uc-problem">
+      <h2>The problem</h2>
+      <p>{uc.problem}</p>
+    </section>
+
+    <section class="uc-mechanism">
+      <Division />
+      <h2>How fork solves it</h2>
+      <p>{uc.mechanism}</p>
+    </section>
+
+    <section class="uc-snippet">
+      <pre><code>{uc.snippet.code}</code></pre>
+    </section>
+
+    <section class="uc-proof">
+      <p class="uc-proof-num">{uc.proof.value}</p>
+      <p class="uc-proof-label">{uc.proof.label}. <a href={uc.proof.source}>Reproduce it</a>.</p>
+    </section>
+
+    {cmp && (
+      <section class="uc-compare">
+        <h2>Compared to {cmp.name}</h2>
+        <p>{cmp.verdict}</p>
+        <a class="btn btn-ghost" href={`/compare/${cmp.slug}`}>Mitos vs {cmp.name}</a>
+      </section>
+    )}
+
+    <section class="uc-pricing">
+      <a class="btn btn-ghost" href={pricingHref}>{pricingLabel}</a>
+    </section>
+
+    <section class="uc-faqs">
+      {uc.faqs.map((f) => (
+        <details>
+          <summary>{f.q}</summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </section>
+
+    <section class="uc-end">
+      <a class="btn btn-primary" href={`/docs/quickstart?uc=${uc.slug}`}>Start free</a>
+    </section>
+  </main>
+</Site>
+
+<style>
+  .uc { max-width: 920px; margin: 0 auto; padding: 64px 24px 96px; }
+  .uc section { margin-block: 56px; }
+  .uc-hero h1 { font-size: var(--step-5); letter-spacing: -.03em; line-height: 1.04; }
+  .uc-hero .lede { color: var(--ink-2); font-size: var(--step-1); max-width: 60ch; margin-top: 16px; }
+  .uc-cta { display: flex; gap: 12px; margin-top: 28px; }
+  .uc-snippet pre { background: var(--field-1); border: 1px solid var(--hairline); border-radius: var(--r-md); padding: 20px; overflow-x: auto; }
+  .uc-proof-num { font-size: var(--step-4); color: var(--magenta); }
+  .uc-proof-label { color: var(--ink-2); }
+  .uc-faqs details { border-bottom: 1px solid var(--hairline); padding: 16px 0; }
+  .uc-faqs summary { cursor: pointer; color: var(--ink); }
+  .uc-faqs p { color: var(--ink-2); margin-top: 10px; }
+</style>
