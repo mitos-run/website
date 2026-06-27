@@ -4,10 +4,12 @@ import { readFileSync, existsSync } from 'node:fs';
 
 const HOME = 'dist/index.html';
 
-test('header renders the Use cases panel with the rollouts link', () => {
+// The Use cases nav is intentionally hidden for now (SHOW_USE_CASES=false in
+// src/layouts/Site.astro) while the use-case surface is iterated on. When it is
+// re-enabled, flip the flag and restore the presence assertions below.
+test('Use cases nav is hidden for now', () => {
   assert.ok(existsSync(HOME), 'run npm run build first');
   const html = readFileSync(HOME, 'utf8');
-  assert.ok(/Use cases/.test(html), 'Use cases trigger missing');
-  assert.ok(html.includes('/use-cases/rollouts'), 'rollouts link missing from nav');
-  assert.ok(/aria-expanded/.test(html), 'dropdown trigger must be accessible');
+  assert.ok(!html.includes('uc-nav-trigger'), 'Use cases nav trigger should be hidden for now');
+  assert.ok(!html.includes('id="uc-panel"'), 'Use cases dropdown panel should be hidden for now');
 });
