@@ -10,6 +10,8 @@ import Analytics from '../components/Analytics.astro';
 import { getStars } from '../lib/stars';
 import '../styles/tokens.css';
 import '../styles/base.css';
+import { useCases } from '../data/usecases.mjs';
+import { SIGNUP_BASE as SIGNUP } from '../data/site.mjs';
 
 interface Props {
   title: string;
@@ -58,7 +60,6 @@ const allSchema = [...baseSchema, ...schema];
 
 const GITHUB = 'https://github.com/mitos-run/mitos';
 const DOCS = '/docs';
-const SIGNUP = '/docs/quickstart'; // TODO: hosted console signup when live
 
 const navLinks = [
   { label: 'How it works', href: '/#how' },
@@ -66,8 +67,6 @@ const navLinks = [
   { label: 'Pricing', href: '/pricing' },
   { label: 'Docs', href: DOCS },
 ];
-
-import { useCases } from '../data/usecases.mjs';
 const ucGroups = [
   { key: 'workload', label: 'By workload' },
   { key: 'integration', label: 'By integration' },

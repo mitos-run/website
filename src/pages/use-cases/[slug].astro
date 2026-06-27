@@ -5,6 +5,7 @@ import Site from '../../layouts/Site.astro';
 import Division from '../../components/Division.astro';
 import { useCases, getUseCase } from '../../data/usecases.mjs';
 import { getCompetitor } from '../../data/competitors';
+import { signupUrl } from '../../data/site.mjs';
 
 export function getStaticPaths() {
   return useCases.map((u) => ({ params: { slug: u.slug } }));
@@ -23,7 +24,7 @@ const pricingLabel = { metered: 'Pay as you go', box: 'Reserve a box', packaged:
       <h1>{uc.h1}</h1>
       <p class="lede">{uc.lede}</p>
       <div class="uc-cta">
-        <a class="btn btn-primary" href={`/docs/quickstart?uc=${uc.slug}`}>Start free</a>
+        <a class="btn btn-primary" href={signupUrl(uc.slug)}>Start free</a>
         <a class="btn btn-ghost" href={uc.proof.source}>See the benchmark</a>
       </div>
     </section>
@@ -70,7 +71,7 @@ const pricingLabel = { metered: 'Pay as you go', box: 'Reserve a box', packaged:
     </section>
 
     <section class="uc-end">
-      <a class="btn btn-primary" href={`/docs/quickstart?uc=${uc.slug}`}>Start free</a>
+      <a class="btn btn-primary" href={signupUrl(uc.slug)}>Start free</a>
     </section>
   </main>
 </Site>
