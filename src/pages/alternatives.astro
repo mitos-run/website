@@ -35,7 +35,7 @@ const criteria = [
   },
   {
     q: 'Can you run it yourself?',
-    why: 'A guaranteed exit is what lets a lock-in-allergic team commit. The Mitos engine is Apache 2.0, the same code the managed service runs, so you can self-host. E2B is also Apache 2.0; Daytona is AGPL on its server; Modal and Morph are closed. The license is the difference between renting and owning.',
+    why: 'A guaranteed exit is what lets a lock-in-allergic team commit. The Mitos engine is Apache 2.0, the same code the managed service runs, so you can self-host. E2B is also Apache 2.0; Daytona moved its runtime to a private codebase in June 2026; Modal and Morph are closed. The license is the difference between renting and owning.',
   },
 ];
 
@@ -44,7 +44,7 @@ const landscape = [
   { name: 'Mitos', fork: 'Live VM fork', iso: 'Firecracker microVM', speed: '~27 ms warm fork', oss: 'Apache 2.0', own: true, href: '/' },
   { name: 'E2B', fork: 'Fresh sandbox', iso: 'Firecracker microVM', speed: 'Fresh create', oss: 'Apache 2.0', href: '/compare/e2b' },
   { name: 'Modal', fork: 'Snapshot', iso: 'gVisor', speed: 'Sub-second (their figure)', oss: 'Closed', href: '/compare/modal' },
-  { name: 'Daytona', fork: 'Live fork (experimental, gated)', iso: 'Container (microVM opt-in)', speed: 'Sub-90 ms create (their figure)', oss: 'AGPL (server)', href: '/compare/daytona' },
+  { name: 'Daytona', fork: 'Live fork (experimental, gated)', iso: 'Container (microVM opt-in)', speed: 'Sub-90 ms create (their figure)', oss: 'Closed source', href: '/compare/daytona' },
   { name: 'Morph', fork: 'Live VM branch', iso: 'Undisclosed', speed: 'Sub-250 ms branch (their figure)', oss: 'Closed', href: '/compare/morph' },
 ];
 
@@ -61,7 +61,7 @@ const framing: Record<string, { win: string; context: string }> = {
   },
   daytona: {
     win: 'A memory fork by default: generally available, ungated, microVM-isolated, Apache-2.0.',
-    context: 'Daytona forks too, but it is experimental, access-gated, container-based, and AGPL on the server.',
+    context: 'Daytona forks too, but it is experimental, access-gated, container-based, and its runtime is now closed source.',
   },
   morph: {
     win: 'Reproducible fork numbers and an open Apache-2.0 engine you can run yourself.',
@@ -80,7 +80,7 @@ const faqs = [
   },
   {
     q: 'Which agent sandboxes are open source?',
-    a: 'Mitos is Apache 2.0, and the managed service runs the same engine you can self-host, so it is a real exit, not just a published SDK. E2B is also Apache 2.0; Daytona is AGPL on its server; Modal and Morph are closed.',
+    a: 'Mitos is Apache 2.0, and the managed service runs the same engine you can self-host, so it is a real exit, not just a published SDK. E2B is also Apache 2.0; Daytona moved its runtime to a private codebase in June 2026; Modal and Morph are closed.',
   },
   {
     q: 'What is the most secure agent sandbox for untrusted code?',
@@ -196,6 +196,9 @@ const schema = [
         </tbody>
       </table>
     </div>
+    <p class="further reveal">
+      Further reading: <a href="/blog/open-source-daytona-alternative">Daytona went closed source, and the open alternative</a>.
+    </p>
   </section>
 
   <!-- PER-COMPETITOR: lead with our edge, contain their fit -->
@@ -288,6 +291,9 @@ const schema = [
   .comp-table .pname a:hover { color: var(--magenta); }
   .comp-table .own-row td:first-child { background: color-mix(in srgb, var(--magenta) 7%, var(--field)); }
   .comp-table .own-row .pname a { color: var(--magenta); }
+  .further { margin-top: 18px; color: var(--ink-3); font-size: var(--text-caption); }
+  .further a { color: var(--ink-2); border-bottom: 1px solid var(--hairline-strong); }
+  .further a:hover { color: var(--magenta); }
 
   /* Per-competitor cards */
   .compare-cards { padding-top: 96px; }

@@ -43,6 +43,8 @@ export interface Competitor {
   /** Why teams pick Mitos over this competitor (us-focused). */
   mitosWins: string[];
   faqs: { q: string; a: string }[];
+  /** Optional related blog post, rendered as a further-reading link. */
+  relatedPost?: { href: string; title: string };
 }
 
 // mitos's own column is constant across every comparison.
@@ -152,20 +154,20 @@ export const competitors: Competitor[] = [
   {
     slug: 'daytona',
     name: 'Daytona',
-    blurb: 'Fast container sandboxes with Computer Use. Memory fork is experimental and gated; the server is AGPL.',
+    blurb: 'Fast container sandboxes with Computer Use. Memory fork is experimental and gated; the runtime is now closed source.',
     title: 'Mitos vs Daytona: microVM fork vs container sandboxes',
     description:
-      'Mitos vs Daytona for AI agents: Mitos forks running memory by default, microVM-isolated and Apache-2.0; Daytona is container-default with an AGPL server.',
+      'Mitos vs Daytona for AI agents: Mitos forks running memory by default, microVM-isolated and Apache-2.0; Daytona is container-default and its runtime is now closed source.',
     h1: 'Mitos vs Daytona',
     lede:
-      'Mitos forks running memory into a fleet by default, each agent in its own microVM. Daytona runs containers by default, its memory fork is experimental and access-gated, and its server is AGPL.',
+      'Mitos forks running memory into a fleet by default, each agent in its own microVM. Daytona runs containers by default, its memory fork is experimental and access-gated, and its runtime moved to a private codebase in June 2026.',
     verdict:
-      'Mitos forks running memory by default: generally available, microVM-isolated, and Apache-2.0. Daytona added a memory fork, but it is experimental and access-gated, its default isolation is containers, and its server is AGPL. For a fork you can rely on today, openly, Mitos is built for it.',
+      'Mitos forks running memory by default: generally available, microVM-isolated, and Apache-2.0. Daytona added a memory fork, but it is experimental and access-gated, its default isolation is containers, and its runtime is now closed source. For a fork you can rely on today, openly, Mitos is built for it.',
     rows: [
       row('Fork a running VM, generally available + ungated', { s: 'p', t: 'experimental, gated' }, { s: 'y', t: 'default' }),
       row('microVM isolation by default (own kernel)', { s: 'n', t: 'container default' }, MITOS.isolation),
       row('Published marginal cost per fork', { s: 'n' }, MITOS.marginal),
-      row('Permissive license (Apache 2.0)', { s: 'n', t: 'AGPL server' }, MITOS.license),
+      row('Open source engine (Apache 2.0)', { s: 'n', t: 'closed source' }, MITOS.license),
       row('Sandbox create speed', { s: 'y', t: 'sub-90 ms (their figure)' }, { s: 'y', t: '~27 ms fork (ours)' }),
       row('Fully managed cloud', { s: 'y' }, MITOS.managed),
     ],
@@ -179,20 +181,21 @@ export const competitors: Competitor[] = [
         body: 'Mitos forks running memory by default, generally available and ungated. Daytona added a memory fork, but it is experimental and gated behind a request, and its other snapshots are prebuilt images, not a copy of your live running state.',
       },
       {
-        h: 'Apache 2.0, not AGPL',
-        body: 'The Mitos engine is Apache 2.0 across the board, so you can build on it and self-host with no copyleft terms. Daytona’s client SDKs are permissive, but its server is AGPL, a copyleft license that many companies are unable to adopt.',
+        h: 'Open, not closed',
+        body: 'The Mitos engine is Apache 2.0 across the board, the same code the managed service runs, so you can build on it and self-host. Daytona moved its core runtime to a private codebase in June 2026 and its public repo is unmaintained, so the open path teams adopted is gone.',
       },
     ],
     mitosWins: [
       'A memory fork that is generally available and ungated, not experimental behind a request.',
       'microVM isolation by default (own kernel), where Daytona defaults to containers.',
-      'Apache-2.0 across the board, not an AGPL server you cannot freely run.',
+      'An Apache-2.0 engine you can self-host, where Daytona moved its runtime behind a private codebase.',
     ],
     faqs: [
       { q: 'Does Daytona fork running memory?', a: 'Daytona added a memory fork, but it is experimental and access-gated, and its default sandboxes are containers. Mitos forks running memory by default, generally available and microVM-isolated.' },
       { q: 'Is Daytona microVM-isolated?', a: 'By default Daytona uses containers, with microVM as an option. Mitos runs every fork as a Firecracker microVM with its own kernel by default.' },
-      { q: 'What licenses do they use?', a: 'Daytona is AGPL on its server (its SDKs are permissive). The Mitos engine is Apache 2.0 throughout, so there are no copyleft terms when you build on or self-host it.' },
+      { q: 'Is Daytona open source?', a: 'No. As of June 2026 Daytona moved its core runtime to a private codebase and its public repo is unmaintained (its client SDKs were permissive). The Mitos engine is Apache 2.0 throughout, and the managed service runs the same code you can self-host.' },
     ],
+    relatedPost: { href: '/blog/open-source-daytona-alternative', title: 'Daytona went closed source: the open Daytona alternative' },
   },
 
   {

@@ -61,6 +61,9 @@ const allSchema = [...baseSchema, ...schema];
 const GITHUB = 'https://github.com/mitos-run/mitos';
 const DOCS = '/docs';
 
+// Use-cases nav is hidden for now while the use-case surface is iterated on.
+const SHOW_USE_CASES = false;
+
 const navLinks = [
   { label: 'How it works', href: '/#how' },
   { label: 'Benchmarks', href: '/benchmarks' },
@@ -120,19 +123,21 @@ const ucGroups = [
       <div class="container nav-inner">
         <a class="brand" href="/"><Mark class="brand-mark" /> Mitos</a>
         <nav class="nav-links">
-          <div class="uc-nav">
-            <button class="uc-nav-trigger" id="uc-trigger" type="button" aria-expanded="false" aria-controls="uc-panel">Use cases</button>
-            <div class="uc-panel" id="uc-panel" inert>
-              {ucGroups.map((g) => (
-                <div class="uc-col">
-                  <p class="uc-col-h">{g.label}</p>
-                  {g.items.map((u) => (
-                    <a href={`/use-cases/${u.slug}`}><span>{u.navLabel}</span><small>{u.navDesc}</small></a>
-                  ))}
-                </div>
-              ))}
+          {SHOW_USE_CASES && (
+            <div class="uc-nav">
+              <button class="uc-nav-trigger" id="uc-trigger" type="button" aria-expanded="false" aria-controls="uc-panel">Use cases</button>
+              <div class="uc-panel" id="uc-panel" inert>
+                {ucGroups.map((g) => (
+                  <div class="uc-col">
+                    <p class="uc-col-h">{g.label}</p>
+                    {g.items.map((u) => (
+                      <a href={`/use-cases/${u.slug}`}><span>{u.navLabel}</span><small>{u.navDesc}</small></a>
+                    ))}
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
           {navLinks.map((l) => <a href={l.href}>{l.label}</a>)}
         </nav>
         <div class="nav-cta">
@@ -152,7 +157,7 @@ const ucGroups = [
     <div class="nav-menu" id="nav-menu" inert>
       <nav class="nav-menu-links" aria-label="Mobile">
         {navLinks.map((l) => <a href={l.href}>{l.label}</a>)}
-        {ucGroups.map((g) => (
+        {SHOW_USE_CASES && ucGroups.map((g) => (
           <Fragment>
             <p class="nav-menu-group">{g.label}</p>
             {g.items.map((u) => <a href={`/use-cases/${u.slug}`}>{u.navLabel}</a>)}
