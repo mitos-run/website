@@ -66,6 +66,14 @@ const navLinks = [
   { label: 'Pricing', href: '/pricing' },
   { label: 'Docs', href: DOCS },
 ];
+
+import { useCases } from '../data/usecases.mjs';
+const ucGroups = [
+  { key: 'workload', label: 'By workload' },
+  { key: 'integration', label: 'By integration' },
+  { key: 'app', label: 'Run an app' },
+].map((g) => ({ ...g, items: useCases.filter((u) => u.group === g.key) }))
+  .filter((g) => g.items.length > 0);
 ---
 
 <!doctype html>
@@ -113,6 +121,19 @@ const navLinks = [
       <div class="container nav-inner">
         <a class="brand" href="/"><Mark class="brand-mark" /> Mitos</a>
         <nav class="nav-links">
+          <div class="uc-nav">
+            <button class="uc-nav-trigger" id="uc-trigger" type="button" aria-expanded="false" aria-controls="uc-panel">Use cases</button>
+            <div class="uc-panel" id="uc-panel" inert>
+              {ucGroups.map((g) => (
+                <div class="uc-col">
+                  <p class="uc-col-h">{g.label}</p>
+                  {g.items.map((u) => (
+                    <a href={`/use-cases/${u.slug}`}><span>{u.navLabel}</span><small>{u.navDesc}</small></a>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
           {navLinks.map((l) => <a href={l.href}>{l.label}</a>)}
         </nav>
         <div class="nav-cta">
@@ -132,6 +153,12 @@ const navLinks = [
     <div class="nav-menu" id="nav-menu" inert>
       <nav class="nav-menu-links" aria-label="Mobile">
         {navLinks.map((l) => <a href={l.href}>{l.label}</a>)}
+        {ucGroups.map((g) => (
+          <Fragment>
+            <p class="nav-menu-group">{g.label}</p>
+            {g.items.map((u) => <a href={`/use-cases/${u.slug}`}>{u.navLabel}</a>)}
+          </Fragment>
+        ))}
       </nav>
       <GhStars count={stars} class="nav-menu-stars" />
     </div>
@@ -183,6 +210,22 @@ const navLinks = [
         document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setMenu(false); });
         // close if resized up to desktop
         window.addEventListener('resize', () => { if (window.innerWidth > 900) setMenu(false); });
+      }
+
+      // Use-cases dropdown panel: toggle, Escape, click-outside.
+      const ucTrigger = document.getElementById('uc-trigger');
+      const ucPanel = document.getElementById('uc-panel');
+      if (ucTrigger && ucPanel) {
+        const setUc = (open) => {
+          ucTrigger.setAttribute('aria-expanded', String(open));
+          if (open) ucPanel.removeAttribute('inert'); else ucPanel.setAttribute('inert', '');
+          ucPanel.classList.toggle('open', open);
+        };
+        ucTrigger.addEventListener('click', () => setUc(ucTrigger.getAttribute('aria-expanded') !== 'true'));
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setUc(false); });
+        document.addEventListener('click', (e) => {
+          if (!ucPanel.contains(e.target) && e.target !== ucTrigger) setUc(false);
+        });
       }
 
       // Live GitHub stars: refresh the baked-in count (cached 1h in localStorage).
@@ -253,9 +296,22 @@ const navLinks = [
       .nav-inner { display: flex; align-items: center; gap: 32px; height: 64px; }
       .brand { font-weight: 600; font-size: var(--text-title); letter-spacing: -.02em; display: inline-flex; align-items: center; gap: 8px; }
       .brand-mark { height: 18px; width: auto; filter: drop-shadow(0 0 6px color-mix(in srgb, var(--magenta) 60%, transparent)); }
-      .nav-links { display: flex; gap: 26px; margin-right: auto; }
+      .nav-links { display: flex; gap: 26px; margin-right: auto; align-items: center; }
       .nav-links a { color: var(--ink-2); font-size: var(--text-dense); }
       .nav-links a:hover { color: var(--ink); }
+      .uc-nav { position: relative; }
+      .uc-nav-trigger { background: none; border: 0; color: var(--ink-2); font: inherit; font-size: var(--text-dense); cursor: pointer; }
+      .uc-nav-trigger:hover, .uc-nav-trigger[aria-expanded="true"] { color: var(--ink); }
+      .uc-panel { position: absolute; top: calc(100% + 14px); left: 0; display: none; gap: 28px; padding: 20px 22px; background: var(--field-1); border: 1px solid var(--hairline); border-radius: var(--r-md); }
+      .uc-panel.open { display: flex; }
+      .uc-col { min-width: 180px; }
+      .uc-col-h { color: var(--ink-3); font-size: var(--text-dense); margin-bottom: 10px; }
+      .uc-col a { display: block; padding: 7px 0; }
+      .uc-col a span { display: block; color: var(--ink); }
+      .uc-col a small { display: block; color: var(--ink-2); }
+      .uc-col a:hover span { color: var(--magenta); }
+      .nav-menu-group { color: var(--ink-3); margin-top: 22px; }
+      @media (prefers-reduced-motion: reduce) { .uc-panel { transition: none; } }
       .nav-cta { display: flex; align-items: center; gap: 16px; }
       .ghost-link { color: var(--ink-2); font-size: var(--text-dense); }
       .ghost-link:hover { color: var(--ink); }
