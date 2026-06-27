@@ -1,7 +1,7 @@
 ---
 // Pricing — Fluorescence, PAYG-only with a live cost estimator in the hero.
 // Model is the engine's real billing shape (decoupled per-second vCPU + RAM,
-// storage GiB-hour, free egress, GPU-second; $100 signup credit; hard spend
+// storage GiB-hour, free egress, GPU-second; $5 signup credit; hard spend
 // caps). Rates are ILLUSTRATIVE placeholders per the repo's no-published-numbers
 // rule — every rate on this page is labelled "illustrative, final at GA".
 import Site from '../layouts/Site.astro';
@@ -28,7 +28,7 @@ const compare = [
 const compareCols = ['E2B', 'Daytona', 'Modal'];
 
 const trust = [
-  { k: '$100 to start', v: 'Free signup credit, no card. Prepaid top-ups after that.' },
+  { k: '$5 to start', v: 'Free signup credit, no card. Prepaid top-ups after that.' },
   { k: 'Hard spend caps', v: 'Set a ceiling. A runaway swarm suspends at the cap, not at a surprise invoice.' },
   { k: 'No platform fee', v: 'No seat or subscription floor. You pay for compute, nothing else.' },
   { k: 'No idle charge', v: 'Billing is per-second while running. Paused sandboxes cost nothing to run.' },
@@ -57,7 +57,7 @@ const schema = [
 
 <Site
   title="Mitos pricing: pay-as-you-go for agent swarms"
-  description="Pay-as-you-go, per-second microVM compute: vCPU and RAM metered separately, forks share memory copy-on-write. $100 credit, hard spend caps, no platform fee."
+  description="Pay-as-you-go, per-second microVM compute: vCPU and RAM metered separately, forks share memory copy-on-write. $5 credit, hard spend caps, no platform fee."
   schema={schema}
 >
   <section class="hero container">
