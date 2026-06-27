@@ -4,7 +4,7 @@ import { readFileSync, existsSync } from 'node:fs';
 
 // Integration check: the built rollouts page renders its hero and snippet.
 // Run `npm run build` before this test (npm test does not build).
-const HTML = 'dist/use-cases/rollouts/index.html';
+const HTML = 'dist/use-cases/rollouts.html';
 
 test('rollouts use-case page builds and renders hero + snippet', () => {
   assert.ok(existsSync(HTML), `expected ${HTML}; run npm run build first`);
