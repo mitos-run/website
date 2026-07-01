@@ -1,0 +1,65 @@
+---
+// /waitlist: the calm "you are on the list" confirmation for a signup that is
+// pending allowlist approval. The hosted console is opening in gated waves; this
+// page is the friendly landing when access is not granted yet, and the console's
+// own waitlisted state can also link here. No dead end: run the open engine now,
+// or head back home. noindex (thin, transactional). Never use em or en dashes.
+import Site from '../layouts/Site.astro';
+
+const DOCS = '/docs/quickstart';
+const TITLE = 'You are on the Mitos waitlist';
+const DESC =
+  'Your spot is saved. The hosted console opens in waves and we will email you when your access is ready. Run the open-source engine today while you wait.';
+---
+
+<Site title={TITLE} description={DESC} noindex={true}>
+  <section class="hero container">
+    <div class="hero-aura" aria-hidden="true"></div>
+    <div class="hero-in reveal">
+      <h1>You are on the list.</h1>
+      <p class="lede">
+        Thanks for signing up. We are opening the hosted console in waves, and we
+        will email you the moment your access is ready. There is nothing else you
+        need to do.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary btn-lg" href={DOCS}>Run the open engine now</a>
+        <a class="btn btn-ghost btn-lg" href="/">Back to home</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="container">
+    <div class="intro">
+    <p>
+      Mitos is open source under Apache 2.0, so you do not have to wait to try the
+      real thing. Follow the <a href="/docs/quickstart">quickstart</a> to fork a
+      running microVM into a swarm on your own machine or cluster today. When your
+      hosted access opens, the same workflow moves to the managed console with your
+      free starting credit already in place.
+    </p>
+    <p>
+      We approve in waves to keep the early experience solid. Your place is saved
+      against the email you signed up with, so keep an eye on your inbox. If you
+      think you should already have access, reach us on
+      <a href="https://github.com/mitos-run/mitos/issues" target="_blank" rel="noopener">GitHub</a>.
+    </p>
+    </div>
+  </section>
+</Site>
+
+<style>
+  .hero { padding-block: 184px 0; position: relative; }
+  .hero-aura { position: absolute; top: -60px; left: 4%; width: 680px; max-width: 90vw; height: 520px; z-index: 0; pointer-events: none;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--magenta) 11%, transparent), transparent 72%);
+    opacity: .5; filter: blur(8px); }
+  .hero-in { position: relative; z-index: 1; max-width: 720px; }
+  .hero h1 { font-size: var(--text-display); line-height: 1.0; letter-spacing: -.035em; font-weight: 400; margin: 0 0 20px; }
+  .lede { font-size: var(--text-lede); color: var(--ink-2); max-width: 34em; margin: 0 0 28px; line-height: 1.5; }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .intro { max-width: 52em; padding-top: 56px; padding-bottom: 96px; }
+  .intro p { color: var(--ink-2); font-size: var(--text-body); line-height: 1.7; margin: 0 0 20px; }
+  .intro a { color: var(--cyan); border-bottom: 1px solid color-mix(in srgb, var(--cyan) 30%, transparent); }
+  .intro a:hover { border-bottom-color: var(--cyan); }
+  @media (max-width: 760px) { .hero { padding-block: 104px 0; } .hero h1 { font-size: var(--text-display-sm); line-height: 1.06; } }
+</style>

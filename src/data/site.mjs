@@ -1,7 +1,8 @@
-// Single source for the signup CTA target. The hosted self-serve signup is a
-// later workstream; until it ships, the CTA lands on the quickstart. Flip
-// SIGNUP_BASE to '/signup' when the hosted funnel goes live; every CTA follows.
-export const SIGNUP_BASE = '/docs/quickstart';
+// Single source for the signup CTA target. The hosted self-serve signup is live
+// behind an allowlist gate: the console is served single-origin at mitos.run and
+// the front-door forwards /signup to it. Every CTA reads this constant, and
+// signupUrl(slug) appends the ?uc on-ramp seed carried through to first-run.
+export const SIGNUP_BASE = '/signup';
 
 /** @param {string} [useCaseSlug] */
 export function signupUrl(useCaseSlug) {

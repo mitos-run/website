@@ -2,6 +2,7 @@
 // /contact — how to reach the mitos team. Honest channels only (OSS-first; no
 // fabricated phone/address). Lifts the E-E-A-T contact signal.
 import Site from '../layouts/Site.astro';
+import { SIGNUP_BASE as SIGNUP } from '../data/site.mjs';
 
 const GITHUB = 'https://github.com/mitos-run/mitos';
 const TITLE = 'Contact Mitos: GitHub, issues, and security';
@@ -12,7 +13,7 @@ const channels = [
   { h: 'GitHub issues', p: 'Bugs, feature requests, and questions about the engine or SDKs. The fastest way to reach us.', cta: 'Open an issue', href: `${GITHUB}/issues` },
   { h: 'Follow development', p: 'Watch the repository for releases and progress, and star it if forking agents is your kind of problem.', cta: 'View the repo', href: GITHUB },
   { h: 'Security', p: 'Report a vulnerability privately. Please do not file public issues for security findings.', cta: 'Read SECURITY.md', href: `${GITHUB}/blob/main/SECURITY.md` },
-  { h: 'Early access', p: 'The managed console is not live yet. Run the open-source engine today and watch the repo for hosted availability.', cta: 'Get started', href: '/docs/quickstart' },
+  { h: 'Early access', p: 'The hosted console is in gated early access. Sign up to start with free credit, or run the open-source engine yourself today.', cta: 'Get started', href: SIGNUP },
 ];
 ---
 

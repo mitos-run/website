@@ -7,6 +7,7 @@
 // docs/superpowers/plans/2026-06-22-fluorescence-page-rebuild.md.
 import Site from '../layouts/Site.astro';
 import Division from '../components/Division.astro';
+import { SIGNUP_BASE as SIGNUP } from '../data/site.mjs';
 import pythonIcon from '../assets/lang/python.svg?raw';
 import tsIcon from '../assets/lang/typescript.svg?raw';
 import cliIcon from '../assets/lang/cli.svg?raw';
@@ -15,7 +16,6 @@ const langIcons: Record<string, string> = { py: pythonIcon, ts: tsIcon, cli: cli
 
 const GITHUB = 'https://github.com/mitos-run/mitos';
 const DOCS = '/docs';
-const SIGNUP = '/docs/quickstart'; // hosted console not live yet; OSS run-now path
 
 // Title carries the search keywords (fork / microVM / agent swarm) using the
 // brand's own locked vocabulary; the poetic line lives in the OG card + body.
