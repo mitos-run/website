@@ -3,6 +3,7 @@
 // open-source repo's bench/ scripts. Honest caveats + clearly-labelled vendor
 // context (NOT a head-to-head). Keep numbers in sync with BENCHMARKS.md.
 import Site from '../layouts/Site.astro';
+import { SIGNUP_BASE as SIGNUP } from '../data/site.mjs';
 
 const GITHUB = 'https://github.com/mitos-run/mitos';
 const BENCH = `${GITHUB}/blob/main/bench/husk-activate-latency.sh`;
@@ -148,7 +149,7 @@ const maxMs = 1000;
     <div class="container reveal">
       <h2>Fork a microVM and time it yourself.</h2>
       <div class="hero-actions center">
-        <a class="btn btn-primary btn-lg" href="/docs/quickstart">Get started</a>
+        <a class="btn btn-primary btn-lg" href={SIGNUP}>Get started</a>
         <a class="btn btn-ghost btn-lg" href={GITHUB} target="_blank" rel="noopener">View the repo</a>
       </div>
     </div>
